@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
 });
 
 // Start app and listen on port 3000 for connections
-var server = app.listen(8080, function () {
+var server = app.listen(5000, function () {
     var host = server.address().address;
     var port = server.address().port;
 
