@@ -4,7 +4,7 @@
 // Create express application
 var express = require('express');
 var app = express();
-var port = process.env.PORT || 5000;
+var puerto = process.env.PORT || 5000;
 
 // Serving static files (http://expressjs.com/starter/static-files.html)
 app.use(express.static(__dirname + '/public'));
@@ -14,7 +14,7 @@ app.get('/', function (req, res) {
 });
 
 // Start app and listen on port 3000 for connections
-var server = app.listen(port, function () {
+var server = app.listen(puerto, function () {
     var host = server.address().address;
     var port = server.address().port;
 
