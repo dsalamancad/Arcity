@@ -31,7 +31,7 @@ var geo = require('geotabuladb'); // Database operation
 // Script --> Initialización de geotabulaDB
 // ------------------------------------------------------
 geo.setCredentials({
-    type : 'default',
+    type : 'postgis',
 	host : 'ec2-23-21-157-223.compute-1.amazonaws.com',
 	user : 'xkwcdmnylucjhr',
 	password : 'c4GzMJFgx9tkeNnhy5tAdjjsXY',
