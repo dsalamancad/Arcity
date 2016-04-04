@@ -31,12 +31,14 @@ var geo = require('geotabuladb'); // Database operation
 // Script --> Initialización de geotabulaDB
 // ------------------------------------------------------
 geo.setCredentials({
-    type: 'postgis',
-    host: 'localhost',
-    user: 'geotabula',
-    password: 'geotabula',
-    database: 'geotabula'
+    type : 'default',
+	host : 'ec2-23-21-157-223.compute-1.amazonaws.com',
+	user : 'xkwcdmnylucjhr',
+	password : 'c4GzMJFgx9tkeNnhy5tAdjjsXY',
+	database : 'd5h2irs74tlg5e'
 });
+
+	
 
 
 
