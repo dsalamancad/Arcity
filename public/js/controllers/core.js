@@ -55,40 +55,40 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
 
 
-var w = 800;
-var h = 450;
-var margin = {
-	top: 58,
-	bottom: 100,
-	left: 80,
-	right: 40
-};
-var width = w - margin.left - margin.right;
-var height = h - margin.top - margin.bottom;
+        var w = 800;
+        var h = 450;
+        var margin = {
+            top: 58,
+            bottom: 100,
+            left: 80,
+            right: 40
+        };
+        var width = w - margin.left - margin.right;
+        var height = h - margin.top - margin.bottom;
 
 
 
-        
-        
+
+
 
         var parseoHora = d3.time.format("%H:%M:%S").parse;
 
         var x = d3.time.scale()
-        .domain([parseoHora("00:00:00"),parseoHora("24:00:00")])
-//            .domain(d3.extent(data.features,function(d){
-//                var hora = parseoHora(d.properties.hora);
-//                return hora;
-//                
-//            }))
-            .range([0,width]);
-        
+            .domain([parseoHora("00:00:00"), parseoHora("24:00:00")])
+            //            .domain(d3.extent(data.features,function(d){
+            //                var hora = parseoHora(d.properties.hora);
+            //                return hora;
+            //                
+            //            }))
+            .range([0, width]);
+
 
         console.log(data);
         console.log(data.features[0].properties.hora);
-var svg = d3.select("body").append("svg")
-			.attr("id", "chart")
-			.attr("width", w)
-			.attr("height", h)
+        var svg = d3.select("body").append("svg")
+            .attr("id", "chart")
+            .attr("width", w)
+            .attr("height", h)
             .attr("id", "chart")
             .attr("width", w)
             .attr("height", h);
@@ -98,13 +98,13 @@ var svg = d3.select("body").append("svg")
             .append("circle")
             .attr("class", "point")
             .attr("r", 10)
-            .attr("cx", function(d){
-			     var date = parseoHora(d.properties.hora);
+            .attr("cx", function (d) {
+                var date = parseoHora(d.properties.hora);
                 console.log(date);
-			     return x(date);
-		      })
+                return x(date);
+            })
             .attr("cy", 20)
-        
+
 
 
 
@@ -149,25 +149,3 @@ var svg = d3.select("body").append("svg")
 
 
 }]);
-
-//my_angular_app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
-//     $scope.slider = {
-//    minValue: 10,
-//    maxValue: 90,
-//    options: {
-//        floor: 0,
-//        ceil: 100,
-//        step: 1
-//    }
-//};
-//    //Range slider config
-//  $scope.rangeSlider = {
-//    minValue: 10,
-//    maxValue: 90,
-//    options: {
-//      floor: 0,
-//      ceil: 100,
-//      step: 1
-//    }
-//  };
-//})
