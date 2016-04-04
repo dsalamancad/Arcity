@@ -41,7 +41,6 @@ geo.setCredentials({
 	
 
 
-
 // ------------------------------------------------------
 // Event Management
 // ------------------------------------------------------
@@ -54,6 +53,10 @@ io.on('connection', function (socket) {
                 geojson: geojson
             });
         })
+    })
+    
+    socket.on('error',function(exception){
+        console.log(exception);
     })
 });
 
