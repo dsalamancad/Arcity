@@ -1,41 +1,102 @@
 <html>
+
 <head>
-    <!--Online resources-->
-    <link rel="stylesheet" href="css/leaflet.css" />
-     <script src="js/libs/leaflet.js"></script>
-    <script src="js/libs/leaflet-providers.js"></script>
     <!--Local resources -->
-    <script src="js/libs/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/leaflet.css" />
     <script src="js/libs/d3.min.js"></script>
-     <!-- <script src="js/libs/rzslider.min.js"></script> -->
+    <script src="js/libs/crossfilter.min.js"></script>
+    <script src="js/libs/dc.min.js"></script>
+    <script src="js/libs/leaflet.js"></script>
+    <!-- <script src="js/libs/leaflet-providers.js"></script> -->
+    <script src="js/libs/leaflet.label.js"></script>
+    <script src="js/libs/angular.min.js"></script>
+    
+    <!-- <script src="js/libs/rzslider.min.js"></script> -->
     <script src="js/controllers/core.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <!--estilos -->
     <link rel="stylesheet" href="css/viewer.css" />
     <link rel="stylesheet" href="css/rzslider.min.css" />
-    
+    <link rel="stylesheet" href="css/leaflet.label.css" />
+    <!--pruebas -->
+    <link rel="stylesheet" href="css/estilosLineaTiempo.css" />
+
+
+
 </head>
 
 <body ng-app="my_angular_app">
     <div ng-controller="home_controller">
-        <div id="map" style="height: 100%;">
-            The map is going to fill this div...
+        <header>
+            <h1>Calidad del Espacio público</h1>
+            <small>
+          <span class="filter-count"></span> seleccionados de <span class="total-count"></span> reportes |
+           <a id="all" href="#">Resetear todo</a>
+          </span>
+        </header>
+      
+        <div id="contenedorPrincipal">
+            <div id="categorias"><h3>Categorias</h3></div>
+            <div id="mapaConReportes">
+                <div id="map">
+                    The map is going to fill this div...
 
+                </div>
+                <div>
+                    <div id="usuariosPorReporte" class="dc-chart"><h3>Usuarios por reporte</h3>
+                    <img src="imagenes/numeroReportes.png" alt=""></div>
+                    <div id="reportesRespondidos" class="dc-chart"><h3>Reportes respondidos</h3>
+                    <img src="imagenes/contestados.png" alt=""></div>
+                </div>
+
+            </div>
         </div>
-        <div>
-            reportes entre: <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
-            <button type="button" ng_click="filtrarPorValor()">filtrar</button>
-            <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
-            
-         <!--  <div ng-controller="MainCtrl">
-              <rzslider rz-slider-model="slider.minValue"
-          rz-slider-high="slider.maxValue"
-          rz-slider-options="slider.options"></rzslider>
-            </div> -->
-        </div>
+        <div id="contenedorTiempo">
+            <div id="graficaAnual" class="dc-chart"><h3>Gráfica Anual <small><a id="year" href="#">resetear</a></small></h3>
+            <img src="imagenes/anual.png" alt="">
+    </div>
+    <div id="graficaMensual" class="dc-chart">
+        <h3>Gráfica mensual <small><a id="month" href="#">resetear</a></small></h3>
+        <img src="imagenes/mes.png" alt=""></div>
+    <div id="graficaDiaria" class="dc-chart">
+        <h3>Gráfica Diaria <small><a id="day" href="#">resetear</a></small></h3>
+        <img src="imagenes/dias.png" alt=""></div>
+    <div id="graficaDiaNoche" class="dc-chart">
+        <h3>Día / Noche <small><a id="hourdianoche" href="#">resetear</a></small></h3>
+        <img src="imagenes/contestados.png" alt=""></div>
+    </div>
+
+    <div id="contenedorlineaDeTiempoVieja">
+        reportes entre:
+        <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
+        <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
+        <button type="button" ng_click="filtrarPorValor()">filtrar</button>
+        <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
+    </div>
+    <div id="tablaReportes">
+        <table id="data-table">
+            <thead>
+                <tr class="header">
+                    <th>Imagen</th>
+                    <th>Usuario</th>
+                    <th>Tipo de Reporte</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Descripción</th>
+                    <th>Seguidores</th>
+        
+                </tr>
+            </thead>
+        </table>
     </div>
 
 
-
+    </div>
+    <div id="capad3Hora"></div>
+    <!--  <div id="timeSlider"></div> -->
+    <!--pruebas -->
+    <script src="js/controllers/lineaTiempo.js"></script>
 
 </body>
 

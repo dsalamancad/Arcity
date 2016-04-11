@@ -47,16 +47,42 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     //    $scope.newTask = "";
 
     var capaConPuntosCargados;
+
+//  borrar  
+//  function onEachFeature(feature, layer) {
+//        // does this feature have a property named popupContent?
+//        if (feature.properties && feature.properties.id) {
+//            layer.bindPopup(feature.properties.id);
+//        }
+//    }
+    var geojsonMarkerOptions = {
+        fillColor: "#2354ae",
+        color: "#000",
+        weight: 1,
+        opacity: 1,
+        fillOpacity: 0.8
+    };
     var dibujarMapa = function (data) {
-        //console.log(data);
-        capaConPuntosCargados = L.geoJson(data);
+        //console.log(data.features[5].properties.id);
+
+        capaConPuntosCargados = L.geoJson(data, {
+            style: function (feature) {
+                return {
+                    radius: (feature.properties.id) / 8
+                };
+            },
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, geojsonMarkerOptions);
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.descripcio);
+            }
+        });
         capaConPuntosCargados.addTo(map);
 
-
-
-
+        // Creación de gráfica de d3
         var w = 800;
-        var h = 450;
+        var h = 100;
         var margin = {
             top: 58,
             bottom: 100,
@@ -65,12 +91,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         };
         var width = w - margin.left - margin.right;
         var height = h - margin.top - margin.bottom;
-
-
-
-
-
-
         var parseoHora = d3.time.format("%H:%M:%S").parse;
 
         var x = d3.time.scale()
@@ -81,11 +101,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             //                
             //            }))
             .range([0, width]);
-
-
-        console.log(data);
-        console.log(data.features[0].properties.hora);
-        var svg = d3.select("body").append("svg")
+        // console.log(data);
+        //console.log(data.features[0].properties.hora);
+        var svg = d3.select("#capad3Hora").append("svg")
             .attr("id", "chart")
             .attr("width", w)
             .attr("height", h)
@@ -100,18 +118,15 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .attr("r", 10)
             .attr("cx", function (d) {
                 var date = parseoHora(d.properties.hora);
-                console.log(date);
+                //console.log(date);
                 return x(date);
             })
             .attr("cy", 20)
-
-
-
-
+        // Final gráfica de d3
     }
 
     $scope.filtrarPorValor = function () {
-        d3.selectAll("svg").remove();
+        d3.selectAll("#capad3Hora svg").remove();
         map.removeLayer(capaConPuntosCargados);
         coneccion.llamarFiltroporHora({
             callback: dibujarMapa,
@@ -129,12 +144,25 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     // ------------------------------------------------------
     // Functions
     // ------------------------------------------------------
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        osm = new L.TileLayer(osmUrl, {
+            maxZoom: 18,
+            attribution: osmAttrib
+        });
 
 
-    var map = L.map('map').setView([4.605038, -74.069819], 16); // Posición inical del mapa (lat, long, zoom)    
-    map.addLayer(new L.TileLayer.provider('Esri.WorldGrayCanvas')); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)   
-    map._layersMaxZoom = 16; // Definie el máximo zoom del mapa
+    var map = L.map('map').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)    
+    map.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 18,
+        attribution: osmAttrib
+    })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)   
+    map._layersMaxZoom = 18; // Definie el máximo zoom del mapa
     map._layersMinZoom = 10;
+    //    L.marker([4.606983, -74.068004]).bindLabel('Casa acal!', {
+    //            noHide: true
+    //        })
+    //        .addTo(map);
 
     L.control.scale({ // Maneja la escala
         position: 'bottomleft', // .. donde aparece
@@ -142,7 +170,24 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     }).addTo(map);
 
 
-
+    //    var deathIcon = L.icon({
+    //        iconUrl: 'death.png',
+    //        iconSize: [36, 36],
+    //        iconAnchor: [18, 18],
+    //        popupAnchor: [0, -18],
+    //        labelAnchor: [14, 0] // as I want the label to appear 2px past the icon (18 + 2 - 6)
+    //    });
+    //    var noHide = false;
+    //    L.marker([4.606983, -74.078004], {
+    //            icon: deathIcon
+    //        })
+    //        .bindLabel('Erghhhhh..')
+    //        .bindPopup('Can has popup?')
+    //        .addTo(map)
+    //        .on('click', function () {
+    //            m.setLabelNoHide(noHide);
+    //            noHide = !noHide;
+    //        });
 
 
 

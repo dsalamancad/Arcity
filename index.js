@@ -75,7 +75,7 @@ function consultarMapaFiltrado(params, callback) {
             tableName: 'invasionespaciopublico', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
             where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
-            properties: ['nombre', 'telefono','hora']
+            properties: ['id','fecha','hora','descripcio','seguidores','respondido']
         },
         function (json) {
             callback(json); 

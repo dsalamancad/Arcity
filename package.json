@@ -4,6 +4,7 @@
   "main": "index.js",
   "dependencies": {
     "angular": "^1.5.3",
+    "dc": "^1.7.5",
     "express": "^4.13.4",
     "geotabuladb": "0.0.11",
     "leaflet": "^0.7.7",
