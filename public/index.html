@@ -11,7 +11,7 @@
     <!-- <script src="js/libs/leaflet-providers.js"></script> -->
     <script src="js/libs/leaflet.label.js"></script>
     <script src="js/libs/angular.min.js"></script>
-    
+
     <!-- <script src="js/libs/rzslider.min.js"></script> -->
     <script src="js/controllers/core.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -31,75 +31,101 @@
     <div ng-controller="home_controller">
         <header id="data-count">
             <h1>Calidad del Espacio público</h1>
-           <div id="filtrosTotales">
-          <span class="filter-count"></span> Intervenciones seleccionadas de <span class="total-count"></span> creadas |
-           <a id="resetearTodo" href="#" class="botonReseteo">Resetear todo</a>
-         </div>
+            <div id="filtrosTotales">
+                <span class="filter-count"></span> Intervenciones seleccionadas de <span class="total-count"></span> creadas |
+                <a id="resetearTodo" href="#" class="botonReseteo">Resetear todo</a>
+            </div>
         </header>
-        
+
         <div id="contenedorPrincipal">
-            <div id="categorias"><h3>Intervenciones creadas</h3></div>
+            <div id="categorias">
+                <h3>Intervenciones creadas</h3></div>
             <div id="mapaConReportes">
                 <div id="map">
                     The map is going to fill this div...
 
                 </div>
-                  <div id="lineaDetiempo" class="dc-chart"></div>
+                <div id="lineaDetiempo" class="dc-chart"></div>
                 <div>
-                    <div id="usuariosPorReporte" class="dc-chart"><h3>votos por escena<small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small></h3>
-                     
-                   </div>
-                    <div id="reportesRespondidos" class="dc-chart"><h3>Intervenciones atendidas por el distrito <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small></h3> 
+                    <!-- <div id="usuariosPorReporte" class="dc-chart">
+                        <h3>votos por escena<small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small></h3>
+                    
                     </div>
+                    <div id="reportesRespondidos" class="dc-chart">
+                        <h3>Intervenciones atendidas por el distrito <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small></h3>
+                    </div> -->
                 </div>
 
             </div>
         </div>
         <div id="contenedorTiempo">
-            <div id="graficaAnual" class="dc-chart"><h3>Gráfica Anual <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small></h3>
-            
-    </div>
-    <div id="graficaMensual" class="dc-chart">
-        <h3>Gráfica mensual <small><a id="resetearMes" href="#" class="botonReseteo">Resetear</a></small></h3>
-        </div>
-    <div id="graficaDiaria" class="dc-chart">
-        <h3>Gráfica Diaria <small><a id="resetearDia" href="#" class="botonReseteo">Resetear</a></small></h3>
-        </div>
-    <!-- <div id="graficaDiaNoche" class="dc-chart">
+            <div id="graficaAnual" class="dc-chart">
+               <div id="tituloGraficas">
+                     <h3>Intervenciones anuales</h3>
+                    <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small>
+                </div>
+
+            </div>
+            <div id="graficaMensual" class="dc-chart">
+               <div id="tituloGraficas">
+                     <div id="tituloGraficas">
+                         <h3>Intervenciones mensuales</h3>
+                         <small><a id="resetearMes" href="#" class="botonReseteo">Resetear</a></small>
+                     </div>
+                </div>
+            </div>
+
+            <div id="usuariosPorReporte" class="dc-chart">
+              <div id="tituloGraficas">
+                      <h3>votos por intervención</h3>
+                    <small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small>
+                </div>
+
+            </div>
+            <div id="reportesRespondidos" class="dc-chart">
+               <div id="tituloGraficas">
+                     <h3>Intervenciones atendidas</h3>
+                    <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small>
+                </div>
+            </div>
+            <!-- <div id="graficaDiaria" class="dc-chart">
+                <h3>Gráfica Diaria <small><a id="resetearDia" href="#" class="botonReseteo">Resetear</a></small></h3>
+            </div> -->
+            <!-- <div id="graficaDiaNoche" class="dc-chart">
         <h3>Día / Noche <small><a id="hourdianoche" href="#">resetear</a></small></h3>
         <img src="imagenes/contestados.png" alt=""></div>
     </div> -->
 
-    <div id="tablaReportes">
-        <table id="data-table">
-            <thead>
-                <tr class="header">
-                    <th>Usuario</th>
-                    <th>Año</th>
-                    <th>Mes</th>
-                    <th>Descripción</th>
-                    <th>Seguidores</th>                 
-        
-                </tr>
-            </thead>
-        </table>
-    </div>
+            <div id="tablaReportes">
+                <table id="data-table">
+                    <thead>
+                        <tr class="header">
+                            <th>Usuario</th>
+                            <th>Año</th>
+                            <th>Mes</th>
+                            <th>Descripción</th>
+                            <th>Seguidores</th>
+
+                        </tr>
+                    </thead>
+                </table>
+            </div>
 
 
-    </div>
-    
-    <div id="contenedorlineaDeTiempoVieja">
-        <!-- reportes entre:
+        </div>
+
+        <div id="contenedorlineaDeTiempoVieja">
+            <!-- reportes entre:
         <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
         <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24"> 
         <button type="button" ng_click="filtrarPorValor()">filtrar</button>
         <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>-->
-    </div>
-    
-  <!--   <div id="capad3Hora"></div> -->
-    <!--  <div id="timeSlider"></div> -->
-    <!--pruebas -->
-    <script src="js/controllers/lineaTiempo.js"></script>
+        </div>
+
+        <!--   <div id="capad3Hora"></div> -->
+        <!--  <div id="timeSlider"></div> -->
+        <!--pruebas -->
+        <script src="js/controllers/lineaTiempo.js"></script>
 
 </body>
 

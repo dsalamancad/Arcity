@@ -174,7 +174,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         //Creación de variables (objetos de dc)
         var graficaAno = dc.pieChart('#graficaAnual'),
             graficaMes = dc.pieChart('#graficaMensual'),
-            graficaDia = dc.barChart('#graficaDiaria'),
+            //graficaDia = dc.barChart('#graficaDiaria'),
             graficaSeguidores = dc.barChart('#usuariosPorReporte'),
             graficaRespondido = dc.pieChart('#reportesRespondidos'),
             dataCount = dc.dataCount('#data-count'),
@@ -182,56 +182,57 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             graficaLineaDeTiempo = dc.lineChart('#lineaDetiempo');
 
         graficaLineaDeTiempo
-            .width(1000).height(100)
+            .width(1000).height(70)
             .dimension(dimensionFecha)
             .group(conteoPorSeguidores)
+         .renderVerticalGridLines(true)
             .x(d3.time.scale().domain([minDate, maxDate]));
         
         graficaAno
-            .width(150)
-            .height(150)
+            .width(120)
+            .height(120)
             .dimension(dimensionAno)
             .group(conteoPorAno)
             .innerRadius(20)
             .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
 
         graficaMes
-            .width(150)
-            .height(150)
+            .width(120)
+            .height(120)
             .dimension(dimensionMes)
             .group(conteoPorMes)
             .innerRadius(20)
             .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
-
-        graficaDia
-            .width(600)
-            .height(180)
-            .dimension(dimensionDia)
-            .group(conteoPorDia)
-            .x(d3.scale.linear().domain([0, 30]))
-            .elasticY(true)
-            .centerBar(true)
-            .barPadding(5)
-            .xAxisLabel('Día')
-            .yAxisLabel('No. de Intervenciones')
-            .margins({
-                top: 10,
-                right: 20,
-                bottom: 50,
-                left: 50
-            })
-            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+//
+//        graficaDia
+//            .width(600)
+//            .height(180)
+//            .dimension(dimensionDia)
+//            .group(conteoPorDia)
+//            .x(d3.scale.linear().domain([0, 30]))
+//            .elasticY(true)
+//            .centerBar(true)
+//            .barPadding(5)
+//            .xAxisLabel('Día')
+//            .yAxisLabel('No. de Intervenciones')
+//            .margins({
+//                top: 10,
+//                right: 20,
+//                bottom: 50,
+//                left: 50
+//            })
+//            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         //graficaDia.xAxis().tickValues([0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
 
         graficaSeguidores
-            .width(600)
-            .height(180)
+            .width(400)
+            .height(160)
             .dimension(dimensionSeguidores)
             .group(conteoPorSeguidores)
-            .x(d3.scale.linear().domain([0, 15]))
+            .x(d3.scale.linear().domain([0, 10]))
             .elasticY(true)
             .centerBar(true)
-            .barPadding(0.5)
+            .barPadding(0.3)
             .xAxisLabel('Votos / Likes')
             .yAxisLabel('No. de Intervenciones')
             .margins({
@@ -243,8 +244,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         graficaSeguidores.xAxis().tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
         graficaRespondido
-            .width(150)
-            .height(150)
+            .width(120)
+            .height(120)
             .dimension(dimensionRespondido)
             .group(conteoPorRespondido)
             .innerRadius(20)

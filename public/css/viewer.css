@@ -54,7 +54,7 @@ h6 {
 }
 h1{
     font-size: 140%;
-    padding: 1% 0;
+    padding-top: 1%;
 }
 h3{
     font-size: 100%;
@@ -86,7 +86,23 @@ header,
     padding: 0% 1% 5%;
     background-color: #fff;
 }
+#contenedorTiempo{
+    font-size: 10px;
+}
 
+#lineaDetiempo{
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+    background-color: #eee;
+    
+}
+#lineaDetiempo svg{
+    background-color: #eee;
+
+    
+}
 header {}
 #filtrosTotales{
     font-size: 12pt;   
@@ -128,6 +144,10 @@ header {}
 
 #contenedorTiempo {}
 
+#contenedorTiempo h3{
+    font-size: 8pt;
+}
+
 #graficaAnual,
 #graficaMensual,
 #graficaDiaria,
@@ -138,7 +158,11 @@ header {}
     float: left;
     padding-bottom: 3%;
 }
-
+#graficaMensual{
+    border-right: solid 1px #ddd;
+    box-sizing: border-box;
+    
+}
 #data-table {
     width: 100%;
     border: solid 1px #ddd;
@@ -192,24 +216,38 @@ header {}
     } */
   
     
-    #usuariosPorReporte,
+    #usuariosPorReporte{
+        width: 40%;
+        clear: none
+    }
     #reportesRespondidos {
-        width: 50%;
+        width: 20%;
         clear: none;
     }
     #graficaAnual,
     #graficaMensual,
     #graficaDiaria,
     #graficaDiaNoche {
-        width: 50%;
+        width: 20%;
         clear: none;
     }
     .escondeTablet {
         display: none;
     }
 }
+
+#tituloGraficas{
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+}
 a.botonReseteo:link, a.botonReseteo:visited {
-    margin-left: 5px;
+    display: block;
+    clear: both;
+    float: left;
+    margin: 5px 0;
+    
     padding: 3px;
     background-color: #3182bd;
     color: #fff;
@@ -217,8 +255,14 @@ a.botonReseteo:link, a.botonReseteo:visited {
     text-decoration: none;
     text-transform: capitalize;
     font-family: 'Montserrat';
-    font-size: 8pt;
+    font-size: 6pt;
     
+}
+a#resetearTodo{
+    display: inline;
+    clear: none;
+    float: none;
+ 
 }
 a.botonReseteo:hover{
 
@@ -235,7 +279,7 @@ a.botonReseteo:hover{
     #graficaMensual,
     #graficaDiaria,
     #graficaDiaNoche {
-        width: 25%;
+        width: 20%;
         clear: none;
     }
     .esconderEscritorioViejo {
