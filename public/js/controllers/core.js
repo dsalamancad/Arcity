@@ -293,8 +293,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                     var loc = d.geometry;
                     //var name = d.brewery.brewery_name;
                     var marker = L.marker([loc.coordinates[1], loc.coordinates[0]]);
-                    //marker.bindPopup("<p>" + name + " " + loc.brewery_city + " " + loc.brewery_state + "</p>");
+                    marker.bindPopup("<div id='popUpMarker'> <div id='fecha'><span>fecha: </span>"+ d.properties.fecha_fecha+"</div><div id='votos'><span>Votos: </span>"+d.properties.seguidores+"</div><div id='elementosUsados'> <div> <span>Elementos Usados:</span> </div><div><span>Policias: </span>1</div><div><span>Canecas: </span>2</div><div><span>Asientos: </span>0</div><div><span>Paraderos: </span>1</div><div><span>Juegos: </span>3</div><div><span>Árboles: </span>2</div><div><span>Luces: </span>0</div></div></div>");
                     marcadoresIntervenciones.addLayer(marker);
+                    
+                    
                 });
                 map.addLayer(marcadoresIntervenciones);
                 map.fitBounds(marcadoresIntervenciones.getBounds());

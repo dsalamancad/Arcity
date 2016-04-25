@@ -163,6 +163,10 @@ header {}
     box-sizing: border-box;
     
 }
+#usuariosPorReporte{
+    padding-left: 20px;
+    box-sizing: border-box;
+}
 #data-table {
     width: 100%;
     border: solid 1px #ddd;
@@ -192,6 +196,21 @@ header {}
 
 .escondeMovil {
     display: none;
+}
+
+/*Estilos para pop-up*/
+#popUpMarker{
+    font-size: 9px;
+    overflow: hidden;
+}
+#popUpMarker span{
+    font-weight: bold;
+}
+#popUpMarker div div{
+    width: 50%;
+    display:block;
+    clear:none;
+    float:left;
 }
 
 
