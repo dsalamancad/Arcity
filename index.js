@@ -62,7 +62,14 @@ io.on('connection', function (socket) {
             });
         })
     })
-    
+    socket.on("llamarManzanas", function (params) {
+        consultarManzanasEnDB(params, function (geojson) {
+            socket.emit("manzanasFiltradas", {
+                guid: params.caller,
+                geojson: geojson
+            });
+        })
+    })
     socket.on('error',function(exception){
         console.log(exception);
     })
@@ -72,11 +79,35 @@ io.on('connection', function (socket) {
 
 function consultarMapaFiltrado(params, callback) {
     geo.geoQuery({
-            tableName: 'invasionespaciopublico', // The name of the table we are going to query
+            tableName: 'aleatoriosmil', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
-            where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
-            properties: ['id','usuario','fecha','hora','descripcio','seguidores','respondido']
+            //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
+            properties: ['id','usuario','fecha','descripcio','seguidores','respondido']
+        
+        //querystring: "lo que busco en web";
         },
+                 
+    
+    
+        function (json) {
+            callback(json); 
+        });
+//querystring
+    // tengo calles, tengo puntos, los puntos so n la entrada. En cada calle haga bufer de 50 mts, si dentro de ese buffer, estan los puntos que me enetraron, devuelvamela 
+
+}
+function consultarManzanasEnDB(params, callback) {
+    geo.geoQuery({
+            tableName: 'manzanasbarriolasnieves', // The name of the table we are going to query
+            geometry: 'geom', // The name of the column who has the geometry
+            //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
+            properties: ['gid','usuario','fecha','descripcio','seguidores','respondido']
+        
+        //querystring: "lo que busco en web";
+        },
+                 
+    
+    
         function (json) {
             callback(json); 
         });

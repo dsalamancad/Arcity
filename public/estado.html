@@ -13,7 +13,7 @@
     <script src="js/libs/angular.min.js"></script>
 
     <!-- <script src="js/libs/rzslider.min.js"></script> -->
-    <script src="js/controllers/core.js"></script>
+    <script src="js/controllers/coreEstado.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <!--estilos -->
     <link rel="stylesheet" href="css/dc.css" />
@@ -96,21 +96,7 @@
         <img src="imagenes/contestados.png" alt=""></div>
     </div> -->
 
-            <div id="tablaReportes">
-                <table id="data-table">
-                    <thead>
-                        <tr class="header">
-                            <th>Usuario</th>
-                            <th>Año</th>
-                            <th>Mes</th>
-                            <th>Descripción</th>
-                            <th>Votos</th>
-
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-
+            
 
         </div>
         <!-- <div id='popUpMarker'>
@@ -134,7 +120,7 @@
              reportes entre:
         <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
         <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24"> 
-        <button type="button" ng_click="filtrarPorValor()">filtrar</button>
+        <button type="button" ng_click="filtrarManzanas()">filtrar</button>
         <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
         </div>
 
