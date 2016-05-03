@@ -61,40 +61,38 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     var capaConPoligonosMulticoloresCargados;
     var guardaPoligonos = [];
     var guardaOpacidad = [];
-    //  borrar
-    function onEachFeature(feature, layer) {
-        // does this feature have a property named popupContent?
-        if (feature.properties && feature.properties.gid) {
-            layer.bindPopup(feature.properties.gid);
-        }
-    }
     var geojsonMarkerOptions = {
         "color": "#ff7800",
         "weight": 2,
         "opacity": 0.65
     };
+
+    // FUNCIONES LLAMADAS CUANDO VUEVLE EL MENSAJE DEL SERVIDOR
     var dibujarMapa = function (data) {
         console.log(data);
         capaConPoligonosCargados = L.geoJson(data, {
             style: geojsonMarkerOptions
         });
-        definirTransparencia(data);
+        aplicarEstilo(data);
         capaConPoligonosCargados.addTo(map);
 
     }
 
+    //función para meter en arrays los valores de poligono y su numero de reportes
     var definirTransparencia = function (data) {
         for (var i = 0; i < data.length; i++) {
             guardaPoligonos.push(data[i].gid);
-            var temporal=[];
-            temporal.push(data[i].totale);
-
-
             guardaOpacidad.push(data[i].totale /60);
             //console.log(guardaPoligonos[i] + " tiene " + guardaOpacidad[i]);
         }
 
-        var estiloCadaUno=function(a){
+
+    }
+
+    //función para crear estilo de cada poligono
+    var aplicarEstilo = function(data){
+             var estiloCadaUno=function(a){
+            console.log(a.properties.gid);
             switch(a.properties.gid){
                 case guardaPoligonos[0]:return{color:"#144a78",weight: 1,fillOpacity:guardaOpacidad[0]};
                 case guardaPoligonos[1]:return{color:"#144a78",weight: 1,fillOpacity:guardaOpacidad[1]};
@@ -150,9 +148,12 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         capaConPoligonosCargados = L.geoJson(data, {
             style: estiloCadaUno
         });
+
     }
 
 
+    //HACER LLAMADOS AL SERVIDOR (EL CALLBACK ES LA FUNCI´ON QUE LLAMA CUANDO ME DEVUELVE EL SERVIDOR)
+    // la usaré cuando sea filtrar por el timeline
     $scope.filtrarManzanas = function () {
         //d3.selectAll("#capad3Hora svg").remove();
         //map.removeLayer(capaConPuntosCargados);
@@ -162,11 +163,13 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             horaFinal: $scope.horaFinalFiltro
         });
     }
+    // me llama los reportes por poligono
     coneccion.llamarFiltroReportesPorManzanas({
         callback: definirTransparencia,
         horaInicial: 0,
         horaFinal: 24
     });
+    // me llama los poligonos para dibujar
     coneccion.llamarFiltroManzanas({
         callback: dibujarMapa,
         horaInicial: 0,
@@ -175,12 +178,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
 
 
-    // ------------------------------------------------------
-    // Functions mapa de geotabula
-    // ------------------------------------------------------
-    var transparencia = {
-        opacity: 0.2
-    };
+    //CREACION DEL MAPA DE GEOTABULA-----------------------------------------------------
+    // llamar tiling de open street
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
         osm = new L.TileLayer(osmUrl, {
@@ -189,19 +188,19 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
         });
 
-
-
-
+    // carga de tiling de open maps
     var map = L.map('mapEstado').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)
     map.addLayer(new L.TileLayer(osmUrl, {
         maxZoom: 18,
         attribution: osmAttrib,
         opacity:.3,
 
-    })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)
-    map._layersMaxZoom = 18; // Definie el máximo zoom del mapa
+    }));
+
+    //configuración general del mapa
+    map._layersMaxZoom = 18;
     map._layersMinZoom = 10;
-    L.control.scale({ // Maneja la escala
+    L.control.scale({
         position: 'bottomleft', // .. donde aparece
         imperial: false // .. sistema métrico
     }).addTo(map);
