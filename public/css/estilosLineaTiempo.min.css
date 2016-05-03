@@ -1,0 +1,1 @@
+.axis line,.brush .extent,.grid line,.grid path{shape-rendering:crispEdges}.axis text{font:11px sans-serif}.axis path{display:none}.axis line{fill:none;stroke:#000}.grid-background{fill:#ddd}.grid line,.grid path{fill:none;stroke:#fff}.grid .minor.tick line{stroke-opacity:.5}.brush .extent{stroke:#000;fill-opacity:.125}

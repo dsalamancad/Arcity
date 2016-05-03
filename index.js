@@ -46,7 +46,7 @@ geo.setCredentials({
     database: 'geotabula'
 });
 
-	
+
 
 
 // ------------------------------------------------------
@@ -70,7 +70,15 @@ io.on('connection', function (socket) {
             });
         })
     })
-    socket.on('error',function(exception){
+    socket.on("llamarReportesPorManzanas", function (params) {
+        consultarReportesenManzanasEnDB(params, function (geojson) {
+            socket.emit("reportesPorManzanasFiltradas", {
+                guid: params.caller,
+                geojson: geojson
+            });
+        })
+    })
+    socket.on('error', function (exception) {
         console.log(exception);
     })
 });
@@ -82,36 +90,45 @@ function consultarMapaFiltrado(params, callback) {
             tableName: 'aleatoriosmil', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
             //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
-            properties: ['id','usuario','fecha','descripcio','seguidores','respondido']
-        
-        //querystring: "lo que busco en web";
+            properties: ['id', 'usuario', 'fecha', 'descripcio', 'seguidores', 'respondido']
+
+            //querystring: "lo que busco en web";
         },
-                 
-    
-    
+
+
+
         function (json) {
-            callback(json); 
+            callback(json);
         });
-//querystring
+    //querystring
     // tengo calles, tengo puntos, los puntos so n la entrada. En cada calle haga bufer de 50 mts, si dentro de ese buffer, estan los puntos que me enetraron, devuelvamela 
 
 }
+
 function consultarManzanasEnDB(params, callback) {
     geo.geoQuery({
             tableName: 'manzanasbarriolasnieves', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
             //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
-            properties: ['gid','usuario','fecha','descripcio','seguidores','respondido']
-        
-        //querystring: "lo que busco en web";
+            properties: ['gid']
+
+            //querystring: "lo que busco en web";
         },
-                 
-    
-    
         function (json) {
-            callback(json); 
+            callback(json);
         });
-//querystring
-    // tengo calles, tengo puntos, los puntos so n la entrada. En cada calle haga bufer de 50 mts, si dentro de ese buffer, estan los puntos que me enetraron, devuelvamela 
+
+
+}
+
+function consultarReportesenManzanasEnDB(params, callback) {
+
+    geo.query({
+            querystring: "SELECT manzanasbarriolasnieves.gid,count(aleatoriosmil.geom) AS totale FROM public.manzanasbarriolasnieves LEFT JOIN public.aleatoriosmil ON st_contains(manzanasbarriolasnieves.geom,aleatoriosmil.geom) GROUP BY manzanasbarriolasnieves.gid"
+        },
+        function (json) {
+           // console.log(json);
+            callback(json);
+        });
 
 }

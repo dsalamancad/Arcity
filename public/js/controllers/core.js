@@ -14,14 +14,14 @@ my_angular_app.service("coneccion", function () {
         delete callbacksMapa[params.guid];
     });
 
-    //generar identificadores únicos con el objetivo de poder identificar quien está haciendo el llamado. 
+    //generar identificadores únicos con el objetivo de poder identificar quien está haciendo el llamado.
     var genGuid = function () {
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
         }
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     };
-    //este es mi metodod que voy a usar 
+    //este es mi metodod que voy a usar
     var llamarFiltroporHora = function (params) {
         //console.log(params);
 
@@ -48,7 +48,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     var capaConPuntosCargados;
 
-    //  borrar  
+    //  borrar
     //  function onEachFeature(feature, layer) {
     //        // does this feature have a property named popupContent?
     //        if (feature.properties && feature.properties.id) {
@@ -100,7 +100,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         map.addLayer(new L.TileLayer(osmUrl, {
             maxZoom: 18,
             attribution: osmAttrib
-        })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)   
+        })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)
         map._layersMaxZoom = 18; // Definie el máximo zoom del mapa
         map._layersMinZoom = 10;
 
@@ -187,7 +187,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .group(conteoPorSeguidores)
          .renderVerticalGridLines(true)
             .x(d3.time.scale().domain([minDate, maxDate]));
-        
+
         graficaAno
             .width(120)
             .height(120)
@@ -295,8 +295,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                     var marker = L.marker([loc.coordinates[1], loc.coordinates[0]]);
                     marker.bindPopup("<div id='popUpMarker'> <div id='fecha'><span>fecha: </span>"+ d.properties.fecha_fecha+"</div><div id='votos'><span>Votos: </span>"+d.properties.seguidores+"</div><div id='elementosUsados'> <div> <span>Elementos Usados:</span> </div><div><span>Policias: </span>1</div><div><span>Canecas: </span>2</div><div><span>Asientos: </span>0</div><div><span>Paraderos: </span>1</div><div><span>Juegos: </span>3</div><div><span>Árboles: </span>2</div><div><span>Luces: </span>0</div></div></div>");
                     marcadoresIntervenciones.addLayer(marker);
-                    
-                    
+
+
                 });
                 map.addLayer(marcadoresIntervenciones);
                 map.fitBounds(marcadoresIntervenciones.getBounds());
@@ -359,7 +359,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             //            .domain(d3.extent(data.features,function(d){
             //                var hora = parseoHora(d.properties.hora);
             //                return hora;
-            //                
+            //
             //            }))
             .range([0, width]);
         // console.log(data);
@@ -403,7 +403,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     });
 
     // ------------------------------------------------------
-    // Functions mapa de geotabula 
+    // Functions mapa de geotabula
     // ------------------------------------------------------
     //    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     //        osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -411,15 +411,15 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     //            maxZoom: 18,
     //            attribution: osmAttrib
     //        });
-    //    
     //
     //
     //
-    //    var map = L.map('map').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)    
+    //
+    //    var map = L.map('map').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)
     //    map.addLayer(new L.TileLayer(osmUrl, {
     //        maxZoom: 18,
     //        attribution: osmAttrib
-    //    })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)   
+    //    })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)
     //    map._layersMaxZoom = 18; // Definie el máximo zoom del mapa
     //    map._layersMinZoom = 10;
     //    //    L.marker([4.606983, -74.068004]).bindLabel('Casa acal!', {
