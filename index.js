@@ -32,10 +32,10 @@ var geo = require('geotabuladb'); // Database operation
 // ------------------------------------------------------
 //geo.setCredentials({
 //    type : 'postgis',
-//	host : 'ec2-23-21-157-223.compute-1.amazonaws.com',
-//	user : 'xkwcdmnylucjhr',
-//	password : 'c4GzMJFgx9tkeNnhy5tAdjjsXY',
-//	database : 'd5h2irs74tlg5e'
+//    host : 'ec2-23-21-157-223.compute-1.amazonaws.com',
+//    user : 'xkwcdmnylucjhr',
+//    password : 'c4GzMJFgx9tkeNnhy5tAdjjsXY',
+//    database : 'd5h2irs74tlg5e'
 //});
 
 geo.setCredentials({
@@ -87,7 +87,7 @@ io.on('connection', function (socket) {
 
 function consultarMapaFiltrado(params, callback) {
     geo.geoQuery({
-            tableName: 'aleatoriosmil', // The name of the table we are going to query
+            tableName: 'reportes', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
             //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
             properties: ['id', 'usuario', 'fecha', 'descripcio', 'seguidores', 'respondido']
@@ -101,7 +101,7 @@ function consultarMapaFiltrado(params, callback) {
             callback(json);
         });
     //querystring
-    // tengo calles, tengo puntos, los puntos so n la entrada. En cada calle haga bufer de 50 mts, si dentro de ese buffer, estan los puntos que me enetraron, devuelvamela 
+    // tengo calles, tengo puntos, los puntos so n la entrada. En cada calle haga bufer de 50 mts, si dentro de ese buffer, estan los puntos que me enetraron, devuelvamela
 
 }
 
@@ -124,10 +124,10 @@ function consultarManzanasEnDB(params, callback) {
 function consultarReportesenManzanasEnDB(params, callback) {
 
     geo.query({
-            querystring: "SELECT manzanasbarriolasnieves.gid,count(aleatoriosmil.geom) AS totale FROM public.manzanasbarriolasnieves LEFT JOIN public.aleatoriosmil ON st_contains(manzanasbarriolasnieves.geom,aleatoriosmil.geom) GROUP BY manzanasbarriolasnieves.gid"
+            querystring: "SELECT manzanasbarriolasnieves.fid as gid,count(*) as totale,sum(aleatoriosmil.policia) as policias,sum(aleatoriosmil.caneca) as caneca,sum(aleatoriosmil.silla) as silla,sum(aleatoriosmil.estacion) as estacion,sum(aleatoriosmil.juego) as juego,sum(aleatoriosmil.arbol) as arbol,sum(aleatoriosmil.luz) as luz FROM public.manzanasbarriolasnieves,public.aleatoriosmil WHERE st_contains(public.manzanasbarriolasnieves.geom,public.aleatoriosmil.geom) GROUP BY manzanasbarriolasnieves.gid ORDER BY manzanasbarriolasnieves.gid"
         },
         function (json) {
-           // console.log(json);
+           //console.log(json);
             callback(json);
         });
 

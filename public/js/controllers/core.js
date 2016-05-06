@@ -55,33 +55,13 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     //            layer.bindPopup(feature.properties.id);
     //        }
     //    }
-    var geojsonMarkerOptions = {
-        fillColor: "#2354ae",
-        color: "#000",
-        weight: 1,
-        opacity: 1,
-        fillOpacity: 0.8
-    };
+
     var dibujarMapa = function (data) {
         console.log(data);
         //console.log(data.features[5].properties.id);
 
         //Creación del mapa de leaflet SIN DC
-        //        capaConPuntosCargados = L.geoJson(data, {
-        //
-        //            style: function (feature) {
-        //                return {
-        //                    radius: (feature.properties.id) / 8
-        //                };
-        //            },
-        //            pointToLayer: function (feature, latlng) {
-        //                return L.circleMarker(latlng, geojsonMarkerOptions);
-        //            },
-        //            onEachFeature: function (feature, layer) {
-        //                layer.bindPopup(feature.properties.descripcio);
-        //            }
-        //        });
-        //        capaConPuntosCargados.addTo(map);
+
 
         //CONSTRUCCION DE INTERACTIVO CON CROSSFILTER Y DC
         var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -99,7 +79,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
         map.addLayer(new L.TileLayer(osmUrl, {
             maxZoom: 18,
-            attribution: osmAttrib
+            attribution: osmAttrib,
+            opacity: .4,
         })); // El mapa base que se va a utilizar (debe importarse la librería correspondiente en index.html)
         map._layersMaxZoom = 18; // Definie el máximo zoom del mapa
         map._layersMinZoom = 10;
@@ -110,11 +91,29 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }).addTo(map);
 
 
+
+        //         capaConPuntosCargados = L.geoJson(data, {
+        //
+        //                    style: function (feature) {
+        //                        return {
+        //                            radius: (feature.properties.id) / 8
+        //                        };
+        //                    },
+        //                    pointToLayer: function (feature, latlng) {
+        //                        return L.circleMarker(latlng, geojsonMarkerOptions);
+        //                    },
+        //                    onEachFeature: function (feature, layer) {
+        //                        layer.bindPopup(feature.properties.descripcio);
+        //                    }
+        //                });
+        //                capaConPuntosCargados.addTo(map);
+
+
         var datosInvasionEspacioPublico = data.features;
 
 
-        var fechaCompletaFormateada = d3.time.format('%Y-%m-%d' + 'T' + '%H:%M:%S' + 'Z');
-        //2015-07-24T08:53:16Z
+        var fechaCompletaFormateada = d3.time.format('%Y-%m-%d' + 'T' + '%H:%M:%S.%L' + 'Z');
+        //2015-07-27T00:00:00.000Z"
         var anoFormateado = d3.time.format('%Y');
         var mesFormateado = d3.time.format('%m');
         var diaFormateado = d3.time.format('%d');
@@ -185,7 +184,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .width(1000).height(70)
             .dimension(dimensionFecha)
             .group(conteoPorSeguidores)
-         .renderVerticalGridLines(true)
+            .renderVerticalGridLines(true)
             .x(d3.time.scale().domain([minDate, maxDate]));
 
         graficaAno
@@ -203,25 +202,25 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .group(conteoPorMes)
             .innerRadius(20)
             .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
-//
-//        graficaDia
-//            .width(600)
-//            .height(180)
-//            .dimension(dimensionDia)
-//            .group(conteoPorDia)
-//            .x(d3.scale.linear().domain([0, 30]))
-//            .elasticY(true)
-//            .centerBar(true)
-//            .barPadding(5)
-//            .xAxisLabel('Día')
-//            .yAxisLabel('No. de Intervenciones')
-//            .margins({
-//                top: 10,
-//                right: 20,
-//                bottom: 50,
-//                left: 50
-//            })
-//            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+        //
+        //        graficaDia
+        //            .width(600)
+        //            .height(180)
+        //            .dimension(dimensionDia)
+        //            .group(conteoPorDia)
+        //            .x(d3.scale.linear().domain([0, 30]))
+        //            .elasticY(true)
+        //            .centerBar(true)
+        //            .barPadding(5)
+        //            .xAxisLabel('Día')
+        //            .yAxisLabel('No. de Intervenciones')
+        //            .margins({
+        //                top: 10,
+        //                right: 20,
+        //                bottom: 50,
+        //                left: 50
+        //            })
+        //            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         //graficaDia.xAxis().tickValues([0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
 
         graficaSeguidores
@@ -229,7 +228,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .height(160)
             .dimension(dimensionSeguidores)
             .group(conteoPorSeguidores)
-            .x(d3.scale.linear().domain([0, 10]))
+            .x(d3.scale.linear().domain([0, 11]))
             .elasticY(true)
             .centerBar(true)
             .barPadding(0.3)
@@ -241,7 +240,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 bottom: 50,
                 left: 40
             }).ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
-        graficaSeguidores.xAxis().tickValues([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        graficaSeguidores.xAxis().tickValues([" ", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, " "]);
 
         graficaRespondido
             .width(120)
@@ -290,10 +289,21 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 marcadoresIntervenciones.clearLayers();
 
                 dimensionesTodas.top(Infinity).forEach(function (d) {
+
                     var loc = d.geometry;
+                    var radio = d.properties.seguidores;
+                    console.log(radio);
                     //var name = d.brewery.brewery_name;
-                    var marker = L.marker([loc.coordinates[1], loc.coordinates[0]]);
-                    marker.bindPopup("<div id='popUpMarker'> <div id='fecha'><span>fecha: </span>"+ d.properties.fecha_fecha+"</div><div id='votos'><span>Votos: </span>"+d.properties.seguidores+"</div><div id='elementosUsados'> <div> <span>Elementos Usados:</span> </div><div><span>Policias: </span>1</div><div><span>Canecas: </span>2</div><div><span>Asientos: </span>0</div><div><span>Paraderos: </span>1</div><div><span>Juegos: </span>3</div><div><span>Árboles: </span>2</div><div><span>Luces: </span>0</div></div></div>");
+                    var marker = L.circleMarker([loc.coordinates[1], loc.coordinates[0]], {
+                        fillColor: "#2354ae",
+                        color: "#000",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8,
+                        radius: radio,
+
+                    });
+                    marker.bindPopup("<div id='popUpMarker'> <div id='fecha'><span>fecha: </span>" + d.properties.fecha_fecha + "</div><div id='votos'><span>Votos: </span>" + d.properties.seguidores + "</div><div id='elementosUsados'> <div> <span>Elementos Usados:</span> </div><div><span>Policias: </span>1</div><div><span>Canecas: </span>2</div><div><span>Asientos: </span>0</div><div><span>Paraderos: </span>1</div><div><span>Juegos: </span>3</div><div><span>Árboles: </span>2</div><div><span>Luces: </span>0</div></div></div>");
                     marcadoresIntervenciones.addLayer(marker);
 
 

@@ -141,7 +141,7 @@ header {}
 
 }
 
-#mapEstado.leaflet-container{
+#mapEstado.leaflet-container, #map.leaflet-container {
     background-color: #fff !important;
 
 }
