@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+<head>
+    <style>
+        rect.bordered {
+            stroke: #E6E6E6;
+            stroke-width: 2px;
+        }
+
+        text.mono {
+            font-size: 9pt;
+            fill: #000;
+        }
+
+        text.axis-workweek {
+            fill: #f00;
+        }
+
+        text.axis-worktime {
+            fill: #f00;
+        }
+    </style>
+    <script src="d3.js"></script>
+</head>
+
+<body>
+    <div id="chart"></div>
+    <div id="dataset-picker">
+    </div>
+    <script type="text/javascript">
+        var margin = {
+                top: 50,
+                right: 0,
+                bottom: 100,
+                left: 100
+            },
+            width = 560 - margin.left - margin.right,
+            height = (width/12)*9 - margin.top,
+            gridSize = Math.floor(width / 12),
+            legendElementWidth = gridSize * 2,
+            estados = 3,
+            coloresEstados = ["#e7ecf1", "#7b99b3", "#134977"], // alternatively colorbrewer.YlGnBu[9]
+            categoriaReporte = ["Policia", "Árboles", "Basura", "Acceso", "Juegos", "Sillas", "Luz"],
+            muestreos = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+
+
+        var svg = d3.select("#chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var labelsCategoriaReportes = svg.selectAll(".labelCategoriasReportes")
+            .data(categoriaReporte)
+            .enter().append("text")
+            .text(function (d) {
+                return d;
+            })
+            .attr("x", 0)
+            .attr("y", function (d, i) {
+                return i * gridSize;
+            })
+            .style("text-anchor", "end")
+            .attr("transform", "translate(-6," + gridSize / 1.5 + ")");
+        //.attr("class", function (d, i) { return ((i >= 0 && i <= 4) ? "labelCategoriasReportes mono axis axis-workweek" : "labelCategoriasReportes mono axis"); });
+
+        var labelsMuestreos = svg.selectAll(".timeLabel")
+            .data(muestreos)
+            .enter().append("text")
+            .text(function (d) {
+                return d;
+            })
+            .attr("x", function (d, i) {
+                return i * gridSize;
+            })
+            .attr("y", 0)
+            .style("text-anchor", "middle")
+            .attr("transform", "translate(" + gridSize / 2 + ", -6)");
+        //.attr("class", function(d, i) { return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis"); });
+
+        var heatmapChart = function (misDatos) {
+            d3.csv(misDatos,
+                function (d) {
+                    return {
+                        categoriaReporte: +d.categoriaReporte,
+                        muestra: +d.muestra,
+                        cantidadReportes: +d.cantidadReportes
+                    };
+                },
+                function (error, data) {
+
+                    var colorScale = d3.scale.quantile()
+                        .domain([0, estados - 1, d3.max(data, function (d) {
+                            return d.cantidadReportes;
+                        })])
+                        .range(coloresEstados);
+
+
+                    var cuadros = svg.selectAll(".muestra")
+                        .data(data, function (d) {
+                            return d.categoriaReporte + ':' + d.muestra;
+                        });
+
+                    cuadros.append("title");
+                    var maximo = d3.max(data, function (d) {
+                        return d.cantidadReportes;
+                    });
+                    cuadros.enter().append("rect")
+                        .attr("x", function (d) {
+                            return (d.muestra - 1) * gridSize;
+                        })
+                        .attr("y", function (d) {
+                            return (d.categoriaReporte - 1) * gridSize;
+                        })
+                        .attr("rx", 4)
+                        .attr("ry", 4)
+                        .attr("class", "muestra bordered")
+                        .attr("width", gridSize)
+                        .attr("height", gridSize)
+                        // ESto es pro si dejo a todos del mismo color
+//                        .style("fill", function (d) {
+//
+//                                      if(d.cantidadReportes>=0 && d.cantidadReportes<=maximo/3){
+//                                          return "#e7ecf1";
+//                                      }
+//                                      else if(d.cantidadReportes>maximo/3 && d.cantidadReportes<=(maximo/3)*2){
+//                                          return "#7b99b3";
+//                                      }
+//                                    else{
+//                                         return "134977";
+//                                         }
+//                        })
+                        .style("fill", function (d) {
+                            if (d.categoriaReporte == 1) {
+                                return "0070bb";
+                            } else if (d.categoriaReporte == 2) {
+                                return "30bb51";
+                            } else if (d.categoriaReporte == 2) {
+                                return "30bb51";
+                            } else if (d.categoriaReporte == 3) {
+                                return "bb6630";
+                            } else if (d.categoriaReporte == 4) {
+                                return "f1872e";
+                            } else if (d.categoriaReporte == 5) {
+                                return "e21a1f";
+                            } else if (d.categoriaReporte == 6) {
+                                return "5930bb";
+                            } else if (d.categoriaReporte == 7) {
+                                return "dfdc13";
+                            } else {
+                                return "000"
+                            }
+                        })
+                        .style("opacity", function (d) {
+                            //console.log(maximo);
+                            if (d.cantidadReportes >= 0 && d.cantidadReportes <= maximo / 4) {
+                                return "0.1";
+                            } else if (d.cantidadReportes > maximo / 4 && d.cantidadReportes <= (maximo / 4) * 2) {
+                                return "0.4";
+                            } else if (d.cantidadReportes > (maximo / 4) * 2 && d.cantidadReportes <= (maximo / 4) * 3) {
+                                return "0.7";
+                            } else {
+                                return "1";
+                            }
+
+                        })
+                    ;
+
+                    //          ESta es la transición del inicio
+                    //cuadros.transition().duration(1000)
+                    //              .style("fill", function(d) { return colorScale(d.cantidadReportes); });
+
+                    cuadros.select("title").text(function (d) {
+                        return d.cantidadReportes;
+                    });
+
+                    cuadros.exit().remove();
+
+                    var legend = svg.selectAll(".legend")
+                        .data(["baja", "media", "alta"]);
+
+                    legend.enter().append("g")
+                        .attr("class", "legend");
+
+                    legend.append("rect")
+                        .attr("x", function (d, i) {
+                            return legendElementWidth * i;
+                        })
+                        .attr("y", height)
+                        .attr("width", legendElementWidth)
+                        .attr("height", gridSize / 2)
+                        .style("fill", function (d, i) {
+                            return coloresEstados[i];
+                        });
+
+                    legend.append("text")
+                        .attr("class", "mono")
+                        .text(function (d) {
+                            return d;
+                        })
+                        .attr("x", function (d, i) {
+                            return legendElementWidth * i;
+                        })
+                        .attr("y", height + gridSize);
+
+                    legend.exit().remove();
+
+                });
+        };
+
+        heatmapChart("set1.csv");
+    </script>
+</body>
+
+</html>

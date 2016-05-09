@@ -29,6 +29,13 @@ video {
 
 
 /* Para todos y Móviles: hasta 480px*/
+.brush .extent {
+    fill: #044265 !important;
+
+  stroke: #000;
+  fill-opacity: .7 !important;
+  shape-rendering: crispEdges;
+}
 
 body {
     font-size: 10pt;
@@ -73,11 +80,39 @@ h3{
     margin: 0 0 5px;
     color: #777;
 }
+#barraNavegacion {
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+    background-color: #BBB;
+    height: 30px;
+    margin: 10px 0 20px;
+}
+#barraNavegacion a:link,#barraNavegacion a:visited{
+    display:block;
+    clear:none;
+    float:left;
+    width: auto;
+    padding: 0 20px;
+    line-height: 30px;
+    font-family: 'Montserrat';
+    color: #666;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;font-size: 11px;
+
+
+}
+#barraNavegacion a:hover, #barraNavegacion a:active, #barraNavegacion a#actual:link,#barraNavegacion a#actual:visited {
+    background-color: #044265;
+    color: #fff;
+}
 
 header,
 #contenedorlineaDeTiempoVieja,
 #contenedorPrincipal,
-#contenedorTiempo,#tablaReportes {
+#contenedorTiempo,#tablaReportes{
     display: block;
     clear: both;
     float: left;
@@ -88,6 +123,13 @@ header,
 }
 #contenedorTiempo{
     font-size: 10px;
+}
+
+#lineaDetiempo{
+    text-align:center;
+}
+#lineaDetiempo svg{
+   display: inline-block;
 }
 
 #lineaDetiempo{

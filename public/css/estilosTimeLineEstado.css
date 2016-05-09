@@ -1,0 +1,52 @@
+#timeLineControlEstado{
+    text-align:center;
+    pading: 0 0 0;
+}
+
+#timeLineControlEstado {
+    display: block;
+    clear: both;
+    float: left;
+    width: 98%;
+    margin: 0 1%;
+    padding: 0% 0% 1%;
+    background-color: #fff;
+}
+#timeLineControlEstado svg{
+   display: inline-block;
+}
+
+.axis text {
+  font: 11px sans-serif;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.grid .minor.tick line {
+  stroke-opacity: .5;
+}
+
+.brush .extent {
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}

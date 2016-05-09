@@ -18,10 +18,10 @@
     <!--estilos -->
     <link rel="stylesheet" href="css/dc.css" />
     <link rel="stylesheet" href="css/viewer.css" />
-    <link rel="stylesheet" href="css/rzslider.min.css" />
+    <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
     <link rel="stylesheet" href="css/leaflet.label.css" />
     <!--pruebas -->
-    <link rel="stylesheet" href="css/estilosLineaTiempo.css" />
+    <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
 
 
 
@@ -29,27 +29,33 @@
 
 <body ng-app="my_angular_app">
     <div ng-controller="home_controller">
-        <header id="data-count">
+        <header>
             <h1>Calidad del Espacio público</h1>
-            <div id="filtrosTotales">
-                <span class="filter-count"></span> Intervenciones seleccionadas de <span class="total-count"></span> creadas |
-                <a id="resetearTodo" href="#" class="botonReseteo">Resetear todo</a>
-            </div>
-        </header>
+            <nav id="barraNavegacion">
+                <a href="index.html">Explorar</a>
+                <a href="estado.html" id="actual">Sistema de Alertas</a>
+                <a href="monitoreo.html">Monitoreo</a>
 
-        <div id="contenedorPrincipal">
-            <div id="categorias">
-                <h3>Intervenciones creadas</h3></div>
-            <div id="mapaConReportes">
-                <div id="mapEstado">
-                    The map is going to fill this div...
+            </nav>
+        </header>
+ <div id="timeLineControlEstado">
+                <script src="js/controllers/timeLineControlEstado.js"></script>
 
                 </div>
-                <div id="lineaDetiempo" class="dc-chart"></div>
+        <div id="contenedorPrincipal">
+            <div id="categorias">
+                <h3>Estado General</h3></div>
+
+            <div id="mapaConReportes">
+                <div id="mapEstado">
+                    <!-- The map is going to fill this div... -->
+
+                </div>
+
                 <div>
                     <!-- <div id="usuariosPorReporte" class="dc-chart">
                         <h3>votos por escena<small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small></h3>
-                    
+
                     </div>
                     <div id="reportesRespondidos" class="dc-chart">
                         <h3>Intervenciones atendidas por el distrito <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small></h3>
@@ -58,13 +64,13 @@
 
             </div>
         </div>
-      <!--   <div id="contenedorTiempo">
+        <!--   <div id="contenedorTiempo">
             <div id="graficaAnual" class="dc-chart">
                 <div id="tituloGraficas">
                     <h3>Intervenciones anuales</h3>
                     <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small>
                 </div>
-        
+
             </div>
             <div id="graficaMensual" class="dc-chart">
                 <div id="tituloGraficas">
@@ -74,20 +80,20 @@
                     </div>
                 </div>
             </div>
-        
+
             <div id="usuariosPorReporte" class="dc-chart">
                 <div id="tituloGraficas">
                     <h3>votos por intervención</h3>
                     <small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small>
                 </div>
-        
+
             </div>
             <div id="reportesRespondidos" class="dc-chart">
                 <div id="tituloGraficas">
                     <h3>Intervenciones atendidas</h3>
                     <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small>
                 </div>
-            </div>      
+            </div>
         </div> -->
         <!-- <div id='popUpMarker'>
             <div id='fecha'><span>fecha: </span> d.properties.fecha_fecha</div>
@@ -103,21 +109,20 @@
                 <div><span>Juegos: </span>3</div>
                 <div><span>Árboles: </span>2</div>
                 <div><span>Luces: </span>0</div>
-        
+
             </div>
         </div> -->
         <div id="contenedorlineaDeTiempoVieja">
-             reportes entre:
-        <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
-        <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24"> 
-        <button type="button" ng_click="filtrarManzanas()">filtrar</button>
-        <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
+            reportes entre:
+            <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
+            <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
+            <button type="button" ng_click="filtrarManzanas()">filtrar</button>
         </div>
 
         <!--   <div id="capad3Hora"></div> -->
         <!--  <div id="timeSlider"></div> -->
         <!--pruebas -->
-        <script src="js/controllers/lineaTiempo.js"></script>
+
 
 </body>
 

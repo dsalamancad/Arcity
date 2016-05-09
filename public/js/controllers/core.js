@@ -185,7 +185,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .dimension(dimensionFecha)
             .group(conteoPorSeguidores)
             .renderVerticalGridLines(true)
+            //.filter(dc.filters.RangedFilter(new Date(2016, 1, 1), new Date(2016, 3, 1)))
+            .filter(dc.filters.RangedFilter(minDate, maxDate))
             .x(d3.time.scale().domain([minDate, maxDate]));
+
 
         graficaAno
             .width(120)
@@ -193,7 +196,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .dimension(dimensionAno)
             .group(conteoPorAno)
             .innerRadius(20)
-            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+            .ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
 
         graficaMes
             .width(120)
@@ -201,7 +204,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .dimension(dimensionMes)
             .group(conteoPorMes)
             .innerRadius(20)
-            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+            .ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         //
         //        graficaDia
         //            .width(600)
@@ -220,7 +223,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         //                bottom: 50,
         //                left: 50
         //            })
-        //            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+        //            .ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         //graficaDia.xAxis().tickValues([0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
 
         graficaSeguidores
@@ -239,7 +242,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 right: 20,
                 bottom: 50,
                 left: 40
-            }).ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+            }).ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         graficaSeguidores.xAxis().tickValues([" ", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, " "]);
 
         graficaRespondido
@@ -248,7 +251,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .dimension(dimensionRespondido)
             .group(conteoPorRespondido)
             .innerRadius(20)
-            .ordinalColors(['#044265', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+            .ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
 
         dataCount
             .dimension(ndx)
@@ -261,6 +264,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             })
             .size(100)
             .columns([
+        function (d) {
+                    return d.properties.id;
+        },
       function (d) {
                     return d.properties.usuario;
                 },
@@ -275,7 +281,12 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 },
       function (d) {
                     return d.properties.seguidores;
-                }
+                },
+        function (d) {
+                    var laimagen;
+                    laimagen = "<img style='width:500px' src='imagenes/capturasReportes/" + d.properties.id + ".jpg' >";
+                    return laimagen;
+            }
     ])
             .sortBy(function (d) {
                 return d.properties.seguidores;
@@ -292,7 +303,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
                     var loc = d.geometry;
                     var radio = d.properties.seguidores;
-                    console.log(radio);
                     //var name = d.brewery.brewery_name;
                     var marker = L.circleMarker([loc.coordinates[1], loc.coordinates[0]], {
                         fillColor: "#2354ae",

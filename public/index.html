@@ -18,11 +18,8 @@
     <!--estilos -->
     <link rel="stylesheet" href="css/dc.css" />
     <link rel="stylesheet" href="css/viewer.css" />
-    <link rel="stylesheet" href="css/rzslider.min.css" />
     <link rel="stylesheet" href="css/leaflet.label.css" />
     <!--pruebas -->
-    <link rel="stylesheet" href="css/estilosLineaTiempo.css" />
-
 
 
 </head>
@@ -31,6 +28,12 @@
     <div ng-controller="home_controller">
         <header id="data-count">
             <h1>Calidad del Espacio público</h1>
+            <nav id="barraNavegacion">
+                <a href="index.html" id="actual">Explorar</a>
+                <a href="estado.html">Sistema de Alertas</a>
+                <a href="monitoreo.html">Monitoreo</a>
+
+            </nav>
             <div id="filtrosTotales">
                 <span class="filter-count"></span> Intervenciones seleccionadas de <span class="total-count"></span> creadas |
                 <a id="resetearTodo" href="#" class="botonReseteo">Resetear todo</a>
@@ -58,6 +61,7 @@
 
             </div>
         </div>
+
         <div id="contenedorTiempo">
             <div id="graficaAnual" class="dc-chart">
                 <div id="tituloGraficas">
@@ -100,12 +104,13 @@
                 <table id="data-table">
                     <thead>
                         <tr class="header">
+                            <th>ID</th>
                             <th>Usuario</th>
                             <th>Año</th>
                             <th>Mes</th>
                             <th>Descripción</th>
                             <th>Votos</th>
-
+                            <th>Imagen</th>
                         </tr>
                     </thead>
                 </table>
@@ -138,10 +143,7 @@
         <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
         </div>
 
-        <!--   <div id="capad3Hora"></div> -->
-        <!--  <div id="timeSlider"></div> -->
-        <!--pruebas -->
-        <script src="js/controllers/lineaTiempo.js"></script>
+
 
 </body>
 
