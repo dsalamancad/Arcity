@@ -63,7 +63,7 @@ io.on('connection', function (socket) {
         })
     })
     socket.on("llamarManzanas", function (params) {
-         console.log("llamado 2");
+        // console.log("llamado 2");
         consultarManzanasEnDB(params, function (geojson) {
             socket.emit("manzanasFiltradas", {
                 guid: params.caller,
@@ -107,14 +107,11 @@ function consultarMapaFiltrado(params, callback) {
 }
 
 function consultarManzanasEnDB(params, callback) {
-     console.log("llamado 3");
+     //console.log("llamado 3");
     geo.geoQuery({
             tableName: 'manzanasbarriolasnieves', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
-            //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
             properties: ['gid']
-
-            //querystring: "lo que busco en web";
         },
         function (json) {
             callback(json);
@@ -124,9 +121,9 @@ function consultarManzanasEnDB(params, callback) {
 }
 
 function consultarReportesenManzanasEnDB(params, callback) {
-    console.log("inicial: "+ params.diaInicial+"/"+ params.mesInicial+"/"+ params.anoInicial);
-    console.log("final: "+ params.diaFinal+"/"+ params.mesFinal+"/"+ params.anoFinal);
-    console.log(params);
+    //console.log("inicial: "+ params.diaInicial+"/"+ params.mesInicial+"/"+ params.anoInicial);
+    //console.log("final: "+ params.diaFinal+"/"+ params.mesFinal+"/"+ params.anoFinal);
+   // console.log(params);
     geo.query({
             querystring: "SELECT manzanasbarriolasnieves.gid as gid,count(reportes.geom) AS totale,sum(reportes.policia) as policias,sum(reportes.caneca) as caneca,sum(reportes.silla) as silla,sum(reportes.estacion) as estacion,sum(reportes.juego) as juego,sum(reportes.arbol) as arbol,sum(reportes.luz) as luz FROM public.manzanasbarriolasnieves LEFT JOIN public.reportes ON st_contains(manzanasbarriolasnieves.geom,reportes.geom) AND reportes.fecha <='"+params.fechaFinal+"'::date AND reportes.fecha>='"+params.fechaInicial+"'::date GROUP BY manzanasbarriolasnieves.gid ORDER BY manzanasbarriolasnieves.gid"
 

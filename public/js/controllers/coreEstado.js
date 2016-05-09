@@ -7,14 +7,14 @@ my_angular_app.service("coneccion", function () {
     var callbacksMapa = {};
 
     socket.on("manzanasFiltradas", function (params) {
-         console.log("llamado 4");
+        //console.log("llamado 4");
         //llamar el callback que tien el guid y le paso como parametro el geojson
         callbacksMapa[params.guid](params.geojson);
         delete callbacksMapa[params.guid];
     });
 
     socket.on("reportesPorManzanasFiltradas", function (params) {
-        console.log(params);
+        //console.log(params);
         //llamar el callback que tien el guid y le paso como parametro el geojson
         callbacksMapa[params.guid](params.geojson);
         delete callbacksMapa[params.guid];
@@ -29,7 +29,7 @@ my_angular_app.service("coneccion", function () {
     };
     //este es mi metodod que voy a usar
     var llamarFiltroManzanas = function (params) {
-         console.log("llamado 1");
+        //console.log("llamado 1");
         var guid = genGuid();
         callbacksMapa[guid] = params.callback;
         params["caller"] = guid;
@@ -53,57 +53,59 @@ my_angular_app.service("coneccion", function () {
 my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($scope, coneccion) {
     //console.log($scope);
     var socket = io();
-    var capaConPoligonosCargados;
+    var capaConPoligonosCargados, capaConPoligonosCargadosPolicia;
     var capaConPoligonosMulticoloresCargados;
     var guardaPoligonos = [];
     var guardaOpacidad = [];
     var opacidadesPoligonos = {};
+    var opacidadesPoligonosPolicia = {};
     //variables iniciales para llamar a los filtros
-    var fechaInicialGlobal = new Date(2015,0,1);
-    var fechaFinalGlobal =new Date(2016,10,1);
-//    var diaInicialGlobal = 1,
-//        diaFinalGlobal = 31,
-//        mesInicialGlobal = 1,
-//        mesFinalGlobal = 12,
-//        anoInicialGlobal = 2015,
-//        anoFinalGlobal = 2016;
+    var fechaInicialGlobal = new Date(2015, 0, 1);
+    var fechaFinalGlobal = new Date(2016, 10, 1);
     var geojsonMarkerOptions = {
         "color": "#ff7800",
         "weight": 1,
         "opacity": 1
     };
 
+    var geojsonMarkerOptionsPolicia = {
+        "color": "#0070bb",
+        "weight": 1,
+        "opacity": 1
+    };
+
     // FUNCIONES LLAMADAS CUANDO VUEVLE EL MENSAJE DEL SERVIDOR
     var dibujarMapa = function (data) {
-         console.log("llamado 5");
-        console.log(data);
+        //console.log("llamado 5");
+        //console.log(data);
         capaConPoligonosCargados = L.geoJson(data, {
             style: geojsonMarkerOptions
         });
+
+        capaConPoligonosCargadosPolicia = L.geoJson(data, {
+            style: geojsonMarkerOptionsPolicia
+        });
+
         // me llama los reportes por poligono
         coneccion.llamarFiltroReportesPorManzanas({
             callback: definirTransparencia,
-            fechaInicial:fechaInicialGlobal,
-            fechaFinal:fechaFinalGlobal,
-//            diaInicial: diaInicialGlobal,
-//            diaFinal: diaFinalGlobal,
-//            mesInicial: mesInicialGlobal,
-//            mesFinal: mesFinalGlobal,
-//            anoInicial: anoInicialGlobal,
-//            anoFinal: anoFinalGlobal,
+            fechaInicial: fechaInicialGlobal,
+            fechaFinal: fechaFinalGlobal,
         });
         capaConPoligonosCargados.addTo(map);
+        capaConPoligonosCargadosPolicia.addTo(mapaPolicia);
     }
 
     //función para meter en arrays los valores de poligono y su numero de reportes
     var definirTransparencia = function (data) {
-
-         console.log("llamado 6");
-        console.log(data);
-
-                var maximoReportesporManzana = d3.max(data, function (d) {
-                    return Number(d.totale);
-                });
+        //console.log("llamado 6");
+        //console.log(data);
+        var maximoReportesporManzana = d3.max(data, function (d) {
+            return Number(d.totale);
+        });
+        var maximoReportesporManzanaPolicia = d3.max(data, function (d) {
+            return Number(d.policias);
+        });
         //var maximoReportesporManzana = 25;
 
         for (var i = 0; i < data.length; i++) {
@@ -117,30 +119,51 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             } else {
                 opacidadesPoligonos[data[i].gid] = 1;
             }
+        }
+
+         for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaPolicia);
+            if (data[i].policias >= 0 && data[i].policias <= maximoReportesporManzanaPolicia / 4) {
+                opacidadesPoligonosPolicia[data[i].gid] = 0.1;
+            } else if (data[i].policias > maximoReportesporManzanaPolicia / 4 && data[i].policias <= (maximoReportesporManzanaPolicia / 4) * 2) {
+                opacidadesPoligonosPolicia[data[i].gid] = 0.4;
+            } else if (data[i].policias > (maximoReportesporManzanaPolicia / 4) * 2 && data[i].policias <= (maximoReportesporManzanaPolicia / 4) * 3) {
+                opacidadesPoligonosPolicia[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosPolicia[data[i].gid] = 1;
+            }
+         }
 
 
             //opacidadesPoligonos[data[i].gid] = Number(data[i].totale) / maximoReportesporManzana;
-        }
-
-
 
 
         // me llama la función que asigna transparencia
         aplicarEstilo();
 
-
     }
 
     //función para crear estilo de cada poligono
     var aplicarEstilo = function () {
-         console.log("llamado 7");
+        //console.log("llamado 7");
         for (each in capaConPoligonosCargados._layers) {
             var l = capaConPoligonosCargados._layers[each];
             var gid = l.feature.properties.gid;
-            console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonos[gid];
             l.setStyle({
                 color: "#144a78",
+                fillOpacity: opacidad
+            })
+
+        }
+
+        for (each in capaConPoligonosCargadosPolicia._layers) {
+            var l = capaConPoligonosCargadosPolicia._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosPolicia[gid];
+            l.setStyle({
                 fillOpacity: opacidad
             })
 
@@ -151,7 +174,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     //HACER LLAMADOS AL SERVIDOR (EL CALLBACK ES LA FUNCI´ON QUE LLAMA CUANDO ME DEVUELVE EL SERVIDOR)
     // la usaré cuando sea filtrar por el timeline
     $scope.filtrarManzanas = function () {
-         if (!d3.event.sourceEvent) return; // only transition after input
+        if (!d3.event.sourceEvent) return; // only transition after input
         var extent0 = brush.extent(),
             extent1 = extent0.map(d3.time.day.round);
 
@@ -168,46 +191,22 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
         fechaInicial = brush.extent()[0];
         fechaFinal = brush.extent()[1];
-//        diaInicial = fechaInicial.getDate();
-//        mesInicial = fechaInicial.getMonth() + 1;
-//        anoInicial = fechaInicial.getFullYear();
-//        diaFinal = fechaFinal.getDate();
-//        mesFinal = fechaFinal.getMonth() + 1;
-//        anoFinal = fechaFinal.getFullYear();
 
-        console.log("inicial: " + fechaInicial);
-        console.log("final: " + fechaFinal);
+        //console.log("inicial: " + fechaInicial);
+        //console.log("final: " + fechaFinal);
         //console.log(diaFinal + " " + mesFinal + " " + anoFinal);
-    fechaInicialGlobal = fechaInicial;
+        fechaInicialGlobal = fechaInicial;
         fechaFinalGlobal = fechaFinal;
-//        diaInicialGlobal = diaInicial;
-//        diaFinalGlobal = diaFinal;
-//        mesInicialGlobal = mesInicial;
-//        mesFinalGlobal = mesFinal;
-//        anoInicialGlobal = anoInicial;
-//        anoFinalGlobal = anoFinal;
+
 
         map.removeLayer(capaConPoligonosCargados);
+        mapaPolicia.removeLayer(capaConPoligonosCargadosPolicia);
 
         coneccion.llamarFiltroManzanas({
             callback: dibujarMapa,
         });
     }
 
-    //    $scope.cambiarTiempoManzanas = function () {
-    //        console.log("llegué aca 1");
-    //        //d3.selectAll("#capad3Hora svg").remove();
-    //        //map.removeLayer(capaConPuntosCargados);
-    ////        coneccion.llamarFiltroReportesPorManzanas({
-    ////            callback: definirTransparencia,
-    ////            diaInicial: 1,
-    ////            diaFinal: 31,
-    ////            mesInicial: 1,
-    ////            mesFinal: 11,
-    ////            anoInicial: 2015,
-    ////            anoFinal: 2016,
-    ////        });
-    //    }
 
     // me llama los poligonos para dibujar
     coneccion.llamarFiltroManzanas({
@@ -221,25 +220,40 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
         osm = new L.TileLayer(osmUrl, {
-            maxZoom: 18,
+            maxZoom: 16,
             attribution: osmAttrib,
         });
 
     // carga de tiling de open maps
     var map = L.map('mapEstado').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)
     map.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 18,
+        maxZoom: 16,
         attribution: osmAttrib,
         opacity: .3,
     }));
 
+     var mapaPolicia = L.map('mapaPolicia').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaPolicia.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
+
+        opacity: .3,
+    }));
+
     //configuración general del mapa
-    map._layersMaxZoom = 18;
-    map._layersMinZoom = 10;
+    map._layersMaxZoom = 16;
+    map._layersMinZoom = 16;
     L.control.scale({
         position: 'bottomleft', // .. donde aparece
         imperial: false // .. sistema métrico
     }).addTo(map);
+
+    mapaPolicia._layersMaxZoom = 18;
+    mapaPolicia._layersMinZoom = 10;
+    L.control.scale({
+        position: 'bottomleft', // .. donde aparece
+        imperial: false // .. sistema métrico
+    }).addTo(mapaPolicia);
+
 
 
     //CREACION DE LINEA DE TIEMPO PARA CONTROLAR
@@ -260,7 +274,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         .x(x)
         .extent([new Date(2015, 1, 1), new Date(2016, 5, 1)])
 
-    .on("brushend",  $scope.filtrarManzanas);
+    .on("brushend", $scope.filtrarManzanas);
 
     var svg = d3.select("body #timeLineControlEstado").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -309,55 +323,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     var fechaInicial, diaInicial, mesInicial, anoInicial;
     var fechaFinal, diaFinal, mesFinal, anoFinal;
-
-//    function extraerDatos() {
-//
-//
-//
-//        if (!d3.event.sourceEvent) return; // only transition after input
-//        var extent0 = brush.extent(),
-//            extent1 = extent0.map(d3.time.day.round);
-//
-//        // if empty when rounded, use floor & ceil instead
-//        if (extent1[0] >= extent1[1]) {
-//            extent1[0] = d3.time.day.floor(extent0[0]);
-//            extent1[1] = d3.time.day.ceil(extent0[1]);
-//        }
-//
-//        d3.select(this).transition()
-//            .call(brush.extent(extent1))
-//            .call(brush.event);
-//
-//
-//        fechaInicial = brush.extent()[0];
-//        fechaFinal = brush.extent()[1];
-//        diaInicial = fechaInicial.getDate();
-//        mesInicial = fechaInicial.getMonth() + 1;
-//        anoInicial = fechaInicial.getFullYear();
-//        diaFinal = fechaFinal.getDate();
-//        mesFinal = fechaFinal.getMonth() + 1;
-//        anoFinal = fechaFinal.getFullYear();
-//
-//        console.log("inicial: " + fechaInicial);
-//        console.log("final: " + fechaFinal);
-//        //console.log(diaFinal + " " + mesFinal + " " + anoFinal);
-//
-//        mesInicialGlobal = mesInicial;
-//        diaInicialGlobal = diaInicial;
-//        diaFinalGlobal = diaFinal;
-//        mesInicialGlobal = mesInicial;
-//        mesFinalGlobal = mesFinal;
-//        anoInicialGlobal = anoInicial;
-//        anoFinalGlobal = anoFinal;
-//
-//        map.removeLayer(capaConPoligonosCargados);
-//        coneccion.llamarFiltroManzanas({
-//            callback: dibujarMapa,
-//        });
-//
-//
-//
-//    }
 
     function brushended() {
 
