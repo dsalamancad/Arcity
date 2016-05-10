@@ -53,12 +53,18 @@ my_angular_app.service("coneccion", function () {
 my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($scope, coneccion) {
     //console.log($scope);
     var socket = io();
-    var capaConPoligonosCargados, capaConPoligonosCargadosPolicia;
+    var capaConPoligonosCargados, capaConPoligonosCargadosPolicia, capaConPoligonosCargadosArboles, capaConPoligonosCargadosBasuras, capaConPoligonosCargadosAcceso, capaConPoligonosCargadosJuegos, capaConPoligonosCargadosSillas, capaConPoligonosCargadosLuz;
     var capaConPoligonosMulticoloresCargados;
     var guardaPoligonos = [];
     var guardaOpacidad = [];
     var opacidadesPoligonos = {};
     var opacidadesPoligonosPolicia = {};
+    var opacidadesPoligonosArboles = {};
+    var opacidadesPoligonosBasuras = {};
+    var opacidadesPoligonosAcceso = {};
+    var opacidadesPoligonosJuegos = {};
+    var opacidadesPoligonosSillas = {};
+    var opacidadesPoligonosLuz = {};
     //variables iniciales para llamar a los filtros
     var fechaInicialGlobal = new Date(2015, 0, 1);
     var fechaFinalGlobal = new Date(2016, 10, 1);
@@ -74,6 +80,37 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         "opacity": 1
     };
 
+    var geojsonMarkerOptionsArboles = {
+        "color": "#30bb51",
+        "weight": 1,
+        "opacity": 1
+    };
+    var geojsonMarkerOptionsBasuras = {
+        "color": "#bc6731",
+        "weight": 1,
+        "opacity": 1
+    };
+    var geojsonMarkerOptionsAcceso = {
+        "color": "#ffb92e",
+        "weight": 1,
+        "opacity": 1
+    };
+    var geojsonMarkerOptionsJuegos = {
+        "color": "#e31b20",
+        "weight": 1,
+        "opacity": 1
+    };
+    var geojsonMarkerOptionsSillas = {
+        "color": "#5a31bc",
+        "weight": 1,
+        "opacity": 1
+    };
+    var geojsonMarkerOptionsLuz = {
+        "color": "#dfdc13",
+        "weight": 1,
+        "opacity": 1
+    };
+
     // FUNCIONES LLAMADAS CUANDO VUEVLE EL MENSAJE DEL SERVIDOR
     var dibujarMapa = function (data) {
         //console.log("llamado 5");
@@ -85,6 +122,24 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         capaConPoligonosCargadosPolicia = L.geoJson(data, {
             style: geojsonMarkerOptionsPolicia
         });
+        capaConPoligonosCargadosArboles = L.geoJson(data, {
+            style: geojsonMarkerOptionsArboles
+        });
+        capaConPoligonosCargadosBasuras = L.geoJson(data, {
+            style: geojsonMarkerOptionsBasuras
+        });
+        capaConPoligonosCargadosAcceso = L.geoJson(data, {
+            style: geojsonMarkerOptionsAcceso
+        });
+        capaConPoligonosCargadosJuegos = L.geoJson(data, {
+            style: geojsonMarkerOptionsJuegos
+        });
+        capaConPoligonosCargadosSillas = L.geoJson(data, {
+            style: geojsonMarkerOptionsSillas
+        });
+        capaConPoligonosCargadosLuz = L.geoJson(data, {
+            style: geojsonMarkerOptionsLuz
+        });
 
         // me llama los reportes por poligono
         coneccion.llamarFiltroReportesPorManzanas({
@@ -94,6 +149,12 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         });
         capaConPoligonosCargados.addTo(map);
         capaConPoligonosCargadosPolicia.addTo(mapaPolicia);
+        capaConPoligonosCargadosArboles.addTo(mapaArboles);
+        capaConPoligonosCargadosBasuras.addTo(mapaBasuras);
+        capaConPoligonosCargadosAcceso.addTo(mapaAcceso);
+        capaConPoligonosCargadosJuegos.addTo(mapaJuegos);
+        capaConPoligonosCargadosSillas.addTo(mapaSillas);
+        capaConPoligonosCargadosLuz.addTo(mapaLuz);
     }
 
     //función para meter en arrays los valores de poligono y su numero de reportes
@@ -106,7 +167,26 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         var maximoReportesporManzanaPolicia = d3.max(data, function (d) {
             return Number(d.policias);
         });
+        var maximoReportesporManzanaArboles = d3.max(data, function (d) {
+            return Number(d.arbol);
+        });
+        var maximoReportesporManzanaBasuras = d3.max(data, function (d) {
+            return Number(d.caneca);
+        });
+        var maximoReportesporManzanaAcceso = d3.max(data, function (d) {
+            return Number(d.estacion);
+        });
+        var maximoReportesporManzanaJuegos = d3.max(data, function (d) {
+            return Number(d.juego);
+        });
+        var maximoReportesporManzanaSillas = d3.max(data, function (d) {
+            return Number(d.silla);
+        });
+        var maximoReportesporManzanaLuz = d3.max(data, function (d) {
+            return Number(d.luz);
+        });
         //var maximoReportesporManzana = 25;
+
 
         for (var i = 0; i < data.length; i++) {
             //console.log(maximoReportesporManzana);
@@ -121,7 +201,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             }
         }
 
-         for (var i = 0; i < data.length; i++) {
+        for (var i = 0; i < data.length; i++) {
             //console.log(maximoReportesporManzanaPolicia);
             if (data[i].policias >= 0 && data[i].policias <= maximoReportesporManzanaPolicia / 4) {
                 opacidadesPoligonosPolicia[data[i].gid] = 0.1;
@@ -132,10 +212,90 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             } else {
                 opacidadesPoligonosPolicia[data[i].gid] = 1;
             }
-         }
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaArboles);
+            if (data[i].arbol >= 0 && data[i].arbol <= maximoReportesporManzanaArboles / 4) {
+                opacidadesPoligonosArboles[data[i].gid] = 0.1;
+            } else if (data[i].arbol > maximoReportesporManzanaArboles / 4 && data[i].arbol <= (maximoReportesporManzanaArboles / 4) * 2) {
+                opacidadesPoligonosArboles[data[i].gid] = 0.4;
+            } else if (data[i].arbol > (maximoReportesporManzanaArboles / 4) * 2 && data[i].arbol <= (maximoReportesporManzanaArboles / 4) * 3) {
+                opacidadesPoligonosArboles[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosArboles[data[i].gid] = 1;
+            }
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaBasuras);
+            if (data[i].caneca >= 0 && data[i].caneca <= maximoReportesporManzanaBasuras / 4) {
+                opacidadesPoligonosBasuras[data[i].gid] = 0.1;
+            } else if (data[i].caneca > maximoReportesporManzanaBasuras / 4 && data[i].caneca <= (maximoReportesporManzanaBasuras / 4) * 2) {
+                opacidadesPoligonosBasuras[data[i].gid] = 0.4;
+            } else if (data[i].caneca > (maximoReportesporManzanaBasuras / 4) * 2 && data[i].caneca <= (maximoReportesporManzanaBasuras / 4) * 3) {
+                opacidadesPoligonosBasuras[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosBasuras[data[i].gid] = 1;
+            }
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaAcceso);
+            if (data[i].estacion >= 0 && data[i].estacion <= maximoReportesporManzanaAcceso / 4) {
+                opacidadesPoligonosAcceso[data[i].gid] = 0.1;
+            } else if (data[i].estacion > maximoReportesporManzanaAcceso / 4 && data[i].estacion <= (maximoReportesporManzanaAcceso / 4) * 2) {
+                opacidadesPoligonosAcceso[data[i].gid] = 0.4;
+            } else if (data[i].estacion > (maximoReportesporManzanaAcceso / 4) * 2 && data[i].estacion <= (maximoReportesporManzanaAcceso / 4) * 3) {
+                opacidadesPoligonosAcceso[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosAcceso[data[i].gid] = 1;
+            }
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaJuegos);
+            if (data[i].juego >= 0 && data[i].juego <= maximoReportesporManzanaJuegos / 4) {
+                opacidadesPoligonosJuegos[data[i].gid] = 0.1;
+            } else if (data[i].juego > maximoReportesporManzanaJuegos / 4 && data[i].juego <= (maximoReportesporManzanaJuegos / 4) * 2) {
+                opacidadesPoligonosJuegos[data[i].gid] = 0.4;
+            } else if (data[i].juego > (maximoReportesporManzanaJuegos / 4) * 2 && data[i].juego <= (maximoReportesporManzanaJuegos / 4) * 3) {
+                opacidadesPoligonosJuegos[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosJuegos[data[i].gid] = 1;
+            }
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaSillas);
+            if (data[i].silla >= 0 && data[i].silla <= maximoReportesporManzanaSillas / 4) {
+                opacidadesPoligonosSillas[data[i].gid] = 0.1;
+            } else if (data[i].silla > maximoReportesporManzanaSillas / 4 && data[i].silla <= (maximoReportesporManzanaSillas / 4) * 2) {
+                opacidadesPoligonosSillas[data[i].gid] = 0.4;
+            } else if (data[i].silla > (maximoReportesporManzanaSillas / 4) * 2 && data[i].silla <= (maximoReportesporManzanaSillas / 4) * 3) {
+                opacidadesPoligonosSillas[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosSillas[data[i].gid] = 1;
+            }
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            //console.log(maximoReportesporManzanaLuz);
+            if (data[i].luz >= 0 && data[i].luz <= maximoReportesporManzanaLuz / 4) {
+                opacidadesPoligonosLuz[data[i].gid] = 0.1;
+            } else if (data[i].luz > maximoReportesporManzanaLuz / 4 && data[i].luz <= (maximoReportesporManzanaLuz / 4) * 2) {
+                opacidadesPoligonosLuz[data[i].gid] = 0.4;
+            } else if (data[i].luz > (maximoReportesporManzanaLuz / 4) * 2 && data[i].luz <= (maximoReportesporManzanaLuz / 4) * 3) {
+                opacidadesPoligonosLuz[data[i].gid] = 0.7;
+            } else {
+                opacidadesPoligonosLuz[data[i].gid] = 1;
+            }
+        }
 
 
-            //opacidadesPoligonos[data[i].gid] = Number(data[i].totale) / maximoReportesporManzana;
+
+
+        //opacidadesPoligonos[data[i].gid] = Number(data[i].totale) / maximoReportesporManzana;
 
 
         // me llama la función que asigna transparencia
@@ -168,6 +328,74 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             })
 
         }
+
+        for (each in capaConPoligonosCargadosArboles._layers) {
+            var l = capaConPoligonosCargadosArboles._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosArboles[gid];
+            l.setStyle({
+                fillOpacity: opacidad
+            })
+
+        }
+
+        for (each in capaConPoligonosCargadosBasuras._layers) {
+            var l = capaConPoligonosCargadosBasuras._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosBasuras[gid];
+            l.setStyle({
+                fillOpacity: opacidad
+            })
+
+        }
+
+        for (each in capaConPoligonosCargadosAcceso._layers) {
+            var l = capaConPoligonosCargadosAcceso._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosAcceso[gid];
+            l.setStyle({
+                fillOpacity: opacidad
+            })
+
+        }
+
+        for (each in capaConPoligonosCargadosJuegos._layers) {
+            var l = capaConPoligonosCargadosJuegos._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosJuegos[gid];
+            l.setStyle({
+                fillOpacity: opacidad
+            })
+
+        }
+
+        for (each in capaConPoligonosCargadosSillas._layers) {
+            var l = capaConPoligonosCargadosSillas._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosSillas[gid];
+            l.setStyle({
+                fillOpacity: opacidad
+            })
+
+        }
+
+        for (each in capaConPoligonosCargadosLuz._layers) {
+            var l = capaConPoligonosCargadosLuz._layers[each];
+            var gid = l.feature.properties.gid;
+            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
+            var opacidad = opacidadesPoligonosLuz[gid];
+            l.setStyle({
+                fillOpacity: opacidad
+            })
+
+        }
+
+
     }
 
 
@@ -201,6 +429,12 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
         map.removeLayer(capaConPoligonosCargados);
         mapaPolicia.removeLayer(capaConPoligonosCargadosPolicia);
+        mapaArboles.removeLayer(capaConPoligonosCargadosArboles);
+        mapaBasuras.removeLayer(capaConPoligonosCargadosBasuras);
+        mapaAcceso.removeLayer(capaConPoligonosCargadosAcceso);
+        mapaJuegos.removeLayer(capaConPoligonosCargadosJuegos);
+        mapaSillas.removeLayer(capaConPoligonosCargadosSillas);
+        mapaLuz.removeLayer(capaConPoligonosCargadosLuz);
 
         coneccion.llamarFiltroManzanas({
             callback: dibujarMapa,
@@ -228,14 +462,52 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     var map = L.map('mapEstado').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)
     map.addLayer(new L.TileLayer(osmUrl, {
         maxZoom: 16,
-        attribution: osmAttrib,
         opacity: .3,
     }));
 
-     var mapaPolicia = L.map('mapaPolicia').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    var mapaPolicia = L.map('mapaPolicia').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
     mapaPolicia.addLayer(new L.TileLayer(osmUrl, {
         maxZoom: 16,
 
+        opacity: .3,
+    }));
+
+    var mapaArboles = L.map('mapaArboles').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaArboles.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
+
+        opacity: .3,
+    }));
+
+    var mapaBasuras = L.map('mapaBasuras').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaBasuras.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
+
+        opacity: .3,
+    }));
+
+    var mapaAcceso = L.map('mapaAcceso').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaAcceso.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
+
+        opacity: .3,
+    }));
+
+    var mapaJuegos = L.map('mapaJuegos').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaJuegos.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
+        opacity: .3,
+    }));
+
+    var mapaSillas = L.map('mapaSillas').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaSillas.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
+        opacity: .3,
+    }));
+
+    var mapaLuz = L.map('mapaLuz').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
+    mapaLuz.addLayer(new L.TileLayer(osmUrl, {
+        maxZoom: 16,
         opacity: .3,
     }));
 
@@ -247,12 +519,27 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         imperial: false // .. sistema métrico
     }).addTo(map);
 
-    mapaPolicia._layersMaxZoom = 18;
-    mapaPolicia._layersMinZoom = 10;
-    L.control.scale({
-        position: 'bottomleft', // .. donde aparece
-        imperial: false // .. sistema métrico
-    }).addTo(mapaPolicia);
+    mapaPolicia._layersMaxZoom = 14;
+    mapaPolicia._layersMinZoom = 14;
+
+    mapaArboles._layersMaxZoom = 14;
+    mapaArboles._layersMinZoom = 14;
+
+    mapaBasuras._layersMaxZoom = 14;
+    mapaBasuras._layersMinZoom = 14;
+
+    mapaAcceso._layersMaxZoom = 14;
+    mapaAcceso._layersMinZoom = 14;
+
+    mapaJuegos._layersMaxZoom = 14;
+    mapaJuegos._layersMinZoom = 14;
+
+    mapaSillas._layersMaxZoom = 14;
+    mapaSillas._layersMinZoom = 14;
+
+    mapaLuz._layersMaxZoom = 14;
+    mapaLuz._layersMinZoom = 14;
+
 
 
 
@@ -272,7 +559,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     var brush = d3.svg.brush()
         .x(x)
-        .extent([new Date(2015, 1, 1), new Date(2016, 5, 1)])
+        .extent([new Date(2015, 1, 1), new Date(2016, 3, 1)])
 
     .on("brushend", $scope.filtrarManzanas);
 

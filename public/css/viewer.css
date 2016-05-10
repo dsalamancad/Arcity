@@ -161,6 +161,7 @@ header {}
     display: block;
     clear: both;
     float: left;
+
 }
 
 #mapaConReportes, #mapaConReportesEstado {
@@ -170,16 +171,34 @@ header {}
     float: left;
 }
 
+
 #map {
     width: 100%;
     min-height: 300px;
     max-height: 400px !important;
 }
 
+#ConfiguracionEstadoGeneral{
+    width: 40%;
+    display:block;
+    clear:none;
+    float:left;
+
+}
+
+#mapasCadauno{
+        width: 60%;
+        display:block;
+    clear:none;
+    float:right;
+
+
+}
 #mapEstado{
     width: 500px;
     min-height: 500px;
     max-height: 500px !important;
+
 
 }
 
@@ -190,19 +209,41 @@ header {}
 
 
 }
+.wrapperMapas{
+    width: 180px;
+   display:block;
+    clear:none;
+    float:left;
+     margin: 0px 0px 20px 20px ;
+}
+#mapaPolicia, #mapaArboles, #mapaBasuras, #mapaAcceso, #mapaJuegos, #mapaSillas, #mapaLuz{
+    width: 180px;
+    min-height: 180px;
+    max-height: 180px !important;
+    background-color: white;
 
-#mapaPolicia{
-    width: 150px;
-    min-height: 150px;
-    max-height: 150px !important;
+
+
 
 }
+
+.wrapperMapas h3{
+    display: block;
+    clear: both;
+    float: left;
+    width: 100%;
+    background-color: white;
+}
+
 
 #mapEstado.leaflet-container, #map.leaflet-container {
     background-color: #fff !important;
 
 }
 
+.leaflet-control-zoom, .leaflet-control-scale-line, .leaflet-control-attribution{
+    visibility: hidden;
+}
 #usuariosPorReporte,
 #reportesRespondidos {
     width: 100%;

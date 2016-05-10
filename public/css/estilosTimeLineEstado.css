@@ -1,5 +1,5 @@
 #timeLineControlEstado{
-    text-align:center;
+/*    text-align:center;*/
     pading: 0 0 0;
 }
 
@@ -7,13 +7,36 @@
     display: block;
     clear: both;
     float: left;
-    width: 98%;
+    width: 96%;
     margin: 0 1%;
-    padding: 0% 0% 1%;
+    padding: 0% 1% 1%;
     background-color: #fff;
 }
+
+#barraNavegacion{
+    width: 960px;
+    margin-bottom: 0px;
+}
+
+#papaArriba{
+    position: relative;
+}
+
+#papaArriba #nivelesAlertas{
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    background-color: #fff;
+    padding-left: 10px;
+}
+#papaArriba #nivelesAlertas img{
+    width: 250px;
+}
+
+
 #timeLineControlEstado svg{
    display: inline-block;
+    margin-right: 40px;
 }
 
 .axis text {

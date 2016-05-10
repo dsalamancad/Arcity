@@ -31,29 +31,111 @@
     <div ng-controller="home_controller">
         <header>
             <h1>Calidad del Espacio público</h1>
-            <nav id="barraNavegacion">
-                <a href="index.html">Explorar</a>
-                <a href="estado.html" id="actual">Sistema de Alertas</a>
-                <a href="monitoreo.html">Monitoreo</a>
+            <div id="papaArriba">
+                <nav id="barraNavegacion">
+                    <a href="index.html">Explorar</a>
+                    <a href="estado.html" id="actual">Sistema de Alertas</a>
+                    <a href="monitoreo.html">Monitoreo</a>
 
-            </nav>
-        </header>
- <div id="timeLineControlEstado">
-                <script src="js/controllers/timeLineControlEstado.js"></script>
-
+                </nav>
+                <div id="nivelesAlertas">
+                    <h3>Niveles de Alerta</h3>
+                    <img src="imagenes/nivelesAlertas.png" alt="">
                 </div>
+            </div>
+        </header>
+        <div id="timeLineControlEstado">
+            <script src="js/controllers/timeLineControlEstado.js"></script>
+
+        </div>
         <div id="contenedorPrincipal">
             <div id="categorias">
-                <h3>Estado General</h3></div>
+            </div>
 
             <div id="mapaConReportesEstado">
-                <div id="mapEstado">
-                    <!-- The map is going to fill this div... -->
+                <div id="ConfiguracionEstadoGeneral">
 
+                    <h3>Estado General</h3>
+                    <div id="mapEstado">
+                        <!-- The map is going to fill this div... -->
+
+                    </div>
+                    <div id="ponderacion">
+                        <h5>Pondere cada una de las categorías:</h5>
+                        <p>Asígnele un peso de acuerdo a la importancia que usted quiera asignarle a cada una de las categorías a analizar y asi ver el estado de cada manzana de acuerdo a ello:</p>
+                        <table>
+                            <th>
+                                <td>Categoría</td>
+                                <td>Peso</td>
+                            </th>
+                            <tr>
+                                <td>Policías</td>
+                                <td><input type="text" ng-model="pesoPolicia" size="2" placeholder="0" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </table>
+
+                    </div>
                 </div>
 
-                <div>
-                    <div id="mapaPolicia"></div>
+                <div id="mapasCadauno">
+                    <div class="wrapperMapas">
+                        <h3>Policía</h3>
+                        <div id="mapaPolicia"></div>
+                    </div>
+                    <div class="wrapperMapas">
+                        <h3>Árboles</h3>
+                        <div id="mapaArboles">
+                        </div>
+                    </div>
+                    <div class="wrapperMapas">
+                        <h3>Basuras</h3>
+                        <div id="mapaBasuras">
+                        </div>
+                    </div>
+                    <div class="wrapperMapas">
+                        <h3>Acceso</h3>
+                        <div id="mapaAcceso">
+                        </div>
+                    </div>
+                    <div class="wrapperMapas">
+                        <h3>Juegos</h3>
+                        <div id="mapaJuegos">
+                        </div>
+                    </div>
+                    <div class="wrapperMapas">
+                        <h3>Sillas</h3>
+                        <div id="mapaSillas">
+                        </div>
+                    </div>
+                    <div class="wrapperMapas">
+                        <h3>Luz</h3>
+                        <div id="mapaLuz">
+                        </div>
+                    </div>
                 </div>
 
             </div>
