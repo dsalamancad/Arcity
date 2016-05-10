@@ -111,6 +111,15 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         "opacity": 1
     };
 
+    //VARIABLES PARA HACER LA PONDERACIÓN DE LOS PESOS DEL GRÁFICO PRINCIPAL
+    var pesoGlobalPolicia = 10,
+        pesoGlobalArboles = 10,
+        pesoGlobalBasuras = 10,
+        pesoGlobalAcceso = 10,
+        pesoGlobalJuegos = 10,
+        pesoGlobalSillas = 10,
+        pesoGlobalLuz = 10;
+
     // FUNCIONES LLAMADAS CUANDO VUEVLE EL MENSAJE DEL SERVIDOR
     var dibujarMapa = function (data) {
         //console.log("llamado 5");
@@ -185,22 +194,49 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         var maximoReportesporManzanaLuz = d3.max(data, function (d) {
             return Number(d.luz);
         });
-        //var maximoReportesporManzana = 25;
 
 
+
+        var reportesporManzanaPonderados = [];
+        var maximoReportesporManzanaPonderados = d3.max(reportesporManzanaPonderados);
+
+        var sumaPesos = pesoGlobalPolicia + pesoGlobalArboles + pesoGlobalBasuras + pesoGlobalAcceso + pesoGlobalJuegos + pesoGlobalSillas + pesoGlobalLuz;
+        console.log("suma de pesos es" + sumaPesos);
         for (var i = 0; i < data.length; i++) {
             //console.log(maximoReportesporManzana);
-            if (data[i].totale >= 0 && data[i].totale <= maximoReportesporManzana / 4) {
+            var totalsuma = (Number(data[i].policias) * pesoGlobalPolicia) + (Number(data[i].arbol) * pesoGlobalArboles) + (Number(data[i].caneca) * pesoGlobalBasuras) + (Number(data[i].estacion) * pesoGlobalAcceso) + (Number(data[i].juego) * pesoGlobalJuegos) + (Number(data[i].silla) * pesoGlobalSillas) + (Number(data[i].luz) * pesoGlobalLuz);
+
+            var valorTotalPonderado = totalsuma / sumaPesos;
+
+            reportesporManzanaPonderados.push(valorTotalPonderado);
+
+            console.log("el" + data[i].gid + " es de" + valorTotalPonderado);
+            //            if (data[i].totale >= 0 && data[i].totale <= maximoReportesporManzana / 4) {
+            //                opacidadesPoligonos[data[i].gid] = 0.1;
+            //            } else if (data[i].totale > maximoReportesporManzana / 4 && data[i].totale <= (maximoReportesporManzana / 4) * 2) {
+            //                opacidadesPoligonos[data[i].gid] = 0.4;
+            //            } else if (data[i].totale > (maximoReportesporManzana / 4) * 2 && data[i].totale <= (maximoReportesporManzana / 4) * 3) {
+            //                opacidadesPoligonos[data[i].gid] = 0.7;
+            //            } else {
+            //                opacidadesPoligonos[data[i].gid] = 1;
+            //            }
+        }
+        maximoReportesporManzanaPonderados = d3.max(reportesporManzanaPonderados);
+        for (var i = 0; i < data.length; i++) {
+            if (reportesporManzanaPonderados[i] >= 0 && reportesporManzanaPonderados[i] <= maximoReportesporManzanaPonderados / 4) {
                 opacidadesPoligonos[data[i].gid] = 0.1;
-            } else if (data[i].totale > maximoReportesporManzana / 4 && data[i].totale <= (maximoReportesporManzana / 4) * 2) {
+            } else if (reportesporManzanaPonderados[i] > maximoReportesporManzanaPonderados / 4 && reportesporManzanaPonderados[i] <= (maximoReportesporManzanaPonderados / 4) * 2) {
                 opacidadesPoligonos[data[i].gid] = 0.4;
-            } else if (data[i].totale > (maximoReportesporManzana / 4) * 2 && data[i].totale <= (maximoReportesporManzana / 4) * 3) {
+            } else if (reportesporManzanaPonderados[i] > (maximoReportesporManzanaPonderados / 4) * 2 && reportesporManzanaPonderados[i]  <= (maximoReportesporManzanaPonderados / 4) * 3) {
                 opacidadesPoligonos[data[i].gid] = 0.7;
             } else {
                 opacidadesPoligonos[data[i].gid] = 1;
             }
+
+
         }
 
+        console.log("el maximo de reportes de manzanas ponderados es " + maximoReportesporManzanaPonderados);
         for (var i = 0; i < data.length; i++) {
             //console.log(maximoReportesporManzanaPolicia);
             if (data[i].policias >= 0 && data[i].policias <= maximoReportesporManzanaPolicia / 4) {

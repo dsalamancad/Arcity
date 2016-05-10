@@ -39,6 +39,49 @@
     margin-right: 40px;
 }
 
+#ponderacion{
+
+    display:block;
+    clear:both;
+    float:left;
+    width: 480px;
+    padding-top: 20px;
+    background-color: #eee;
+    padding: 10px;
+}
+
+#ponderacion table {
+    width: 40%;
+    border: solid 1px #ddd;
+    border-collapse: collapse;
+    float: right;
+    background-color: #fff;
+}
+
+#ponderacion table th, #ponderacion table td, #ponderacion table tr{
+
+    font-weight: 300;
+    font-size: 10pt;
+    text-align: left;
+    padding: 2px;
+    border-bottom: 1px solid #ddd;
+}
+
+#ponderacion tr:nth-child(even) {background-color: #f2f2f2}
+
+#ponderacion th{
+    font-family: 'Montserrat';
+    font-weight: 700;
+    background-color: #044265;
+    color: white;
+}
+
+#ponderacion button{
+    background-color: #044265;
+    color: #fff;
+    border: none;
+}
+
 .axis text {
   font: 11px sans-serif;
 }

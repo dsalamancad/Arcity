@@ -62,39 +62,43 @@
                     </div>
                     <div id="ponderacion">
                         <h5>Pondere cada una de las categorías:</h5>
-                        <p>Asígnele un peso de acuerdo a la importancia que usted quiera asignarle a cada una de las categorías a analizar y asi ver el estado de cada manzana de acuerdo a ello:</p>
+                        <p>Asígnele un peso de acuerdo a la importancia que usted quiera darle a cada una de las categorías a analizar y asi ver el estado de cada manzana de acuerdo a ello en el gráfico superior</p>
                         <table>
-                            <th>
-                                <td>Categoría</td>
-                                <td>Peso</td>
-                            </th>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Peso</th>
+                            </tr>
                             <tr>
                                 <td>Policías</td>
-                                <td><input type="text" ng-model="pesoPolicia" size="2" placeholder="0" value="10"></td>
+                                <td><input type="text" ng-model="pesoPolicia" size="2" placeholder="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Árboles</td>
+                                <td><input type="text" ng-model="pesoArboles" size="2" placeholder="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Basuras</td>
+                                <td><input type="text" ng-model="pesoBasuras" size="2" placeholder="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Acceso</td>
+                                <td><input type="text" ng-model="pesoAcceso" size="2" placeholder="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Juegos</td>
+                                <td><input type="text" ng-model="pesoJuegos" size="2" placeholder="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Sillas</td>
+                                <td><input type="text" ng-model="pesoSillas" size="2" placeholder="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Luz</td>
+                                <td><input type="text" ng-model="pesoLuz" size="2" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td></td>
+                                <td><button type="button" ng_click="filtrarManzanas()">Calcular</button></td>
                             </tr>
                         </table>
 
@@ -192,7 +196,7 @@
             reportes entre:
             <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
             <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
-            <button type="button" ng_click="filtrarManzanas()">filtrar</button>
+
         </div>
 
         <!--   <div id="capad3Hora"></div> -->
