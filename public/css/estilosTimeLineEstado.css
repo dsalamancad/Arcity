@@ -101,20 +101,37 @@
     color: #fff;
     border: none;
 }
+#EstadoDerecho{
+    width: 650px;
+        display:block;
+    clear:none;
+    float:left;
+    position:relative;
 
+}
+
+#graficaCoordenadasParalelas{
+
+    left: 0px;
+    width:720px;
+    height:300px;
+    display:block;
+    clear:both;
+    float:left;
+    margin-left: 0px;
+}
+#graficaCoordenadasParalelas .foreground path {
+  fill: none;
+  stroke: steelblue;
+}
 
 #mapasCadauno{
         width: 650px;
         display:block;
-    clear:none;
+    clear:both;
     float:left;
-
-    position: absolute;
-    bottom: 0;
-    right: 0;
-
-
-
+    margin-top: 20px;
+    margin-left: 35px;
 
 }
 #mapEstado{

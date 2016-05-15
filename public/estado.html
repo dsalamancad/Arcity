@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/leaflet.css" />
     <script src="js/libs/d3.min.js"></script>
-    <script src="js/libs/crossfilter.min.js"></script>
-    <script src="js/libs/dc.min.js"></script>
+    <script src="js/libs/d3.parcoords.js"></script>
     <script src="js/libs/leaflet.js"></script>
     <!-- <script src="js/libs/leaflet-providers.js"></script> -->
     <script src="js/libs/leaflet.label.js"></script>
@@ -21,6 +20,7 @@
 
     <link rel="stylesheet" href="css/leaflet.label.css" />
     <!--pruebas -->
+    <link rel="stylesheet" href="css/d3.parcoords.css" />
     <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
 
 
@@ -45,7 +45,7 @@
             </div>
         </header>
         <div id="timeLineControlEstado">
-           <div id="fechaSeleccion">Seleccionado desde el <span id="desde"></span> hasta el <span id="hasta"></span></div>
+            <div id="fechaSeleccion">Seleccionado desde el <span id="desde"></span> hasta el <span id="hasta"></span></div>
             <script src="js/controllers/timeLineControlEstado.js"></script>
 
         </div>
@@ -53,54 +53,69 @@
         <div id="contenedorPrincipal">
             <div id="categorias">
             </div>
-           <!--  <h3>Estado General</h3> -->
+            <!--  <h3>Estado General</h3> -->
             <div id="mapaConReportesEstado">
-               <div id="ponderacion">
-                        <!-- <h5>Pondere cada una de las categorías:</h5>
+                <div id="ponderacion">
+                    <!-- <h5>Pondere cada una de las categorías:</h5>
                         <p>Asígnele un peso de acuerdo a la importancia que usted quiera darle a cada una de las categorías a analizar y asi ver el estado de cada manzana de acuerdo a ello en el gráfico superior</p> -->
-                        <table>
-                            <tr>
-                                <th colspan="2">Peso ponderado</th>
+                    <table>
+                        <tr>
+                            <th colspan="2">Peso ponderado</th>
 
-                            </tr>
-                            <tr>
-                                <td>Policías</td>
-                                <td><input type="text" ng-model="pesoPolicia" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td>Árboles</td>
-                                <td><input type="text" ng-model="pesoArboles" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td>Basuras</td>
-                                <td><input type="text" ng-model="pesoBasuras" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td>Acceso</td>
-                                <td><input type="text" ng-model="pesoAcceso" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td>Juegos</td>
-                                <td><input type="text" ng-model="pesoJuegos" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td>Sillas</td>
-                                <td><input type="text" ng-model="pesoSillas" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td>Luz</td>
-                                <td><input type="text" ng-model="pesoLuz" size="3" placeholder="10" value="10"></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><button type="button" ng_click="cambiarPesos()">Calcular</button>
+                        </tr>
+                        <tr>
+                            <td>Policías</td>
+                            <td>
+                                <input type="text" ng-model="pesoPolicia" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Árboles</td>
+                            <td>
+                                <input type="text" ng-model="pesoArboles" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Basuras</td>
+                            <td>
+                                <input type="text" ng-model="pesoBasuras" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Acceso</td>
+                            <td>
+                                <input type="text" ng-model="pesoAcceso" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Juegos</td>
+                            <td>
+                                <input type="text" ng-model="pesoJuegos" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sillas</td>
+                            <td>
+                                <input type="text" ng-model="pesoSillas" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Luz</td>
+                            <td>
+                                <input type="text" ng-model="pesoLuz" size="3" placeholder="10" value="10">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="button" ng_click="cambiarPesos()">Calcular</button>
 
 
-                                </td>
-                            </tr>
-                        </table>
+                            </td>
+                        </tr>
+                    </table>
 
-                    </div>
+                </div>
                 <div id="ConfiguracionEstadoGeneral">
 
 
@@ -111,47 +126,52 @@
 
                 </div>
 
+                <div id="EstadoDerecho">
+                    <button id="reseteoBrushParalel">Resetear</button>
+                    <div id="graficaCoordenadasParalelas" class="parcoords">
 
-                <div id="mapasCadauno">
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoPolicia.png" alt="">Policía</h3>
-                        <div id="mapaPolicia"><span id="maxoimoPolicias"></span></div>
                     </div>
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoArbol.png" alt="">Árboles</h3>
-                        <div id="mapaArboles">
+                    <div id="mapasCadauno">
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoPolicia.png" alt="">Policía</h3>
+                            <div id="mapaPolicia"><span id="maxoimoPolicias"></span></div>
                         </div>
-                    </div>
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoCaneca.png" alt="">Basuras</h3>
-                        <div id="mapaBasuras">
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoArbol.png" alt="">Árboles</h3>
+                            <div id="mapaArboles">
+                            </div>
                         </div>
-                    </div>
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoEstacion.png" alt="">Acceso</h3>
-                        <div id="mapaAcceso">
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoCaneca.png" alt="">Basuras</h3>
+                            <div id="mapaBasuras">
+                            </div>
                         </div>
-                    </div>
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoJuego.png" alt="">Juegos</h3>
-                        <div id="mapaJuegos">
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoEstacion.png" alt="">Acceso</h3>
+                            <div id="mapaAcceso">
+                            </div>
                         </div>
-                    </div>
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoSilla.png" alt="">Sillas</h3>
-                        <div id="mapaSillas">
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoJuego.png" alt="">Juegos</h3>
+                            <div id="mapaJuegos">
+                            </div>
                         </div>
-                    </div>
-                    <div class="wrapperMapas">
-                        <h3><img src="imagenes/iconos/iconoLuz.png" alt="">Luz</h3>
-                        <div id="mapaLuz">
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoSilla.png" alt="">Sillas</h3>
+                            <div id="mapaSillas">
+                            </div>
+                        </div>
+                        <div class="wrapperMapas">
+                            <h3><img src="imagenes/iconos/iconoLuz.png" alt="">Luz</h3>
+                            <div id="mapaLuz">
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-       <!--  <div id='popUpPoligono'>
+        <!--  <div id='popUpPoligono'>
             <div id='elementosUsados'>
                 <div>
                     <span>Reportes:</span>
@@ -165,9 +185,12 @@
                 <div><img src="imagenes/iconos/iconoLuz.png" alt=""><span>3</span></div>
 
             </div>
-        </div> -->
+         -->
 
+    </div>
+    <script>
 
+    </script>
 
 
 
