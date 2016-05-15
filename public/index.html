@@ -29,94 +29,113 @@
         <header id="data-count">
             <h1>Calidad del Espacio público</h1>
             <nav id="barraNavegacion">
-                <a href="index.html" id="actual">Explorar</a>
-                <a href="estado.html">Sistema de Alertas</a>
-                <a href="monitoreo.html">Monitoreo</a>
+                <a href="index.html" id="actual">Estado General de la zona</a>
+                <a href="estado.html">Estado de las manzanas</a>
+                <a href="monitoreo.html">Alertas Generadas</a>
 
             </nav>
             <div id="filtrosTotales">
-                <span class="filter-count"></span> Intervenciones seleccionadas de <span class="total-count"></span> creadas |
+                <span class="filter-count"></span> Propuestas seleccionadas de <span class="total-count"></span> creadas |
                 <a id="resetearTodo" href="#" class="botonReseteo">Resetear todo</a>
             </div>
         </header>
 
         <div id="contenedorPrincipal">
-            <div id="categorias">
-                <h3>Intervenciones creadas</h3></div>
-            <div id="mapaConReportes">
-                <div id="map">
+            <div id="wrapperHome">
+                <div id="categorias">
+                    <h3>Propuestas creadas</h3></div>
+                <div id="mapaConReportes">
+                    <div id="map">
 
 
-                </div>
-                <div id="lineaDetiempo" class="dc-chart"></div>
-                <div>
-                    <!-- <div id="usuariosPorReporte" class="dc-chart">
+                    </div>
+
+
+                    <div id="derecha">
+                        <div id="arriba">
+                            <div id="reportesTotales"><div id="tituloGraficas">
+                                    <h3>Cantidad de propuestas por categoría</h3>
+
+                                </div></div>
+                            <div id="test"></div>
+                        </div>
+                        <div id="abajo">
+                            <div id="usuariosPorReporte" class="dc-chart">
+                                <div id="tituloGraficas">
+                                    <h3>Likes por Propuestas</h3>
+                                    <small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small>
+                                </div>
+
+                            </div>
+                            <div id="reportesRespondidos" class="dc-chart">
+                                <div id="tituloGraficas">
+                                    <h3>Propuestas atendidas</h3>
+                                    <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- <div id="usuariosPorReporte" class="dc-chart">
                         <h3>votos por escena<small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small></h3>
 
                     </div>
                     <div id="reportesRespondidos" class="dc-chart">
                         <h3>Intervenciones atendidas por el distrito <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small></h3>
                     </div> -->
+                    </div>
+
+
                 </div>
-
-            </div>
-        </div>
-
-        <div id="contenedorTiempo">
-            <div id="graficaAnual" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>Intervenciones anuales</h3>
-                    <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small>
+                <div id="lineaDetiempo" class="dc-chart">
+                 <div id="rango"><span id="textofijo">Periodo de tiempo seleccionado:&nbsp;</span>   <span class="filter"></span></div>
                 </div>
+                <div id="evolucionTiempo" class="dc-chart"></div>
 
-            </div>
-            <div id="graficaMensual" class="dc-chart">
-                <div id="tituloGraficas">
+
+                <!--  <div id="contenedorTiempo">
+                <div id="graficaAnual" class="dc-chart">
                     <div id="tituloGraficas">
-                        <h3>Intervenciones mensuales</h3>
-                        <small><a id="resetearMes" href="#" class="botonReseteo">Resetear</a></small>
+                        <h3>Intervenciones anuales</h3>
+                        <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small>
+                    </div>
+
+                </div>
+                <div id="graficaMensual" class="dc-chart">
+                    <div id="tituloGraficas">
+                        <div id="tituloGraficas">
+                            <h3>Intervenciones mensuales</h3>
+                            <small><a id="resetearMes" href="#" class="botonReseteo">Resetear</a></small>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div id="usuariosPorReporte" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>votos por intervención</h3>
-                    <small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
 
-            </div>
-            <div id="reportesRespondidos" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>Intervenciones atendidas</h3>
-                    <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
-            </div>
-            <!-- <div id="graficaDiaria" class="dc-chart">
+                <!-- <div id="graficaDiaria" class="dc-chart">
                 <h3>Gráfica Diaria <small><a id="resetearDia" href="#" class="botonReseteo">Resetear</a></small></h3>
             </div> -->
-            <!-- <div id="graficaDiaNoche" class="dc-chart">
+                <!-- <div id="graficaDiaNoche" class="dc-chart">
         <h3>Día / Noche <small><a id="hourdianoche" href="#">resetear</a></small></h3>
         <img src="imagenes/contestados.png" alt=""></div>
     </div> -->
 
-            <div id="tablaReportes">
-                <table id="data-table">
-                    <thead>
-                        <tr class="header">
-                            <th>ID</th>
-                            <th>Usuario</th>
-                            <th>Año</th>
-                            <th>Mes</th>
-                            <th>Descripción</th>
-                            <th>Votos</th>
-                            <th>Imagen</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div id="tablaReportes">
+                    <table id="data-table">
+                        <thead>
+                            <tr class="header">
+                                <th>ID</th>
+                                <th>Usuario</th>
+                                <th>Año</th>
+                                <th>Mes</th>
+                                <th>Descripción</th>
+                                <th>Votos</th>
+                                <th>Imagen</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
             </div>
-
-
         </div>
         <!-- <div id='popUpMarker'>
             <div id='fecha'><span>fecha: </span> d.properties.fecha_fecha</div>
@@ -135,13 +154,13 @@
 
             </div>
         </div> -->
-        <div id="contenedorlineaDeTiempoVieja">
+        <!-- <div id="contenedorlineaDeTiempoVieja">
              reportes entre:
         <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
         <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
         <button type="button" ng_click="filtrarPorValor()">filtrar</button>
         <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
-        </div>
+        </div> -->
 
 
 

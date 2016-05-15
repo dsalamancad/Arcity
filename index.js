@@ -90,9 +90,8 @@ function consultarMapaFiltrado(params, callback) {
     geo.geoQuery({
             tableName: 'reportes', // The name of the table we are going to query
             geometry: 'geom', // The name of the column who has the geometry
-            //where: 'EXTRACT(HOUR FROM hora)>=' + params.horaInicial + 'AND EXTRACT(HOUR FROM hora)<=' + params.horaFinal,
-            properties: ['id', 'usuario', 'fecha', 'descripcio', 'seguidores', 'respondido']
-
+            //where: 'reportes.fecha <= '+ params.fechaInicial+'::date AND reportes.fecha >= '+ params.fechaFinal+'::date',
+            properties: ['id', 'usuario', 'fecha', 'descripcio', 'seguidores', 'respondido','policia','caneca','silla','estacion','juego','arbol','luz']
             //querystring: "lo que busco en web";
         },
 
@@ -126,6 +125,21 @@ function consultarReportesenManzanasEnDB(params, callback) {
    // console.log(params);
     geo.query({
             querystring: "SELECT manzanasbarriolasnieves.gid as gid,count(reportes.geom) AS totale,sum(reportes.policia) as policias,sum(reportes.caneca) as caneca,sum(reportes.silla) as silla,sum(reportes.estacion) as estacion,sum(reportes.juego) as juego,sum(reportes.arbol) as arbol,sum(reportes.luz) as luz FROM public.manzanasbarriolasnieves LEFT JOIN public.reportes ON st_contains(manzanasbarriolasnieves.geom,reportes.geom) AND reportes.fecha <='"+params.fechaFinal+"'::date AND reportes.fecha>='"+params.fechaInicial+"'::date GROUP BY manzanasbarriolasnieves.gid ORDER BY manzanasbarriolasnieves.gid"
+
+
+        },
+        function (json) {
+           //console.log(json);
+            callback(json);
+        });
+
+}
+function consultarReportesPorSemana(params, callback) {
+    //console.log("inicial: "+ params.diaInicial+"/"+ params.mesInicial+"/"+ params.anoInicial);
+    //console.log("final: "+ params.diaFinal+"/"+ params.mesFinal+"/"+ params.anoFinal);
+   // console.log(params);
+    geo.query({
+            querystring: "SELECT date_trunc('week',reportes.fecha) as semana,count(*) as cantidadReportes,sum(reportes.policia) as policias,sum(reportes.caneca) as caneca,sum(reportes.silla) as silla,sum(reportes.estacion) as estacion,sum(reportes.juego) as juego,sum(reportes.arbol) as arbol,sum(reportes.luz) as luz FROM public.reportes GROUP BY semana ORDER BY semana;"
 
 
         },

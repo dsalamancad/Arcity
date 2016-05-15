@@ -118,18 +118,22 @@ header,
     float: left;
     width: 96%;
     margin: 0 1%;
-    padding: 0% 1% 5%;
+    padding: 0% 1% 1%;
     background-color: #fff;
 }
+
+
+
+
 #contenedorTiempo{
     font-size: 10px;
 }
 
 #lineaDetiempo{
-    text-align:center;
+    /* text-align:center; */
 }
 #lineaDetiempo svg{
-   display: inline-block;
+/*   display: inline-block;*/
 }
 
 #lineaDetiempo{
@@ -137,121 +141,136 @@ header,
     display:block;
     clear:both;
     float:left;
-    background-color: #eee;
 
 }
+
+#lineaDetiempo #rango{
+    padding-left: 30px;
+
+}
+#lineaDetiempo #rango #textofijo{
+    display:block;
+    clear:none;
+    float:left;
+}
+#lineaDetiempo span.filter{
+    display:block;
+    clear:none;
+    float:left;
+    width: 30%;
+
+/*    color: #cc0000;*/
+      color: blue;
+    font-weight: 400;
+
+
+
+}
+
+#lineaDetiempo .background{
+
+    visibility: visible !important;
+    fill:rgb(187, 187, 187);
+}
+
+.dc-chart .grid-line line{
+    stroke:#fff !important;
+}
+
+.dc-chart path.line {
+    fill: none;
+    stroke-width: 1px;
+    stroke-opacity:0.1;
+}
+.dc-chart .selected path {
+    stroke-width: 3;
+    stroke: #ccc;
+    fill-opacity: 1;
+}
+
+.dc-chart path.highlight {
+    stroke-width: 3;
+    fill-opacity: 1;
+    stroke-opacity: 1;
+}
+
+.dc-chart .fadeout {
+    fill-opacity: 0.2;
+    stroke-opacity: 0;
+}
+
 #lineaDetiempo svg{
-    background-color: #eee;
+    background-color: #fff;
 
 
 }
 header {}
 #filtrosTotales{
     font-size: 12pt;
+    padding-left: 55px;
+    max-width: 1095px;
 }
 #filtrosTotales span{
-    color: #cc0000;
+/*    color: #cc0000;*/
+      color: blue;
+    font-weight: 400;
+
 }
 #contenedorlineaDeTiempoVieja {}
 
 #contenedorPrincipal {}
 
 #categorias {
-    width: 100%;
+     width: 1080px;
+    padding: 0px 30px;
     display: block;
     clear: both;
     float: left;
 
 }
 
-#mapaConReportes, #mapaConReportesEstado {
-    width: 100%;
+#mapaConReportes {
+    width: 1080px;
+    padding: 0px 30px;
     display: block;
     clear: both;
     float: left;
+    position: relative;
 }
 
 
 #map {
-    width: 100%;
-    min-height: 300px;
-    max-height: 400px !important;
-}
-
-#ConfiguracionEstadoGeneral{
-    width: 40%;
+    width: 350px;
+    min-height: 350px;
+    max-height: 350px !important;
     display:block;
     clear:none;
     float:left;
-
+    background-color: #fff;
+    border: solid 1px #ddd;
 }
 
-#mapasCadauno{
-        width: 60%;
-        display:block;
-    clear:none;
-    float:right;
-
-
-}
-#mapEstado{
-    width: 500px;
-    min-height: 500px;
-    max-height: 500px !important;
-
-
+#wrapperHome,#filtrosTotales{
+    max-width: 1140px;
+    margin: 0 auto;
 }
 
-#mapaConReportesEstado #mapEstado{
-    display:block;
-    clear:none;
-    float:left;
-
-
-}
-.wrapperMapas{
-    width: 180px;
-   display:block;
-    clear:none;
-    float:left;
-     margin: 0px 0px 20px 20px ;
-}
-#mapaPolicia, #mapaArboles, #mapaBasuras, #mapaAcceso, #mapaJuegos, #mapaSillas, #mapaLuz{
-    width: 180px;
-    min-height: 180px;
-    max-height: 180px !important;
-    background-color: white;
-
-
-
-
-}
-
-.wrapperMapas h3{
-    display: block;
-    clear: both;
-    float: left;
-    width: 100%;
-    background-color: white;
-}
-
-
-#mapEstado.leaflet-container, #map.leaflet-container {
-    background-color: #fff !important;
-
-}
 
 .leaflet-control-zoom, .leaflet-control-scale-line, .leaflet-control-attribution{
     visibility: hidden;
 }
-#usuariosPorReporte,
-#reportesRespondidos {
-    width: 100%;
-    display: block;
-    clear: both;
-    float: left;
-}
 
+#map .leaflet-control-zoom,#map .leaflet-control-scale-line,#map .leaflet-control-attribution{
+    visibility:visible;
+}
+ #usuariosPorReporte{
+        width: 400px;
+        clear: none
+    }
+    #reportesRespondidos {
+        width: 180px;
+        clear: none;
+    }
 #contenedorTiempo {}
 
 #contenedorTiempo h3{
@@ -277,8 +296,69 @@ header {}
     padding-left: 20px;
     box-sizing: border-box;
 }
+
+#derecha{
+    display:block;
+    clear:none;
+    float:left;
+    width: 580px;
+    margin-left: 20px;
+
+
+}
+/*Chambonada de la grafica de los totales*/
+
+#reportesTotales rect{
+     width: 40px !important;
+}
+
+#reportesTotales g.sub._0{
+     transform: translate(52px,0px);
+
+
+}
+#reportesTotales g.sub._1{
+    transform: translate(122px,0px);
+}
+#reportesTotales g.sub._2{
+    transform: translate(190px,0px);
+}
+#reportesTotales g.sub._3{
+    transform: translate(258px,0px);
+}
+
+#reportesTotales g.sub._4{
+    transform: translate(328px,0px);
+}
+
+#reportesTotales g.sub._5{
+    transform: translate(398px,0px);
+}
+#reportesTotales g.sub._6{
+    transform: translate(468px,0px);
+}
+
+
+
+#arriba{
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+    margin-bottom: 20px;
+}
+#abajo{
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+}
+
+
 #data-table {
-    width: 100%;
+    width: 955px;
+    margin-top: 20px;
+    margin-left: 5px;
     border: solid 1px #ddd;
     border-collapse: collapse;
 }
@@ -310,59 +390,39 @@ header {}
 
 /*Estilos para pop-up*/
 #popUpMarker{
-    font-size: 9px;
+    font-size: 10px;
     overflow: hidden;
 }
 #popUpMarker span{
     font-weight: bold;
 }
+#popUpMarker #tituloelementosusados{
+    width: 100%;
+}
+#popUpMarker div{
+
+}
 #popUpMarker div div{
-    width: 50%;
+    width: 25%;
+    display:block;
+    clear:none;
+    float:left;
+    line-height: 14px;
+    margin-bottom: 5px;
+
+}
+#popUpMarker div div img{
+    width:20px;
     display:block;
     clear:none;
     float:left;
 }
-
-
-/* Tablets: 481px a 768px.*/
-
-@media only screen and (min-width: 481px) {
-    header,#contenedorlineaDeTiempoVieja,
-    #contenedorPrincipal,
-    #contenedorTiempo, #tablaReportes {
-        padding: 0% 1% 1%;
-    }
-
-    /* MIENTRAS O TENGO CATEGORIAS
-    #categorias {
-        width: 25%;
-        clear: none;
-
-    }
-    #mapaConReportes {
-        width: 75%;
-        clear: none;
-    } */
-
-
-    #usuariosPorReporte{
-        width: 40%;
-        clear: none
-    }
-    #reportesRespondidos {
-        width: 20%;
-        clear: none;
-    }
-    #graficaAnual,
-    #graficaMensual,
-    #graficaDiaria,
-    #graficaDiaNoche {
-        width: 20%;
-        clear: none;
-    }
-    .escondeTablet {
-        display: none;
-    }
+#popUpMarker div div .valorenpopup{
+    display:block;
+    clear:none;
+    float:left;
+    font-weight: bold;
+    padding: 3px 0px 0px 2px;
 }
 
 #tituloGraficas{
@@ -398,6 +458,17 @@ a.botonReseteo:hover{
     background-color: #a00;
 
 
+}
+
+
+/* Tablets: 481px a 768px.*/
+
+@media only screen and (min-width: 481px) {
+
+
+    .escondeTablet {
+        display: none;
+    }
 }
 
 

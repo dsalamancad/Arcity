@@ -6,6 +6,12 @@ my_angular_app.service("coneccion", function () {
     //tiene el uid y el metodo
     var callbacksMapa = {};
 
+     socket.on("mapaFiltrado", function (params) {
+        //llamar el callback que tien el guid y le paso como parametro el geojson
+        callbacksMapa[params.guid](params.geojson);
+        delete callbacksMapa[params.guid];
+    });
+
     socket.on("manzanasFiltradas", function (params) {
         //console.log("llamado 4");
         //llamar el callback que tien el guid y le paso como parametro el geojson
@@ -28,6 +34,17 @@ my_angular_app.service("coneccion", function () {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     };
     //este es mi metodod que voy a usar
+    var llamarFiltroporHora = function (params) {
+        //console.log(params);
+
+        var guid = genGuid();
+        callbacksMapa[guid] = params.callback;
+        params["caller"] = guid;
+        socket.emit("filtrarHora", params);
+
+
+    }
+
     var llamarFiltroManzanas = function (params) {
         //console.log("llamado 1");
         var guid = genGuid();
@@ -44,6 +61,7 @@ my_angular_app.service("coneccion", function () {
         socket.emit("llamarReportesPorManzanas", params);
     }
     return {
+        llamarFiltroporHora: llamarFiltroporHora,
         llamarFiltroManzanas: llamarFiltroManzanas,
         llamarFiltroReportesPorManzanas: llamarFiltroReportesPorManzanas,
     };
@@ -53,6 +71,7 @@ my_angular_app.service("coneccion", function () {
 my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($scope, coneccion) {
     //console.log($scope);
     var socket = io();
+    var capaConPuntosCargados;
     var capaConPoligonosCargados, capaConPoligonosCargadosPolicia, capaConPoligonosCargadosArboles, capaConPoligonosCargadosBasuras, capaConPoligonosCargadosAcceso, capaConPoligonosCargadosJuegos, capaConPoligonosCargadosSillas, capaConPoligonosCargadosLuz;
     var capaConPoligonosMulticoloresCargados;
     var guardaPoligonos = [];
@@ -65,49 +84,57 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     var opacidadesPoligonosJuegos = {};
     var opacidadesPoligonosSillas = {};
     var opacidadesPoligonosLuz = {};
+
+    var cantidadDePolicias = {};
+    var cantidadDeCanecas = {};
+    var cantidadDeSillas = {};
+    var cantidadDeEstaciones = {};
+    var cantidadDeJuegos = {};
+    var cantidadDeArboles = {};
+    var cantidadDeLuces = {};
     //variables iniciales para llamar a los filtros
     var fechaInicialGlobal = new Date(2015, 0, 1);
     var fechaFinalGlobal = new Date(2016, 10, 1);
     var geojsonMarkerOptions = {
-        "color": "#ff7800",
+        "color": "#fff",
         "weight": 1,
         "opacity": 1
     };
 
     var geojsonMarkerOptionsPolicia = {
         "color": "#0070bb",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
 
     var geojsonMarkerOptionsArboles = {
         "color": "#30bb51",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
     var geojsonMarkerOptionsBasuras = {
         "color": "#bc6731",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
     var geojsonMarkerOptionsAcceso = {
         "color": "#ffb92e",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
     var geojsonMarkerOptionsJuegos = {
         "color": "#e31b20",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
     var geojsonMarkerOptionsSillas = {
         "color": "#5a31bc",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
     var geojsonMarkerOptionsLuz = {
         "color": "#dfdc13",
-        "weight": 1,
+        "weight": 0.5,
         "opacity": 1
     };
 
@@ -120,10 +147,42 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         pesoGlobalSillas = 10,
         pesoGlobalLuz = 10;
 
+    $scope.cambiarPesos = function () {
+        pesoGlobalPolicia = $scope.pesoPolicia;
+        pesoGlobalArboles = $scope.pesoArboles;
+        pesoGlobalBasuras = $scope.pesoBasuras;
+        pesoGlobalAcceso = $scope.pesoAcceso;
+        pesoGlobalJuegos = $scope.pesoJuegos;
+        pesoGlobalSillas = $scope.pesoSillas;
+        pesoGlobalLuz = $scope.pesoLuz;
+    }
+
+    var dibujarPuntos = function (data){
+        console.log("obj");
+           capaConPuntosCargados = L.geoJson(data, {
+
+                            style: function (feature) {
+                                return {
+                                    stroke: false,
+                                    color:"#fff",
+                                    fillColor: "#0a2438",
+                                    radius: 2,
+                                    fillOpacity:0.5,
+                                };
+                            },
+                            pointToLayer: function (feature, latlng) {
+                                return L.circleMarker(latlng, geojsonMarkerOptions);
+                            },
+                            onEachFeature: function (feature, layer) {
+                                layer.bindPopup(feature.properties.descripcio);
+                            }
+                        });
+                        capaConPuntosCargados.addTo(map);
+
+    }
+
     // FUNCIONES LLAMADAS CUANDO VUEVLE EL MENSAJE DEL SERVIDOR
     var dibujarMapa = function (data) {
-        //console.log("llamado 5");
-        //console.log(data);
         capaConPoligonosCargados = L.geoJson(data, {
             style: geojsonMarkerOptions
         });
@@ -150,6 +209,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             style: geojsonMarkerOptionsLuz
         });
 
+
+
         // me llama los reportes por poligono
         coneccion.llamarFiltroReportesPorManzanas({
             callback: definirTransparencia,
@@ -164,18 +225,21 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         capaConPoligonosCargadosJuegos.addTo(mapaJuegos);
         capaConPoligonosCargadosSillas.addTo(mapaSillas);
         capaConPoligonosCargadosLuz.addTo(mapaLuz);
+
+
     }
+
+
 
     //función para meter en arrays los valores de poligono y su numero de reportes
     var definirTransparencia = function (data) {
-        //console.log("llamado 6");
-        //console.log(data);
         var maximoReportesporManzana = d3.max(data, function (d) {
             return Number(d.totale);
         });
         var maximoReportesporManzanaPolicia = d3.max(data, function (d) {
             return Number(d.policias);
         });
+        document.getElementById("maxoimoPolicias").innerHTML = String(maximoReportesporManzanaPolicia);
         var maximoReportesporManzanaArboles = d3.max(data, function (d) {
             return Number(d.arbol);
         });
@@ -195,31 +259,15 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             return Number(d.luz);
         });
 
-
-
         var reportesporManzanaPonderados = [];
         var maximoReportesporManzanaPonderados = d3.max(reportesporManzanaPonderados);
 
         var sumaPesos = pesoGlobalPolicia + pesoGlobalArboles + pesoGlobalBasuras + pesoGlobalAcceso + pesoGlobalJuegos + pesoGlobalSillas + pesoGlobalLuz;
-        console.log("suma de pesos es" + sumaPesos);
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzana);
             var totalsuma = (Number(data[i].policias) * pesoGlobalPolicia) + (Number(data[i].arbol) * pesoGlobalArboles) + (Number(data[i].caneca) * pesoGlobalBasuras) + (Number(data[i].estacion) * pesoGlobalAcceso) + (Number(data[i].juego) * pesoGlobalJuegos) + (Number(data[i].silla) * pesoGlobalSillas) + (Number(data[i].luz) * pesoGlobalLuz);
 
             var valorTotalPonderado = totalsuma / sumaPesos;
-
             reportesporManzanaPonderados.push(valorTotalPonderado);
-
-            console.log("el" + data[i].gid + " es de" + valorTotalPonderado);
-            //            if (data[i].totale >= 0 && data[i].totale <= maximoReportesporManzana / 4) {
-            //                opacidadesPoligonos[data[i].gid] = 0.1;
-            //            } else if (data[i].totale > maximoReportesporManzana / 4 && data[i].totale <= (maximoReportesporManzana / 4) * 2) {
-            //                opacidadesPoligonos[data[i].gid] = 0.4;
-            //            } else if (data[i].totale > (maximoReportesporManzana / 4) * 2 && data[i].totale <= (maximoReportesporManzana / 4) * 3) {
-            //                opacidadesPoligonos[data[i].gid] = 0.7;
-            //            } else {
-            //                opacidadesPoligonos[data[i].gid] = 1;
-            //            }
         }
         maximoReportesporManzanaPonderados = d3.max(reportesporManzanaPonderados);
         for (var i = 0; i < data.length; i++) {
@@ -227,18 +275,21 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 opacidadesPoligonos[data[i].gid] = 0.1;
             } else if (reportesporManzanaPonderados[i] > maximoReportesporManzanaPonderados / 4 && reportesporManzanaPonderados[i] <= (maximoReportesporManzanaPonderados / 4) * 2) {
                 opacidadesPoligonos[data[i].gid] = 0.4;
-            } else if (reportesporManzanaPonderados[i] > (maximoReportesporManzanaPonderados / 4) * 2 && reportesporManzanaPonderados[i]  <= (maximoReportesporManzanaPonderados / 4) * 3) {
+            } else if (reportesporManzanaPonderados[i] > (maximoReportesporManzanaPonderados / 4) * 2 && reportesporManzanaPonderados[i] <= (maximoReportesporManzanaPonderados / 4) * 3) {
                 opacidadesPoligonos[data[i].gid] = 0.7;
             } else {
                 opacidadesPoligonos[data[i].gid] = 1;
             }
-
-
+            cantidadDePolicias[data[i].gid] = data[i].policias;
+            cantidadDeCanecas[data[i].gid] = data[i].caneca;
+            cantidadDeSillas[data[i].gid] = data[i].silla;
+            cantidadDeEstaciones[data[i].gid] = data[i].estacion;
+            cantidadDeJuegos[data[i].gid] = data[i].juego;
+            cantidadDeArboles[data[i].gid] = data[i].arbol;
+            cantidadDeLuces[data[i].gid] = data[i].luz;
         }
 
-        console.log("el maximo de reportes de manzanas ponderados es " + maximoReportesporManzanaPonderados);
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaPolicia);
             if (data[i].policias >= 0 && data[i].policias <= maximoReportesporManzanaPolicia / 4) {
                 opacidadesPoligonosPolicia[data[i].gid] = 0.1;
             } else if (data[i].policias > maximoReportesporManzanaPolicia / 4 && data[i].policias <= (maximoReportesporManzanaPolicia / 4) * 2) {
@@ -251,7 +302,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaArboles);
             if (data[i].arbol >= 0 && data[i].arbol <= maximoReportesporManzanaArboles / 4) {
                 opacidadesPoligonosArboles[data[i].gid] = 0.1;
             } else if (data[i].arbol > maximoReportesporManzanaArboles / 4 && data[i].arbol <= (maximoReportesporManzanaArboles / 4) * 2) {
@@ -264,7 +314,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaBasuras);
             if (data[i].caneca >= 0 && data[i].caneca <= maximoReportesporManzanaBasuras / 4) {
                 opacidadesPoligonosBasuras[data[i].gid] = 0.1;
             } else if (data[i].caneca > maximoReportesporManzanaBasuras / 4 && data[i].caneca <= (maximoReportesporManzanaBasuras / 4) * 2) {
@@ -277,7 +326,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaAcceso);
             if (data[i].estacion >= 0 && data[i].estacion <= maximoReportesporManzanaAcceso / 4) {
                 opacidadesPoligonosAcceso[data[i].gid] = 0.1;
             } else if (data[i].estacion > maximoReportesporManzanaAcceso / 4 && data[i].estacion <= (maximoReportesporManzanaAcceso / 4) * 2) {
@@ -290,7 +338,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaJuegos);
             if (data[i].juego >= 0 && data[i].juego <= maximoReportesporManzanaJuegos / 4) {
                 opacidadesPoligonosJuegos[data[i].gid] = 0.1;
             } else if (data[i].juego > maximoReportesporManzanaJuegos / 4 && data[i].juego <= (maximoReportesporManzanaJuegos / 4) * 2) {
@@ -303,7 +350,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaSillas);
             if (data[i].silla >= 0 && data[i].silla <= maximoReportesporManzanaSillas / 4) {
                 opacidadesPoligonosSillas[data[i].gid] = 0.1;
             } else if (data[i].silla > maximoReportesporManzanaSillas / 4 && data[i].silla <= (maximoReportesporManzanaSillas / 4) * 2) {
@@ -316,7 +362,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-            //console.log(maximoReportesporManzanaLuz);
             if (data[i].luz >= 0 && data[i].luz <= maximoReportesporManzanaLuz / 4) {
                 opacidadesPoligonosLuz[data[i].gid] = 0.1;
             } else if (data[i].luz > maximoReportesporManzanaLuz / 4 && data[i].luz <= (maximoReportesporManzanaLuz / 4) * 2) {
@@ -328,12 +373,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             }
         }
 
-
-
-
-        //opacidadesPoligonos[data[i].gid] = Number(data[i].totale) / maximoReportesporManzana;
-
-
         // me llama la función que asigna transparencia
         aplicarEstilo();
 
@@ -341,34 +380,43 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     //función para crear estilo de cada poligono
     var aplicarEstilo = function () {
-        //console.log("llamado 7");
         for (each in capaConPoligonosCargados._layers) {
             var l = capaConPoligonosCargados._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonos[gid];
             l.setStyle({
-                color: "#144a78",
+                fillColor: "#144a78",
+                color:"#fff",
                 fillOpacity: opacidad
-            })
+            });
+            l.bindPopup("<div id='popUpPoligono'><div id='elementosUsados'><div id='tituloPop'><span>Reportes:</span></div>"+
+                "<div><img src='imagenes/iconos/iconoPolicia.png'><span>"+cantidadDePolicias[gid]+"</span></div>"+
+                "<div><img src='imagenes/iconos/iconoArbol.png'><span>"+cantidadDeArboles[gid]+"</span></div>"+
+                "<div><img src='imagenes/iconos/iconoCaneca.png'><span>"+cantidadDeCanecas[gid]+"</span></div>"+
+                "<div><img src='imagenes/iconos/iconoEstacion.png'><span>"+cantidadDeEstaciones[gid]+"</span></div>"+
+                "<div><img src='imagenes/iconos/iconoJuego.png'><span>"+cantidadDeJuegos[gid]+"</span></div>"+
+                "<div><img src='imagenes/iconos/iconoSilla.png'><span>"+cantidadDeSillas[gid]+"</span></div>"+
+                "<div><img src='imagenes/iconos/iconoLuz.png'><span>"+cantidadDeLuces[gid]+"</span></div></div></div>");
+            l.bindLabel(String(l.feature.properties.gid), { noHide: true }).addTo(map);
+
+
 
         }
 
         for (each in capaConPoligonosCargadosPolicia._layers) {
             var l = capaConPoligonosCargadosPolicia._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosPolicia[gid];
             l.setStyle({
                 fillOpacity: opacidad
             })
+
 
         }
 
         for (each in capaConPoligonosCargadosArboles._layers) {
             var l = capaConPoligonosCargadosArboles._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosArboles[gid];
             l.setStyle({
                 fillOpacity: opacidad
@@ -379,7 +427,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         for (each in capaConPoligonosCargadosBasuras._layers) {
             var l = capaConPoligonosCargadosBasuras._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosBasuras[gid];
             l.setStyle({
                 fillOpacity: opacidad
@@ -390,7 +437,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         for (each in capaConPoligonosCargadosAcceso._layers) {
             var l = capaConPoligonosCargadosAcceso._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosAcceso[gid];
             l.setStyle({
                 fillOpacity: opacidad
@@ -401,7 +447,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         for (each in capaConPoligonosCargadosJuegos._layers) {
             var l = capaConPoligonosCargadosJuegos._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosJuegos[gid];
             l.setStyle({
                 fillOpacity: opacidad
@@ -412,7 +457,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         for (each in capaConPoligonosCargadosSillas._layers) {
             var l = capaConPoligonosCargadosSillas._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosSillas[gid];
             l.setStyle({
                 fillOpacity: opacidad
@@ -423,7 +467,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         for (each in capaConPoligonosCargadosLuz._layers) {
             var l = capaConPoligonosCargadosLuz._layers[each];
             var gid = l.feature.properties.gid;
-            //console.log("opacidades poligones es" + opacidadesPoligonos[gid]);
             var opacidad = opacidadesPoligonosLuz[gid];
             l.setStyle({
                 fillOpacity: opacidad
@@ -436,13 +479,11 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
 
     //HACER LLAMADOS AL SERVIDOR (EL CALLBACK ES LA FUNCI´ON QUE LLAMA CUANDO ME DEVUELVE EL SERVIDOR)
-    // la usaré cuando sea filtrar por el timeline
     $scope.filtrarManzanas = function () {
-        if (!d3.event.sourceEvent) return; // only transition after input
+        if (!d3.event.sourceEvent) return;
         var extent0 = brush.extent(),
             extent1 = extent0.map(d3.time.day.round);
 
-        // if empty when rounded, use floor & ceil instead
         if (extent1[0] >= extent1[1]) {
             extent1[0] = d3.time.day.floor(extent0[0]);
             extent1[1] = d3.time.day.ceil(extent0[1]);
@@ -456,14 +497,15 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         fechaInicial = brush.extent()[0];
         fechaFinal = brush.extent()[1];
 
-        //console.log("inicial: " + fechaInicial);
-        //console.log("final: " + fechaFinal);
-        //console.log(diaFinal + " " + mesFinal + " " + anoFinal);
+        document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
+        document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
+
         fechaInicialGlobal = fechaInicial;
         fechaFinalGlobal = fechaFinal;
 
 
         map.removeLayer(capaConPoligonosCargados);
+         map.removeLayer(capaConPuntosCargados);
         mapaPolicia.removeLayer(capaConPoligonosCargadosPolicia);
         mapaArboles.removeLayer(capaConPoligonosCargadosArboles);
         mapaBasuras.removeLayer(capaConPoligonosCargadosBasuras);
@@ -471,21 +513,28 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         mapaJuegos.removeLayer(capaConPoligonosCargadosJuegos);
         mapaSillas.removeLayer(capaConPoligonosCargadosSillas);
         mapaLuz.removeLayer(capaConPoligonosCargadosLuz);
-
+        console.log("llegue a filtrar 2");
         coneccion.llamarFiltroManzanas({
             callback: dibujarMapa,
         });
+        coneccion.llamarFiltroporHora({
+        callback: dibujarPuntos,
+    });
+
     }
 
 
     // me llama los poligonos para dibujar
     coneccion.llamarFiltroManzanas({
-
         callback: dibujarMapa
     });
 
+     coneccion.llamarFiltroporHora({
+        callback: dibujarPuntos
+    });
 
-    //CREACION DEL MAPA DE GEOTABULA-----------------------------------------------------
+
+    //CREACION DEL MAPA DE GEOTABULA
     // llamar tiling de open street
     var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         osmAttrib = 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
@@ -495,57 +544,19 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         });
 
     // carga de tiling de open maps
-    var map = L.map('mapEstado').setView([4.607038, -74.068819], 16); // Posición inical del mapa (lat, long, zoom)
+    var map = L.map('mapEstado').setView([4.607230, -74.0692000], 16); // Posición inical del mapa (lat, long, zoom)
     map.addLayer(new L.TileLayer(osmUrl, {
         maxZoom: 16,
         opacity: .3,
     }));
 
-    var mapaPolicia = L.map('mapaPolicia').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaPolicia.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-
-        opacity: .3,
-    }));
-
-    var mapaArboles = L.map('mapaArboles').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaArboles.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-
-        opacity: .3,
-    }));
-
-    var mapaBasuras = L.map('mapaBasuras').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaBasuras.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-
-        opacity: .3,
-    }));
-
-    var mapaAcceso = L.map('mapaAcceso').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaAcceso.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-
-        opacity: .3,
-    }));
-
-    var mapaJuegos = L.map('mapaJuegos').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaJuegos.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-        opacity: .3,
-    }));
-
-    var mapaSillas = L.map('mapaSillas').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaSillas.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-        opacity: .3,
-    }));
-
-    var mapaLuz = L.map('mapaLuz').setView([4.607038, -74.068819], 14); // Posición inical del mapa (lat, long, zoom)
-    mapaLuz.addLayer(new L.TileLayer(osmUrl, {
-        maxZoom: 16,
-        opacity: .3,
-    }));
+    var mapaPolicia = L.map('mapaPolicia').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
+    var mapaArboles = L.map('mapaArboles').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
+    var mapaBasuras = L.map('mapaBasuras').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
+    var mapaAcceso = L.map('mapaAcceso').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
+    var mapaJuegos = L.map('mapaJuegos').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
+    var mapaSillas = L.map('mapaSillas').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
+    var mapaLuz = L.map('mapaLuz').setView([4.607038, -74.068819], 13.5); // Posición inical del mapa (lat, long, zoom)
 
     //configuración general del mapa
     map._layersMaxZoom = 16;
@@ -586,7 +597,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             bottom: 20,
             left: 0
         },
-        width = 960 - margin.left - margin.right,
+        width = 930 - margin.left - margin.right,
         height = 70 - margin.top - margin.bottom;
 
     var x = d3.time.scale()
@@ -597,7 +608,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         .x(x)
         .extent([new Date(2015, 1, 1), new Date(2016, 3, 1)])
 
+
     .on("brushend", $scope.filtrarManzanas);
+    document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
+    document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
 
     var svg = d3.select("body #timeLineControlEstado").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -644,14 +658,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     gBrush.selectAll("rect")
         .attr("height", height);
 
-    var fechaInicial, diaInicial, mesInicial, anoInicial;
-    var fechaFinal, diaFinal, mesFinal, anoFinal;
+
 
     function brushended() {
-
-
         console.log(extent0[0] + " y " + extent0[1]);
-
     }
-
-}]);
+            }]);

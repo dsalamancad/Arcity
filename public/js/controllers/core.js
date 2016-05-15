@@ -42,22 +42,11 @@ my_angular_app.service("coneccion", function () {
 my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($scope, coneccion) {
     //console.log($scope);
     var socket = io();
-    //    $scope.title = "Lista de Tareas";
-    //    $scope.taskList = [];
-    //    $scope.newTask = "";
 
     var capaConPuntosCargados;
 
-    //  borrar
-    //  function onEachFeature(feature, layer) {
-    //        // does this feature have a property named popupContent?
-    //        if (feature.properties && feature.properties.id) {
-    //            layer.bindPopup(feature.properties.id);
-    //        }
-    //    }
-
     var dibujarMapa = function (data) {
-        console.log(data);
+        // console.log(data);
         //console.log(data.features[5].properties.id);
 
         //Creación del mapa de leaflet SIN DC
@@ -128,7 +117,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             d.properties.fecha_mes = +mesFormateado(d.properties.fecha_fecha);
             d.properties.fecha_dia = +diaFormateado(d.properties.fecha_fecha);
             d.properties.fecha_hora = +horaFormateada(d.properties.fecha_fecha);
+            d.properties.policia = +d.properties.policia;
+            d.properties.canecas = +d.properties.canecas;
 
+            //console.log(d.properties.policia);
         });
 
         var ndx = crossfilter(datosInvasionEspacioPublico);
@@ -155,7 +147,14 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             }),
             dimensionFecha = ndx.dimension(function (d) {
                 return d.properties.fecha_fecha;
+            }),
+            dimensionPolicia = ndx.dimension(function (d) {
+                return d.properties.policia;
+            }),
+            dimensionCanecas = ndx.dimension(function (d) {
+                return d.properties.canecas;
             });
+
 
 
 
@@ -166,7 +165,31 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             conteoPorDia = dimensionDia.group().reduceCount(),
             conteoPorSeguidores = dimensionSeguidores.group().reduceCount(),
             conteoPorRespondido = dimensionRespondido.group().reduceCount(),
-            conteoPorFecha = dimensionFecha.group().reduceCount();
+            conteoPorFecha = dimensionFecha.group().reduceCount(),
+            policiasPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.policia;
+            }),
+            arbolesPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.arbol;
+            }),
+            canecasPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.caneca;
+            }),
+            estacionesPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.estacion;
+            }),
+            juegosPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.juego;
+            }),
+            sillasPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.silla;
+            }),
+            lucesPorDia = dimensionFecha.group().reduceSum(function (d) {
+                return d.properties.luz;
+            });
+        //todospolicias = dimensionPolicia.group().reduceSum(function(d) { return d.value });
+
+
         var minDate = dimensionFecha.bottom(1)[0].properties.fecha_fecha;
         var maxDate = dimensionFecha.top(1)[0].properties.fecha_fecha;
         //Creacion de gráficas
@@ -178,17 +201,129 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             graficaRespondido = dc.pieChart('#reportesRespondidos'),
             dataCount = dc.dataCount('#data-count'),
             dataTable = dc.dataTable('#data-table'),
-            graficaLineaDeTiempo = dc.lineChart('#lineaDetiempo');
+            graficaLineaDeTiempo = dc.lineChart('#lineaDetiempo'),
+            graficaEvolucionTiempo = dc.compositeChart("#evolucionTiempo"),
+            graficaTotalesReportes = dc.compositeChart('#reportesTotales');
+
+
+
+        var EscalaOrdinal = d3.scale.ordinal()
+            .domain(["Policias", "Árboles", "Basuras", "Acceso", "Juegos", "Sillas", "Luz"]);
+
+
+
+        var dimensionesNombreCategorias = ndx.dimension(function (d) {
+            return d.properties;
+        });
+        var todospolicias = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.policia;
+        });
+        var todosarboles = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.arbol;
+        });
+        var todosbasuras = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.caneca;
+        });
+        var todosacceso = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.estacion;
+        });
+        var todosjuegos = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.juego;
+        });
+        var todossillas = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.silla;
+        });
+        var todosluces = dimensionesNombreCategorias.group().reduceSum(function (d) {
+            return d.properties.luz;
+        });
+
+
+
+
+        //console.log(datosInvasionEspacioPublico);
+        //var chart = dc.barChart("#test");
+        //chart
+        //  .width(500)
+        //  .height(200)
+        //  .x(EscalaOrdinal)
+        //  .xUnits(dc.units.ordinal)
+        //  .brushOn(false)
+        //  .xAxisLabel("Categorias")
+        //  .yAxisLabel("Cantidad de propuestas")
+        //  .dimension(dimensionesNombreCategorias)
+        //  .barPadding(0.1)
+        //  .outerPadding(0.05)
+        //  .group(todospolicias)
+        //.stack(todosarboles);
+        //
+        //chart.render();
+
+
+
+
+
+
+
+        graficaTotalesReportes
+            .width(630).height(150)
+            .x(EscalaOrdinal)
+            .xUnits(dc.units.ordinal)
+            .elasticY(false)
+            .compose([
+                dc.barChart(graficaTotalesReportes).group(todospolicias, "Policias").ordinalColors(['#0070bb']),
+                dc.barChart(graficaTotalesReportes).group(todosarboles, "Árboles").ordinalColors(['#30bb51']),
+                dc.barChart(graficaTotalesReportes).group(todosbasuras, "Basuras").ordinalColors(['#bc6731']),
+                dc.barChart(graficaTotalesReportes).group(todosacceso, "Acceso").ordinalColors(['#ffb92e']),
+                dc.barChart(graficaTotalesReportes).group(todosjuegos, "Juegos").ordinalColors(['#e31b20']),
+                dc.barChart(graficaTotalesReportes).group(todossillas, "Sillas").ordinalColors(['#5a31bc']),
+                dc.barChart(graficaTotalesReportes).group(todosluces, "Luces").ordinalColors(['#dfdc13']),
+        ]);
 
         graficaLineaDeTiempo
-            .width(1000).height(70)
+            .width(1060).height(80)
             .dimension(dimensionFecha)
-            .group(conteoPorSeguidores)
+            .group(todospolicias)
             .renderVerticalGridLines(true)
+            .margins({
+                top: 10,
+                right: 80,
+                bottom: 20,
+                left: 30
+            })
             //.filter(dc.filters.RangedFilter(new Date(2016, 1, 1), new Date(2016, 3, 1)))
             .filter(dc.filters.RangedFilter(minDate, maxDate))
             .x(d3.time.scale().domain([minDate, maxDate]));
 
+        graficaEvolucionTiempo
+            .width(1060).height(150)
+            .dimension(dimensionFecha)
+            .margins({
+                top: 10,
+                right: 80,
+                bottom: 20,
+                left: 30
+            })
+            .x(d3.time.scale().domain([minDate, maxDate]))
+            .brushOn(false)
+            .legend(dc.legend().x(1000).y(10).itemHeight(13).gap(5))
+            //            .yAxisLabel("Reportes por día")
+            .compose([
+                dc.lineChart(graficaEvolucionTiempo).group(policiasPorDia, "Policias").ordinalColors(['#0070bb']),
+                dc.lineChart(graficaEvolucionTiempo).group(arbolesPorDia, "Árboles").ordinalColors(['#30bb51']),
+                dc.lineChart(graficaEvolucionTiempo).group(canecasPorDia, "Canecas").ordinalColors(['#bc6731']),
+                dc.lineChart(graficaEvolucionTiempo).group(estacionesPorDia, "Estaciones").ordinalColors(['#ffb92e']),
+                dc.lineChart(graficaEvolucionTiempo).group(juegosPorDia, "Juegos").ordinalColors(['#e31b20']),
+                dc.lineChart(graficaEvolucionTiempo).group(sillasPorDia, "Sillas").ordinalColors(['#5a31bc']),
+                dc.lineChart(graficaEvolucionTiempo).group(estacionesPorDia, "Luces").ordinalColors(['#dfdc13']),
+            ]);
+        //            .group(policiasPorDia, "Policias")
+        //            .stack(arbolesPorDia, "Árboles")
+        //            .stack(canecasPorDia, "Canecas")
+        //            .stack(estacionesPorDia, "Estaciones")
+        //            .stack(juegosPorDia, "Juegos")
+        //            .stack(sillasPorDia, "Sillas")
+        //            .stack(lucesPorDia, "Luces")
+        //            .renderVerticalGridLines(true)
 
         graficaAno
             .width(120)
@@ -227,27 +362,27 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         //graficaDia.xAxis().tickValues([0, 1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]);
 
         graficaSeguidores
-            .width(400)
-            .height(160)
+            .width(360)
+            .height(140)
             .dimension(dimensionSeguidores)
             .group(conteoPorSeguidores)
             .x(d3.scale.linear().domain([0, 11]))
-            .elasticY(true)
-            .centerBar(true)
+            .elasticY(false)
+            .centerBar(false)
             .barPadding(0.3)
-            .xAxisLabel('Votos / Likes')
+            //.xAxisLabel('Votos / Likes')
             .yAxisLabel('No. de Intervenciones')
             .margins({
                 top: 10,
                 right: 20,
-                bottom: 50,
+                bottom: 20,
                 left: 40
             }).ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         graficaSeguidores.xAxis().tickValues([" ", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, " "]);
 
         graficaRespondido
-            .width(120)
-            .height(120)
+            .width(140)
+            .height(140)
             .dimension(dimensionRespondido)
             .group(conteoPorRespondido)
             .innerRadius(20)
@@ -302,19 +437,21 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 dimensionesTodas.top(Infinity).forEach(function (d) {
 
                     var loc = d.geometry;
-                    var radio = d.properties.seguidores;
+//                    var radio = d.properties.seguidores;
+                    var radio = 3;
                     //var name = d.brewery.brewery_name;
                     var marker = L.circleMarker([loc.coordinates[1], loc.coordinates[0]], {
                         fillColor: "#2354ae",
-                        color: "#000",
-                        weight: 1,
+                        color: "#fff",
+                        weight: 0.5,
                         opacity: 1,
                         fillOpacity: 0.8,
                         radius: radio,
 
                     });
-                    marker.bindPopup("<div id='popUpMarker'> <div id='fecha'><span>fecha: </span>" + d.properties.fecha_fecha + "</div><div id='votos'><span>Votos: </span>" + d.properties.seguidores + "</div><div id='elementosUsados'> <div> <span>Elementos Usados:</span> </div><div><span>Policias: </span>1</div><div><span>Canecas: </span>2</div><div><span>Asientos: </span>0</div><div><span>Paraderos: </span>1</div><div><span>Juegos: </span>3</div><div><span>Árboles: </span>2</div><div><span>Luces: </span>0</div></div></div>");
+                    marker.bindPopup("<div id='popUpMarker'><img style='width:150px' src='imagenes/capturasReportes/" + d.properties.id + ".jpg' > <div id='fecha'><span>fecha: </span>"  +d.properties.fecha_dia+ "/" +d.properties.fecha_mes+ "/"+ d.properties.fecha_ano + "</div><div id='votos'><span>Likes: </span>" + d.properties.seguidores + "</div><div id='elementosUsados'> <div id='tituloelementosusados'> <span>Elementos Usados:</span> </div><div><img src='imagenes/iconos/iconoPolicia.png'><span class='valorenpopup'>" + d.properties.policia + "</span></div><div><img src='imagenes/iconos/iconoCaneca.png'><span class='valorenpopup'>" + d.properties.caneca + "</span></div><div><img src='imagenes/iconos/iconoSilla.png'><span class='valorenpopup'>" + d.properties.silla + "</span></div><div><img src='imagenes/iconos/iconoEstacion.png'><span class='valorenpopup'>" + d.properties.estacion + "</span></div><div><img src='imagenes/iconos/iconoJuego.png'><span class='valorenpopup'>" + d.properties.juego + "</span></div><div><img src='imagenes/iconos/iconoArbol.png'><span class='valorenpopup'>" + d.properties.arbol + "</span></div><div><img src='imagenes/iconos/iconoLuz.png'><span class='valorenpopup'>" + d.properties.luz + "</div></div></div>");
                     marcadoresIntervenciones.addLayer(marker);
+
 
 
                 });
@@ -350,60 +487,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             graficaRespondido.filterAll();
             dc.redrawAll();
         });
-
-
-
-
-
-
         // showtime!
         dc.renderAll();
 
-        console.log(conteoPorAno);
 
-        // Creación de gráfica de d3
-        var w = 800;
-        var h = 100;
-        var margin = {
-            top: 58,
-            bottom: 100,
-            left: 80,
-            right: 40
-        };
-        var width = w - margin.left - margin.right;
-        var height = h - margin.top - margin.bottom;
-        var parseoHora = d3.time.format("%H:%M:%S").parse;
-
-        var x = d3.time.scale()
-            .domain([parseoHora("00:00:00"), parseoHora("24:00:00")])
-            //            .domain(d3.extent(data.features,function(d){
-            //                var hora = parseoHora(d.properties.hora);
-            //                return hora;
-            //
-            //            }))
-            .range([0, width]);
-        // console.log(data);
-        //console.log(data.features[0].properties.hora);
-        var svg = d3.select("#capad3Hora").append("svg")
-            .attr("id", "chart")
-            .attr("width", w)
-            .attr("height", h)
-            .attr("id", "chart")
-            .attr("width", w)
-            .attr("height", h);
-        svg.selectAll(".bar")
-            .data(data.features)
-            .enter()
-            .append("circle")
-            .attr("class", "point")
-            .attr("r", 10)
-            .attr("cx", function (d) {
-                var date = parseoHora(d.properties.hora);
-                //console.log(date);
-                return x(date);
-            })
-            .attr("cy", 20)
-            // Final gráfica de d3
     }
 
     $scope.filtrarPorValor = function () {

@@ -18,7 +18,7 @@
     <!--estilos -->
     <link rel="stylesheet" href="css/dc.css" />
     <link rel="stylesheet" href="css/viewer.css" />
-    <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
+
     <link rel="stylesheet" href="css/leaflet.label.css" />
     <!--pruebas -->
     <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
@@ -33,9 +33,9 @@
             <h1>Calidad del Espacio público</h1>
             <div id="papaArriba">
                 <nav id="barraNavegacion">
-                    <a href="index.html">Explorar</a>
-                    <a href="estado.html" id="actual">Sistema de Alertas</a>
-                    <a href="monitoreo.html">Monitoreo</a>
+                    <a href="index.html">Estado General de la zona</a>
+                    <a href="estado.html" id="actual">Estado de las manzanas</a>
+                    <a href="monitoreo.html">Alertas Generadas</a>
 
                 </nav>
                 <div id="nivelesAlertas">
@@ -45,98 +45,105 @@
             </div>
         </header>
         <div id="timeLineControlEstado">
+           <div id="fechaSeleccion">Seleccionado desde el <span id="desde"></span> hasta el <span id="hasta"></span></div>
             <script src="js/controllers/timeLineControlEstado.js"></script>
 
         </div>
+
         <div id="contenedorPrincipal">
             <div id="categorias">
             </div>
-
+           <!--  <h3>Estado General</h3> -->
             <div id="mapaConReportesEstado">
-                <div id="ConfiguracionEstadoGeneral">
-
-                    <h3>Estado General</h3>
-                    <div id="mapEstado">
-                        <!-- The map is going to fill this div... -->
-
-                    </div>
-                    <div id="ponderacion">
-                        <h5>Pondere cada una de las categorías:</h5>
-                        <p>Asígnele un peso de acuerdo a la importancia que usted quiera darle a cada una de las categorías a analizar y asi ver el estado de cada manzana de acuerdo a ello en el gráfico superior</p>
+               <div id="ponderacion">
+                        <!-- <h5>Pondere cada una de las categorías:</h5>
+                        <p>Asígnele un peso de acuerdo a la importancia que usted quiera darle a cada una de las categorías a analizar y asi ver el estado de cada manzana de acuerdo a ello en el gráfico superior</p> -->
                         <table>
                             <tr>
-                                <th>Categoría</th>
-                                <th>Peso</th>
+                                <th colspan="2">Peso ponderado</th>
+
                             </tr>
                             <tr>
                                 <td>Policías</td>
-                                <td><input type="text" ng-model="pesoPolicia" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoPolicia" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td>Árboles</td>
-                                <td><input type="text" ng-model="pesoArboles" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoArboles" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td>Basuras</td>
-                                <td><input type="text" ng-model="pesoBasuras" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoBasuras" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td>Acceso</td>
-                                <td><input type="text" ng-model="pesoAcceso" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoAcceso" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td>Juegos</td>
-                                <td><input type="text" ng-model="pesoJuegos" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoJuegos" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td>Sillas</td>
-                                <td><input type="text" ng-model="pesoSillas" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoSillas" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td>Luz</td>
-                                <td><input type="text" ng-model="pesoLuz" size="2" placeholder="10" value="10"></td>
+                                <td><input type="text" ng-model="pesoLuz" size="3" placeholder="10" value="10"></td>
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><button type="button" ng_click="filtrarManzanas()">Calcular</button></td>
+                                <td><button type="button" ng_click="cambiarPesos()">Calcular</button>
+
+
+                                </td>
                             </tr>
                         </table>
 
                     </div>
+                <div id="ConfiguracionEstadoGeneral">
+
+
+                    <div id="mapEstado">
+                        <!-- The map is going to fill this div... -->
+
+                    </div>
+
                 </div>
+
 
                 <div id="mapasCadauno">
                     <div class="wrapperMapas">
-                        <h3>Policía</h3>
-                        <div id="mapaPolicia"></div>
+                        <h3><img src="imagenes/iconos/iconoPolicia.png" alt="">Policía</h3>
+                        <div id="mapaPolicia"><span id="maxoimoPolicias"></span></div>
                     </div>
                     <div class="wrapperMapas">
-                        <h3>Árboles</h3>
+                        <h3><img src="imagenes/iconos/iconoArbol.png" alt="">Árboles</h3>
                         <div id="mapaArboles">
                         </div>
                     </div>
                     <div class="wrapperMapas">
-                        <h3>Basuras</h3>
+                        <h3><img src="imagenes/iconos/iconoCaneca.png" alt="">Basuras</h3>
                         <div id="mapaBasuras">
                         </div>
                     </div>
                     <div class="wrapperMapas">
-                        <h3>Acceso</h3>
+                        <h3><img src="imagenes/iconos/iconoEstacion.png" alt="">Acceso</h3>
                         <div id="mapaAcceso">
                         </div>
                     </div>
                     <div class="wrapperMapas">
-                        <h3>Juegos</h3>
+                        <h3><img src="imagenes/iconos/iconoJuego.png" alt="">Juegos</h3>
                         <div id="mapaJuegos">
                         </div>
                     </div>
                     <div class="wrapperMapas">
-                        <h3>Sillas</h3>
+                        <h3><img src="imagenes/iconos/iconoSilla.png" alt="">Sillas</h3>
                         <div id="mapaSillas">
                         </div>
                     </div>
                     <div class="wrapperMapas">
-                        <h3>Luz</h3>
+                        <h3><img src="imagenes/iconos/iconoLuz.png" alt="">Luz</h3>
                         <div id="mapaLuz">
                         </div>
                     </div>
@@ -144,64 +151,24 @@
 
             </div>
         </div>
-        <!--   <div id="contenedorTiempo">
-            <div id="graficaAnual" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>Intervenciones anuales</h3>
-                    <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
-
-            </div>
-            <div id="graficaMensual" class="dc-chart">
-                <div id="tituloGraficas">
-                    <div id="tituloGraficas">
-                        <h3>Intervenciones mensuales</h3>
-                        <small><a id="resetearMes" href="#" class="botonReseteo">Resetear</a></small>
-                    </div>
-                </div>
-            </div>
-
-            <div id="usuariosPorReporte" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>votos por intervención</h3>
-                    <small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
-
-            </div>
-            <div id="reportesRespondidos" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>Intervenciones atendidas</h3>
-                    <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
-            </div>
-        </div> -->
-        <!-- <div id='popUpMarker'>
-            <div id='fecha'><span>fecha: </span> d.properties.fecha_fecha</div>
-            <div id='votos'><span>Votos: </span> d.propoerties.seguidores</div>
+       <!--  <div id='popUpPoligono'>
             <div id='elementosUsados'>
                 <div>
-                    <span>Elementos Usados:</span>
+                    <span>Reportes:</span>
                 </div>
-                <div><span>Policias: </span>1</div>
-                <div><span>Canecas: </span>2</div>
-                <div><span>Asientos: </span>0</div>
-                <div><span>Paraderos: </span>1</div>
-                <div><span>Juegos: </span>3</div>
-                <div><span>Árboles: </span>2</div>
-                <div><span>Luces: </span>0</div>
+                <div><img src="imagenes/iconos/iconoPolicia.png" alt=""><span>3</span></div>
+                <div><img src="imagenes/iconos/iconoArbol.png" alt=""><span>3</span></div>
+                <div><img src="imagenes/iconos/iconoCaneca.png" alt=""><span>3</span></div>
+                <div><img src="imagenes/iconos/iconoEstacion.png" alt=""><span>3</span></div>
+                <div><img src="imagenes/iconos/iconoJuego.png" alt=""><span>3</span></div>
+                <div><img src="imagenes/iconos/iconoSilla.png" alt=""><span>3</span></div>
+                <div><img src="imagenes/iconos/iconoLuz.png" alt=""><span>3</span></div>
 
             </div>
         </div> -->
-        <div id="contenedorlineaDeTiempoVieja">
-            reportes entre:
-            <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
-            <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
 
-        </div>
 
-        <!--   <div id="capad3Hora"></div> -->
-        <!--  <div id="timeSlider"></div> -->
-        <!--pruebas -->
+
 
 
 </body>
