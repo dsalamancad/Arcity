@@ -1,4 +1,59 @@
 .leaflet-label {
+
+    background: rgba(0, 0, 0, 0.4);
+    background-clip: padding-box;
+
+    border-radius: 8px;
+    text-align: center;
+    line-height: 14px;
+    width: 14px;
+    height: 14px;
+    color: #ddd;
+    display: block;
+    font-family: "Oswald";
+    font-size: 9px;
+    padding: 2px;
+
+    position: absolute;
+    left: -15px;
+    top: 10px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: -10;
+}
+
+.leaflet-label.leaflet-clickable {
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.leaflet-label:before,
+.leaflet-label:after {
+
+}
+
+.leaflet-label:before {
+
+}
+
+.leaflet-label:after {
+    border-left: 6px solid black;
+    border-left-color: inherit;
+    right: -10px;
+}
+
+.leaflet-label-right:before,
+.leaflet-label-left:after {
+    content: "";
+}
+
+/*
+
+.leaflet-label {
     background: rgb(235, 235, 235);
     background: rgba(235, 235, 235, 0.81);
     background-clip: padding-box;
@@ -52,3 +107,4 @@
 .leaflet-label-left:after {
     content: "";
 }
+*/
