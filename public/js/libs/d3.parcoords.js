@@ -108,24 +108,24 @@ var side_effects = d3.dispatch.apply(this,d3.keys(__))
     if (flags.interactive){pc.render().updateAxes();}
   })
   .on("bundleDimension", function(d) {
-	  if (!d3.keys(__.dimensions).length) pc.detectDimensions();
-	  pc.autoscale();
-	  if (typeof d.value === "number") {
-		  if (d.value < d3.keys(__.dimensions).length) {
-			  __.bundleDimension = __.dimensions[d.value];
-		  } else if (d.value < __.hideAxis.length) {
-			  __.bundleDimension = __.hideAxis[d.value];
-		  }
-	  } else {
-		  __.bundleDimension = d.value;
-	  }
+      if (!d3.keys(__.dimensions).length) pc.detectDimensions();
+      pc.autoscale();
+      if (typeof d.value === "number") {
+          if (d.value < d3.keys(__.dimensions).length) {
+              __.bundleDimension = __.dimensions[d.value];
+          } else if (d.value < __.hideAxis.length) {
+              __.bundleDimension = __.hideAxis[d.value];
+          }
+      } else {
+          __.bundleDimension = d.value;
+      }
 
-	  __.clusterCentroids = compute_cluster_centroids(__.bundleDimension);
+      __.clusterCentroids = compute_cluster_centroids(__.bundleDimension);
     if (flags.interactive){pc.render();}
   })
   .on("hideAxis", function(d) {
-  	pc.dimensions(pc.applyDimensionDefaults());
-	  pc.dimensions(without(__.dimensions, d.value));
+      pc.dimensions(pc.applyDimensionDefaults());
+      pc.dimensions(without(__.dimensions, d.value));
   });
 
 // expose the state of the chart
@@ -173,12 +173,12 @@ function without(arr, items) {
 };
 /** adjusts an axis' default range [h()+1, 1] if a NullValueSeparator is set */
 function getRange() {
-	if (__.nullValueSeparator=="bottom") {
-		return [h()+1-__.nullValueSeparatorPadding.bottom-__.nullValueSeparatorPadding.top, 1];
-	} else if (__.nullValueSeparator=="top") {
-		return [h()+1, 1+__.nullValueSeparatorPadding.bottom+__.nullValueSeparatorPadding.top];
-	}
-	return [h()+1, 1];
+    if (__.nullValueSeparator=="bottom") {
+        return [h()+1-__.nullValueSeparatorPadding.bottom-__.nullValueSeparatorPadding.top, 1];
+    } else if (__.nullValueSeparator=="top") {
+        return [h()+1, 1+__.nullValueSeparatorPadding.bottom+__.nullValueSeparatorPadding.top];
+    }
+    return [h()+1, 1];
 };
 
 pc.autoscale = function() {
@@ -258,8 +258,9 @@ pc.autoscale = function() {
       .attr("height", h()+2);
 
   // default styles, needs to be set when canvas width changes
+
   ctx.foreground.strokeStyle = __.color;
-  ctx.foreground.lineWidth = 1.4;
+  ctx.foreground.lineWidth = 0.2; //meto mano
   ctx.foreground.globalCompositeOperation = __.composite;
   ctx.foreground.globalAlpha = __.alpha;
   ctx.brushed.strokeStyle = __.brushedColor;
@@ -274,21 +275,21 @@ pc.autoscale = function() {
 pc.scale = function(d, domain) {
   __.dimensions[d].yscale.domain(domain);
 
-	return this;
+    return this;
 };
 
 pc.flip = function(d) {
-	//__.dimensions[d].yscale.domain().reverse();					// does not work
+    //__.dimensions[d].yscale.domain().reverse();                    // does not work
   __.dimensions[d].yscale.domain(__.dimensions[d].yscale.domain().reverse()); // works
 
-	return this;
+    return this;
 };
 
 pc.commonScale = function(global, type) {
-	var t = type || "number";
-	if (typeof global === 'undefined') {
-		global = true;
-	}
+    var t = type || "number";
+    if (typeof global === 'undefined') {
+        global = true;
+    }
 
   // try to autodetect dimensions and create scales
   if (!d3.keys(__.dimensions).length) {
@@ -296,34 +297,34 @@ pc.commonScale = function(global, type) {
   }
   pc.autoscale();
 
-	// scales of the same type
-	var scales = d3.keys(__.dimensions).filter(function(p) {
-		return __.dimensions[p].type == t;
-	});
+    // scales of the same type
+    var scales = d3.keys(__.dimensions).filter(function(p) {
+        return __.dimensions[p].type == t;
+    });
 
-	if (global) {
-		var extent = d3.extent(scales.map(function(d,i) {
-				return __.dimensions[d].yscale.domain();
-			}).reduce(function(a,b) {
-				return a.concat(b);
-			}));
+    if (global) {
+        var extent = d3.extent(scales.map(function(d,i) {
+                return __.dimensions[d].yscale.domain();
+            }).reduce(function(a,b) {
+                return a.concat(b);
+            }));
 
-		scales.forEach(function(d) {
+        scales.forEach(function(d) {
       __.dimensions[d].yscale.domain(extent);
-		});
+        });
 
-	} else {
-		scales.forEach(function(d) {
+    } else {
+        scales.forEach(function(d) {
       __.dimensions[d].yscale.domain(d3.extent(__.data, function(d) { return +d[k]; }));
-		});
-	}
+        });
+    }
 
-	// update centroids
-	if (__.bundleDimension !== null) {
-		pc.bundleDimension(__.bundleDimension);
-	}
+    // update centroids
+    if (__.bundleDimension !== null) {
+        pc.bundleDimension(__.bundleDimension);
+    }
 
-	return this;
+    return this;
 };
 pc.detectDimensions = function() {
   pc.dimensions(pc.applyDimensionDefaults());
@@ -331,8 +332,8 @@ pc.detectDimensions = function() {
 };
 
 pc.applyDimensionDefaults = function(dims) {
-	var types = pc.detectDimensionTypes(__.data);
-	dims = dims ? dims : d3.keys(types);
+    var types = pc.detectDimensionTypes(__.data);
+    dims = dims ? dims : d3.keys(types);
   var newDims = {};
   var currIndex = 0;
   dims.forEach(function(k) {
@@ -352,9 +353,9 @@ pc.applyDimensionDefaults = function(dims) {
 };
 
 pc.getOrderedDimensionKeys = function(){
-	return d3.keys(__.dimensions).sort(function(x, y){
-		return d3.ascending(__.dimensions[x].index, __.dimensions[y].index);
-	});
+    return d3.keys(__.dimensions).sort(function(x, y){
+        return d3.ascending(__.dimensions[x].index, __.dimensions[y].index);
+    });
 };
 
 // a better "typeof" from this post: http://stackoverflow.com/questions/7390426/better-way-to-get-type-of-a-javascript-variable
@@ -365,7 +366,7 @@ pc.toType = function(v) {
 // try to coerce to number before returning type
 pc.toTypeCoerceNumbers = function(v) {
   if ((parseFloat(v) == v) && (v != null)) {
-	return "number";
+    return "number";
 }
   return pc.toType(v);
 };
@@ -459,177 +460,177 @@ pc.renderBrushed.queue = function() {
   }
 };function compute_cluster_centroids(d) {
 
-	var clusterCentroids = d3.map();
-	var clusterCounts = d3.map();
-	// determine clusterCounts
-	__.data.forEach(function(row) {
-		var scaled = __.dimensions[d].yscale(row[d]);
-		if (!clusterCounts.has(scaled)) {
-			clusterCounts.set(scaled, 0);
-		}
-		var count = clusterCounts.get(scaled);
-		clusterCounts.set(scaled, count + 1);
-	});
+    var clusterCentroids = d3.map();
+    var clusterCounts = d3.map();
+    // determine clusterCounts
+    __.data.forEach(function(row) {
+        var scaled = __.dimensions[d].yscale(row[d]);
+        if (!clusterCounts.has(scaled)) {
+            clusterCounts.set(scaled, 0);
+        }
+        var count = clusterCounts.get(scaled);
+        clusterCounts.set(scaled, count + 1);
+    });
 
-	__.data.forEach(function(row) {
-		d3.keys(__.dimensions).map(function(p, i) {
-			var scaled = __.dimensions[d].yscale(row[d]);
-			if (!clusterCentroids.has(scaled)) {
-				var map = d3.map();
-				clusterCentroids.set(scaled, map);
-			}
-			if (!clusterCentroids.get(scaled).has(p)) {
-				clusterCentroids.get(scaled).set(p, 0);
-			}
-			var value = clusterCentroids.get(scaled).get(p);
-			value += __.dimensions[p].yscale(row[p]) / clusterCounts.get(scaled);
-			clusterCentroids.get(scaled).set(p, value);
-		});
-	});
+    __.data.forEach(function(row) {
+        d3.keys(__.dimensions).map(function(p, i) {
+            var scaled = __.dimensions[d].yscale(row[d]);
+            if (!clusterCentroids.has(scaled)) {
+                var map = d3.map();
+                clusterCentroids.set(scaled, map);
+            }
+            if (!clusterCentroids.get(scaled).has(p)) {
+                clusterCentroids.get(scaled).set(p, 0);
+            }
+            var value = clusterCentroids.get(scaled).get(p);
+            value += __.dimensions[p].yscale(row[p]) / clusterCounts.get(scaled);
+            clusterCentroids.get(scaled).set(p, value);
+        });
+    });
 
-	return clusterCentroids;
+    return clusterCentroids;
 
 }
 
 function compute_centroids(row) {
-	var centroids = [];
+    var centroids = [];
 
-	var p = d3.keys(__.dimensions);
-	var cols = p.length;
-	var a = 0.5;			// center between axes
-	for (var i = 0; i < cols; ++i) {
-		// centroids on 'real' axes
-		var x = position(p[i]);
-		var y = __.dimensions[p[i]].yscale(row[p[i]]);
-		centroids.push($V([x, y]));
+    var p = d3.keys(__.dimensions);
+    var cols = p.length;
+    var a = 0.5;            // center between axes
+    for (var i = 0; i < cols; ++i) {
+        // centroids on 'real' axes
+        var x = position(p[i]);
+        var y = __.dimensions[p[i]].yscale(row[p[i]]);
+        centroids.push($V([x, y]));
 
-		// centroids on 'virtual' axes
-		if (i < cols - 1) {
-			var cx = x + a * (position(p[i+1]) - x);
-			var cy = y + a * (__.dimensions[p[i+1]].yscale(row[p[i+1]]) - y);
-			if (__.bundleDimension !== null) {
-				var leftCentroid = __.clusterCentroids.get(__.dimensions[__.bundleDimension].yscale(row[__.bundleDimension])).get(p[i]);
-				var rightCentroid = __.clusterCentroids.get(__.dimensions[__.bundleDimension].yscale(row[__.bundleDimension])).get(p[i+1]);
-				var centroid = 0.5 * (leftCentroid + rightCentroid);
-				cy = centroid + (1 - __.bundlingStrength) * (cy - centroid);
-			}
-			centroids.push($V([cx, cy]));
-		}
-	}
+        // centroids on 'virtual' axes
+        if (i < cols - 1) {
+            var cx = x + a * (position(p[i+1]) - x);
+            var cy = y + a * (__.dimensions[p[i+1]].yscale(row[p[i+1]]) - y);
+            if (__.bundleDimension !== null) {
+                var leftCentroid = __.clusterCentroids.get(__.dimensions[__.bundleDimension].yscale(row[__.bundleDimension])).get(p[i]);
+                var rightCentroid = __.clusterCentroids.get(__.dimensions[__.bundleDimension].yscale(row[__.bundleDimension])).get(p[i+1]);
+                var centroid = 0.5 * (leftCentroid + rightCentroid);
+                cy = centroid + (1 - __.bundlingStrength) * (cy - centroid);
+            }
+            centroids.push($V([cx, cy]));
+        }
+    }
 
-	return centroids;
+    return centroids;
 }
 
 function compute_control_points(centroids) {
 
-	var cols = centroids.length;
-	var a = __.smoothness;
-	var cps = [];
+    var cols = centroids.length;
+    var a = __.smoothness;
+    var cps = [];
 
-	cps.push(centroids[0]);
-	cps.push($V([centroids[0].e(1) + a*2*(centroids[1].e(1)-centroids[0].e(1)), centroids[0].e(2)]));
-	for (var col = 1; col < cols - 1; ++col) {
-		var mid = centroids[col];
-		var left = centroids[col - 1];
-		var right = centroids[col + 1];
+    cps.push(centroids[0]);
+    cps.push($V([centroids[0].e(1) + a*2*(centroids[1].e(1)-centroids[0].e(1)), centroids[0].e(2)]));
+    for (var col = 1; col < cols - 1; ++col) {
+        var mid = centroids[col];
+        var left = centroids[col - 1];
+        var right = centroids[col + 1];
 
-		var diff = left.subtract(right);
-		cps.push(mid.add(diff.x(a)));
-		cps.push(mid);
-		cps.push(mid.subtract(diff.x(a)));
-	}
-	cps.push($V([centroids[cols-1].e(1) + a*2*(centroids[cols-2].e(1)-centroids[cols-1].e(1)), centroids[cols-1].e(2)]));
-	cps.push(centroids[cols - 1]);
+        var diff = left.subtract(right);
+        cps.push(mid.add(diff.x(a)));
+        cps.push(mid);
+        cps.push(mid.subtract(diff.x(a)));
+    }
+    cps.push($V([centroids[cols-1].e(1) + a*2*(centroids[cols-2].e(1)-centroids[cols-1].e(1)), centroids[cols-1].e(2)]));
+    cps.push(centroids[cols - 1]);
 
-	return cps;
+    return cps;
 
 };pc.shadows = function() {
-	flags.shadows = true;
-	pc.alphaOnBrushed(0.1);
-	pc.render();
-	return this;
+    flags.shadows = true;
+    pc.alphaOnBrushed(0.1);
+    pc.render();
+    return this;
 };
 
 // draw dots with radius r on the axis line where data intersects
 pc.axisDots = function(r) {
-	var r = r || 0.1;
-	var ctx = pc.ctx.marks;
-	var startAngle = 0;
-	var endAngle = 2 * Math.PI;
-	ctx.globalAlpha = d3.min([ 1 / Math.pow(__.data.length, 1 / 2), 1 ]);
-	__.data.forEach(function(d) {
-		d3.entries(__.dimensions).forEach(function(p, i) {
-			ctx.beginPath();
-			ctx.arc(position(p), __.dimensions[p.key].yscale(d[p]), r, startAngle, endAngle);
-			ctx.stroke();
-			ctx.fill();
-		});
-	});
-	return this;
+    var r = r || 0.1;
+    var ctx = pc.ctx.marks;
+    var startAngle = 0;
+    var endAngle = 2 * Math.PI;
+    ctx.globalAlpha = d3.min([ 1 / Math.pow(__.data.length, 1 / 2), 1 ]);
+    __.data.forEach(function(d) {
+        d3.entries(__.dimensions).forEach(function(p, i) {
+            ctx.beginPath();
+            ctx.arc(position(p), __.dimensions[p.key].yscale(d[p]), r, startAngle, endAngle);
+            ctx.stroke();
+            ctx.fill();
+        });
+    });
+    return this;
 };
 
 // draw single cubic bezier curve
 function single_curve(d, ctx) {
 
-	var centroids = compute_centroids(d);
-	var cps = compute_control_points(centroids);
+    var centroids = compute_centroids(d);
+    var cps = compute_control_points(centroids);
 
-	ctx.moveTo(cps[0].e(1), cps[0].e(2));
-	for (var i = 1; i < cps.length; i += 3) {
-		if (__.showControlPoints) {
-			for (var j = 0; j < 3; j++) {
-				ctx.fillRect(cps[i+j].e(1), cps[i+j].e(2), 2, 2);
-			}
-		}
-		ctx.bezierCurveTo(cps[i].e(1), cps[i].e(2), cps[i+1].e(1), cps[i+1].e(2), cps[i+2].e(1), cps[i+2].e(2));
-	}
+    ctx.moveTo(cps[0].e(1), cps[0].e(2));
+    for (var i = 1; i < cps.length; i += 3) {
+        if (__.showControlPoints) {
+            for (var j = 0; j < 3; j++) {
+                ctx.fillRect(cps[i+j].e(1), cps[i+j].e(2), 2, 2);
+            }
+        }
+        ctx.bezierCurveTo(cps[i].e(1), cps[i].e(2), cps[i+1].e(1), cps[i+1].e(2), cps[i+2].e(1), cps[i+2].e(2));
+    }
 };
 
 // draw single polyline
 function color_path(d, ctx) {
-	ctx.beginPath();
-	if ((__.bundleDimension !== null && __.bundlingStrength > 0) || __.smoothness > 0) {
-		single_curve(d, ctx);
-	} else {
-		single_path(d, ctx);
-	}
-	ctx.stroke();
+    ctx.beginPath();
+    if ((__.bundleDimension !== null && __.bundlingStrength > 0) || __.smoothness > 0) {
+        single_curve(d, ctx);
+    } else {
+        single_path(d, ctx);
+    }
+    ctx.stroke();
 };
 
 // draw many polylines of the same color
 function paths(data, ctx) {
-	ctx.clearRect(-1, -1, w() + 2, h() + 2);
-	ctx.beginPath();
-	data.forEach(function(d) {
-		if ((__.bundleDimension !== null && __.bundlingStrength > 0) || __.smoothness > 0) {
-			single_curve(d, ctx);
-		} else {
-			single_path(d, ctx);
-		}
-	});
-	ctx.stroke();
+    ctx.clearRect(-1, -1, w() + 2, h() + 2);
+    ctx.beginPath();
+    data.forEach(function(d) {
+        if ((__.bundleDimension !== null && __.bundlingStrength > 0) || __.smoothness > 0) {
+            single_curve(d, ctx);
+        } else {
+            single_path(d, ctx);
+        }
+    });
+    ctx.stroke();
 };
 
 // returns the y-position just beyond the separating null value line
 function getNullPosition() {
-	if (__.nullValueSeparator=="bottom") {
-		return h()+1;
-	} else if (__.nullValueSeparator=="top") {
-		return 1;
-	} else {
-		console.log("A value is NULL, but nullValueSeparator is not set; set it to 'bottom' or 'top'.");
-	}
-	return h()+1;
+    if (__.nullValueSeparator=="bottom") {
+        return h()+1;
+    } else if (__.nullValueSeparator=="top") {
+        return 1;
+    } else {
+        console.log("A value is NULL, but nullValueSeparator is not set; set it to 'bottom' or 'top'.");
+    }
+    return h()+1;
 };
 
 function single_path(d, ctx) {
-	d3.entries(__.dimensions).forEach(function(p, i) {  //p isn't really p
-		if (i == 0) {
-			ctx.moveTo(position(p.key), typeof d[p.key] =='undefined' ? getNullPosition() : __.dimensions[p.key].yscale(d[p.key]));
-		} else {
-			ctx.lineTo(position(p.key), typeof d[p.key] =='undefined' ? getNullPosition() : __.dimensions[p.key].yscale(d[p.key]));
-		}
-	});
+    d3.entries(__.dimensions).forEach(function(p, i) {  //p isn't really p
+        if (i == 0) {
+            ctx.moveTo(position(p.key), typeof d[p.key] =='undefined' ? getNullPosition() : __.dimensions[p.key].yscale(d[p.key]));
+        } else {
+            ctx.lineTo(position(p.key), typeof d[p.key] =='undefined' ? getNullPosition() : __.dimensions[p.key].yscale(d[p.key]));
+        }
+    });
 };
 
 function path_brushed(d, i) {
@@ -643,12 +644,12 @@ function path_brushed(d, i) {
 
 function path_foreground(d, i) {
   ctx.foreground.strokeStyle = d3.functor(__.color)(d, i);
-	return color_path(d, ctx.foreground);
+    return color_path(d, ctx.foreground);
 };
 
 function path_highlight(d, i) {
   ctx.highlight.strokeStyle = d3.functor(__.color)(d, i);
-	return color_path(d, ctx.highlight);
+    return color_path(d, ctx.highlight);
 };
 pc.clear = function(layer) {
   ctx[layer].clearRect(0, 0, w() + 2, h() + 2);
@@ -725,7 +726,7 @@ pc.createAxes = function() {
       .text(dimensionLabels)
       .on("dblclick", flipAxisAndUpdatePCP)
       .on("wheel", rotateLabels);
-  
+
   if (__.nullValueSeparator=="top") {
     pc.svg.append("line")
       .attr("x1", 0)
@@ -747,7 +748,7 @@ pc.createAxes = function() {
       .attr("fill", "none")
       .attr("shape-rendering", "crispEdges");
   }
-  
+
   flags.axes= true;
   return this;
 };
@@ -894,7 +895,7 @@ pc.reorderable = function() {
 pc.reorder = function(rowdata) {
   var firstDim = pc.getOrderedDimensionKeys()[0];
 
-	pc.sortDimensionsByRowData(rowdata);
+    pc.sortDimensionsByRowData(rowdata);
   // NOTE: this is relatively cheap given that:
   // number of dimensions < number of data items
   // Thus we check equality of order to prevent rerendering when this is the case.
@@ -922,7 +923,7 @@ pc.reorder = function(rowdata) {
 
 pc.sortDimensionsByRowData = function(rowdata) {
   var copy = __.dimensions;
-	var positionSortedKeys = d3.keys(__.dimensions).sort(function(a, b) {
+    var positionSortedKeys = d3.keys(__.dimensions).sort(function(a, b) {
     var pixelDifference = __.dimensions[a].yscale(rowdata[a]) - __.dimensions[b].yscale(rowdata[b]);
 
     // Array.sort is not necessarily stable, this means that if pixelDifference is zero
@@ -934,17 +935,17 @@ pc.sortDimensionsByRowData = function(rowdata) {
     return pixelDifference;
   });
   __.dimensions = {};
-	positionSortedKeys.forEach(function(p, i){
-		__.dimensions[p] = copy[p];
-		__.dimensions[p].index = i;
-	});
+    positionSortedKeys.forEach(function(p, i){
+        __.dimensions[p] = copy[p];
+        __.dimensions[p].index = i;
+    });
 }
 
 pc.sortDimensions = function() {
   var copy = __.dimensions;
   var positionSortedKeys = d3.keys(__.dimensions).sort(function(a, b) {
-  	return position(a) - position(b);
-	});
+      return position(a) - position(b);
+    });
   __.dimensions = {};
   positionSortedKeys.forEach(function(p, i){
     __.dimensions[p] = copy[p];
@@ -1064,7 +1065,7 @@ pc.brushMode = function(mode) {
     // test if within range
     var within = {
       "date": function(d,p,dimension) {
-	if (typeof __.dimensions[p].yscale.rangePoints === "function") { // if it is ordinal
+    if (typeof __.dimensions[p].yscale.rangePoints === "function") { // if it is ordinal
           return extents[dimension][0] <= __.dimensions[p].yscale(d[p]) && __.dimensions[p].yscale(d[p]) <= extents[dimension][1]
         } else {
           return extents[dimension][0] <= d[p] && d[p] <= extents[dimension][1]
@@ -1101,50 +1102,50 @@ pc.brushMode = function(mode) {
 
   function brushExtents(extents) {
     if(typeof(extents) === 'undefined')
-		{
-			var extents = {};
-			d3.keys(__.dimensions).forEach(function(d) {
-				var brush = brushes[d];
-				if (brush !== undefined && !brush.empty()) {
-					var extent = brush.extent();
-					extent.sort(d3.ascending);
-					extents[d] = extent;
-				}
-			});
-			return extents;
-		}
-		else
-		{
-			//first get all the brush selections
-			var brushSelections = {};
-			g.selectAll('.brush')
-				.each(function(d) {
-					brushSelections[d] = d3.select(this);
+        {
+            var extents = {};
+            d3.keys(__.dimensions).forEach(function(d) {
+                var brush = brushes[d];
+                if (brush !== undefined && !brush.empty()) {
+                    var extent = brush.extent();
+                    extent.sort(d3.ascending);
+                    extents[d] = extent;
+                }
+            });
+            return extents;
+        }
+        else
+        {
+            //first get all the brush selections
+            var brushSelections = {};
+            g.selectAll('.brush')
+                .each(function(d) {
+                    brushSelections[d] = d3.select(this);
 
-			});
+            });
 
-			// loop over each dimension and update appropriately (if it was passed in through extents)
-			d3.keys(__.dimensions).forEach(function(d) {
-				if (extents[d] === undefined){
-					return;
-				}
+            // loop over each dimension and update appropriately (if it was passed in through extents)
+            d3.keys(__.dimensions).forEach(function(d) {
+                if (extents[d] === undefined){
+                    return;
+                }
 
-				var brush = brushes[d];
-				if (brush !== undefined) {
-					//update the extent
-					brush.extent(extents[d]);
+                var brush = brushes[d];
+                if (brush !== undefined) {
+                    //update the extent
+                    brush.extent(extents[d]);
 
-					//redraw the brush
-					brush(brushSelections[d]);
+                    //redraw the brush
+                    brush(brushSelections[d]);
 
-					//fire some events
-					brush.event(brushSelections[d]);
-				}
-			});
+                    //fire some events
+                    brush.event(brushSelections[d]);
+                }
+            });
 
-			//redraw the chart
-			pc.renderBrushed();
-		}
+            //redraw the chart
+            pc.renderBrushed();
+        }
   }
 
   function brushFor(axis) {
@@ -1153,10 +1154,10 @@ pc.brushMode = function(mode) {
     brush
       .y(__.dimensions[axis].yscale)
       .on("brushstart", function() {
-				if(d3.event.sourceEvent !== null) {
-					d3.event.sourceEvent.stopPropagation();
-				}
-			})
+                if(d3.event.sourceEvent !== null) {
+                    d3.event.sourceEvent.stopPropagation();
+                }
+            })
       .on("brush", function() {
         brushUpdated(selected());
       })
@@ -1245,7 +1246,7 @@ pc.brushMode = function(mode) {
       .attr("stroke-width", 2);
 
     drag
-      .on("drag", function(d, i) { 
+      .on("drag", function(d, i) {
         var ev = d3.event;
         i = i + 1;
         strum["p" + i][0] = Math.min(Math.max(strum.minX + 1, ev.x), strum.maxX);
@@ -1543,7 +1544,7 @@ pc.brushMode = function(mode) {
 
 (function() {
   if (typeof d3.svg.multibrush !== 'function') {
-	  return;
+      return;
   }
   var brushes = {};
 
@@ -1591,13 +1592,13 @@ pc.brushMode = function(mode) {
       case "AND":
         return actives.every(function(p, dimension) {
           return extents[dimension].some(function(b) {
-          	return within[__.dimensions[p].type](d,p,dimension,b);
+              return within[__.dimensions[p].type](d,p,dimension,b);
           });
         });
       case "OR":
         return actives.some(function(p, dimension) {
-      	  return extents[dimension].some(function(b) {
-            	return within[__.dimensions[p].type](d,p,dimension,b);
+            return extents[dimension].some(function(b) {
+                return within[__.dimensions[p].type](d,p,dimension,b);
             });
         });
       default:
@@ -1624,32 +1625,32 @@ pc.brushMode = function(mode) {
     brush
       .y(__.dimensions[axis].yscale)
       .on("brushstart", function() {
-				if(d3.event.sourceEvent !== null) {
-					d3.event.sourceEvent.stopPropagation();
-				}
+                if(d3.event.sourceEvent !== null) {
+                    d3.event.sourceEvent.stopPropagation();
+                }
       })
       .on("brush", function() {
         brushUpdated(selected());
       })
       .on("brushend", function() {
-    	// d3.svg.multibrush clears extents just before calling 'brushend'
-    	// so we have to update here again.
-    	// This fixes issue #103 for now, but should be changed in d3.svg.multibrush
-    	// to avoid unnecessary computation.
-    	brushUpdated(selected());
+        // d3.svg.multibrush clears extents just before calling 'brushend'
+        // so we have to update here again.
+        // This fixes issue #103 for now, but should be changed in d3.svg.multibrush
+        // to avoid unnecessary computation.
+        brushUpdated(selected());
         events.brushend.call(pc, __.brushed);
       })
       .extentAdaption(function(selection) {
-    	  selection
-    	  .style("visibility", null)
+          selection
+          .style("visibility", null)
           .attr("x", -15)
           .attr("width", 30);
       })
       .resizeAdaption(function(selection) {
-    	 selection
-    	   .selectAll("rect")
-    	   .attr("x", -15)
-    	   .attr("width", 30);
+         selection
+           .selectAll("rect")
+           .attr("x", -15)
+           .attr("width", 30);
       });
 
     brushes[axis] = brush;
@@ -1723,11 +1724,11 @@ pc.brushMode = function(mode) {
       .attr("class", "arc")
       .style("fill", "orange")
       .style("opacity", 0.5);
-    
+
     path
       .attr("d", arc.arc)
       .attr("transform", "translate(" + arc.p1[0] + "," + arc.p1[1] + ")");
-    		  
+
     line.enter()
       .append("line")
       .attr("id", "arc-" + id)
@@ -1742,30 +1743,30 @@ pc.brushMode = function(mode) {
       .attr("stroke-width", 2);
 
     drag
-      .on("drag", function(d, i) { 
+      .on("drag", function(d, i) {
         var ev = d3.event,
-        	angle = 0;
-        
+            angle = 0;
+
         i = i + 2;
-        
+
         arc["p" + i][0] = Math.min(Math.max(arc.minX + 1, ev.x), arc.maxX);
         arc["p" + i][1] = Math.min(Math.max(arc.minY, ev.y), arc.maxY);
-        
+
         angle = i === 3 ? arcs.startAngle(id) : arcs.endAngle(id);
-        
+
         if ((arc.startAngle < Math.PI && arc.endAngle < Math.PI && angle < Math.PI) ||
-        		(arc.startAngle >= Math.PI && arc.endAngle >= Math.PI && angle >= Math.PI)) {
-	        
-        	if (i === 2) {
-	        	arc.endAngle = angle;
-	        	arc.arc.endAngle(angle);
-	        } else if (i === 3) {
-	        	arc.startAngle = angle;
-	        	arc.arc.startAngle(angle);
-	        }
-	        
+                (arc.startAngle >= Math.PI && arc.endAngle >= Math.PI && angle >= Math.PI)) {
+
+            if (i === 2) {
+                arc.endAngle = angle;
+                arc.arc.endAngle(angle);
+            } else if (i === 3) {
+                arc.startAngle = angle;
+                arc.arc.startAngle(angle);
+            }
+
         }
-        
+
         drawStrum(arc, i - 2);
       })
       .on("dragend", onDragEnd());
@@ -1869,39 +1870,39 @@ pc.brushMode = function(mode) {
       drawStrum(arc, 1);
     };
   }
-  
+
   // some helper functions
   function hypothenuse(a, b) {
-	  return Math.sqrt(a*a + b*b);
+      return Math.sqrt(a*a + b*b);
   }
-  
+
   var rad = (function() {
-	  var c = Math.PI / 180;
-	  return function(angle) {
-		  return angle * c;
-	  };
+      var c = Math.PI / 180;
+      return function(angle) {
+          return angle * c;
+      };
   })();
-  
+
   var deg = (function() {
-	  var c = 180 / Math.PI;
-	  return function(angle) {
-		  return angle * c;
-	  }; 
+      var c = 180 / Math.PI;
+      return function(angle) {
+          return angle * c;
+      };
   })();
-  
+
   // [0, 2*PI] -> [-PI/2, PI/2]
   var signedAngle = function(angle) {
-	  var ret = angle;
-	  if (angle > Math.PI) {
-		ret = angle - 1.5 * Math.PI; 
-		ret = angle - 1.5 * Math.PI; 
-	  } else {
-	  	ret = angle - 0.5 * Math.PI;
-	   	ret = angle - 0.5 * Math.PI;
-	  }
-	  return -ret;
+      var ret = angle;
+      if (angle > Math.PI) {
+        ret = angle - 1.5 * Math.PI;
+        ret = angle - 1.5 * Math.PI;
+      } else {
+          ret = angle - 0.5 * Math.PI;
+           ret = angle - 0.5 * Math.PI;
+      }
+      return -ret;
   }
-  
+
   /**
    * angles are stored in radians from in [0, 2*PI], where 0 in 12 o'clock.
    * However, one can only select lines from 0 to PI, so we compute the
@@ -1911,16 +1912,16 @@ pc.brushMode = function(mode) {
   function containmentTest(arc) {
     var startAngle = signedAngle(arc.startAngle);
     var endAngle = signedAngle(arc.endAngle);
-    
+
     if (startAngle > endAngle) {
-    	var tmp = startAngle;
-    	startAngle = endAngle;
-    	endAngle = tmp;
+        var tmp = startAngle;
+        startAngle = endAngle;
+        endAngle = tmp;
     }
-    
+
     // test if segment angle is contained in angle interval
     return function(a) {
-      
+
       if (a >= startAngle && a <= endAngle) {
         return true;
       }
@@ -1948,7 +1949,7 @@ pc.brushMode = function(mode) {
           a = arcs.width(id),
           b = y1(d[d1]) - y2(d[d2]),
           c = hypothenuse(a, b),
-          angle = Math.asin(b/c);	// rad in [-PI/2, PI/2]
+          angle = Math.asin(b/c);    // rad in [-PI/2, PI/2]
       return test(angle);
     }
 
@@ -1987,19 +1988,19 @@ pc.brushMode = function(mode) {
       if (arc && arc.p1[0] === arc.p2[0] && arc.p1[1] === arc.p2[1]) {
         removeStrum(arcs);
       }
-      
+
       if (arc) {
-    	  var angle = arcs.startAngle(arcs.active);
-    	  
-    	  arc.startAngle = angle;
+          var angle = arcs.startAngle(arcs.active);
+
+          arc.startAngle = angle;
           arc.endAngle = angle;
           arc.arc
             .outerRadius(arcs.length(arcs.active))
             .startAngle(angle)
             .endAngle(angle);
       }
-      
-      
+
+
       brushed = selected(arcs);
       arcs.active = undefined;
       __.brushed = brushed;
@@ -2041,59 +2042,59 @@ pc.brushMode = function(mode) {
 
       return arc.maxX - arc.minX;
     };
-    
+
     // returns angles in [-PI/2, PI/2]
     angle = function(p1, p2) {
         var a = p1[0] - p2[0],
-        	b = p1[1] - p2[1],
-        	c = hypothenuse(a, b);
-        
+            b = p1[1] - p2[1],
+            c = hypothenuse(a, b);
+
         return Math.asin(b/c);
     }
-    
+
     // returns angles in [0, 2 * PI]
     arcs.endAngle = function(id) {
-    	var arc = arcs[id];
-    	if (arc === undefined) {
+        var arc = arcs[id];
+        if (arc === undefined) {
             return undefined;
         }
-    	var sAngle = angle(arc.p1, arc.p2),
-    		uAngle = -sAngle + Math.PI / 2;
-    	
-    	if (arc.p1[0] > arc.p2[0]) {
-    		uAngle = 2 * Math.PI - uAngle;
-    	}
-    	
-    	return uAngle;
+        var sAngle = angle(arc.p1, arc.p2),
+            uAngle = -sAngle + Math.PI / 2;
+
+        if (arc.p1[0] > arc.p2[0]) {
+            uAngle = 2 * Math.PI - uAngle;
+        }
+
+        return uAngle;
     }
-    
+
     arcs.startAngle = function(id) {
-    	var arc = arcs[id];
-    	if (arc === undefined) {
+        var arc = arcs[id];
+        if (arc === undefined) {
             return undefined;
         }
-    	
-    	var sAngle = angle(arc.p1, arc.p3),
-    		uAngle = -sAngle + Math.PI / 2;
-    	
-    	if (arc.p1[0] > arc.p3[0]) {
-    		uAngle = 2 * Math.PI - uAngle;
-    	}
-    	
-    	return uAngle;
+
+        var sAngle = angle(arc.p1, arc.p3),
+            uAngle = -sAngle + Math.PI / 2;
+
+        if (arc.p1[0] > arc.p3[0]) {
+            uAngle = 2 * Math.PI - uAngle;
+        }
+
+        return uAngle;
     }
-    
+
     arcs.length = function(id) {
-    	var arc = arcs[id];
+        var arc = arcs[id];
 
         if (arc === undefined) {
           return undefined;
         }
 
         var a = arc.p1[0] - arc.p2[0],
-        	b = arc.p1[1] - arc.p2[1],
-        	c = hypothenuse(a, b);
-        	
+            b = arc.p1[1] - arc.p2[1],
+            c = hypothenuse(a, b);
+
         return(c);
     }
 

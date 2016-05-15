@@ -147,7 +147,14 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         pesoGlobalSillas = 10,
         pesoGlobalLuz = 10;
 //VARIABLES PARA CREAR GRAFICO DE COORDENADAS PARAELAS
-    var m1=[1, -0, 0, 0, 0, 3, 7, "m1"], m2=[1, -1, 1, 2, 1, 6, 1, "m2"],m3=[2, -2, 4, 4, 0.5, 2, 7, "m3"],m4=[3, -3, 9, 6, 0.33, 4, 5, "m4"], m5=[4, -4, 16, 8, 0.25, 9, 3, "m5"], m6=[5, -7, 16, 8, 0.25, 9, 5, "m6"], m7=[6, -3, 16, 8, 0.25, 9, 1, "m7"],m8=[7, -0, 0, 5, 0, 3, 6, "m8"],m9=[],m10=[],m11=[],m12=[],m13=[],m14=[],m15=[],m16=[],m17=[],m18=[],m19=[],m20=[],m21=[],m22=[],m23=[],m24=[],m25=[],m26=[],m27=[],m28=[],m29=[],m30=[],m31=[],m32=[],m33=[],m34=[],m35=[],m36=[],m37=[],m38=[],m39=[],m40=[],m41=[],m42=[],m43=[],m44=[],m45=[],m46=[],m47=[],m48=[];
+    var nombresManzanas = ["m1","m2","m3","m4","m5","m6","m7","m8","m9","m10","m11","m12","m13","m14","m15","m16","m17","m18","m19","m20","m21","m22","m23","m24","m25","m26","m27","m28","m29","m30","m31","m32","m33","m34","m35","m36","m37","m38","m39","m40","m41","m42","m43","m44","m45","m46","m47","m48"]
+     //var m1=[1, -0, 0, 0, 0, 3, 7, "m1"], m2=[1, -1, 1, 2, 1, 6, 1, "m2"],m3=[2, -2, 4, 4, 0.5, 2, 7, "m3"],m4=[3, -3, 9, 6, 0.33, 4, 5, "m4"], m5=[4, -4, 16, 8, 0.25, 9, 3, "m5"], m6=[5, -7, 16, 8, 0.25, 9, 5, "m6"], m7=[6, -3, 16, 8, 0.25, 9, 1, "m7"],m8=[7, -0, 0, 5, 0, 3, 6, "m8"],m9=[],m10=[],m11=[],m12=[],m13=[],m14=[],m15=[],m16=[],m17=[],m18=[],m19=[],m20=[],m21=[],m22=[],m23=[],m24=[],m25=[],m26=[],m27=[],m28=[],m29=[],m30=[],m31=[],m32=[],m33=[],m34=[],m35=[],m36=[],m37=[],m38=[],m39=[],m40=[],m41=[],m42=[],m43=[],m44=[],m45=[],m46=[],m47=[],m48=[];
+    var m1=[],m2=[],m3=[],m4=[],m5=[],m6=[],m7=[],m8=[],m9=[],m10=[],m11=[],m12=[],m13=[],m14=[],m15=[],m16=[],m17=[],m18=[],m19=[],m20=[],m21=[],m22=[],m23=[],m24=[],m25=[],m26=[],m27=[],m28=[],m29=[],m30=[],m31=[],m32=[],m33=[],m34=[],m35=[],m36=[],m37=[],m38=[],m39=[],m40=[],m41=[],m42=[],m43=[],m44=[],m45=[],m46=[],m47=[],m48=[];
+
+        var dataparalel = [
+ m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33,m34,m35,m36,m37,m38,m39,m40,m41,m42,m43,m44,m45,m46,m47,m48,
+];
+var pc;
 
     $scope.cambiarPesos = function () {
         pesoGlobalPolicia = $scope.pesoPolicia;
@@ -160,7 +167,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     }
 
     var dibujarPuntos = function (data){
-        console.log("obj");
+
            capaConPuntosCargados = L.geoJson(data, {
 
                             style: function (feature) {
@@ -235,6 +242,56 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     //función para meter en arrays los valores de poligono y su numero de reportes
     var definirTransparencia = function (data) {
+       // RESETEAR LOS ARRAYS PARA LA GRAFICA DE COORDENADAS PARALELAS
+        m1=[];m2=[];m3=[];m4=[];m5=[];m6=[];m7=[];m8=[];m9=[];m10=[];m11=[];m12=[];m13=[];m14=[];m15=[];m16=[];m17=[];m18=[];m19=[];m20=[];m21=[];m22=[];m23=[];m24=[];m25=[];m26=[];m27=[];m28=[];m29=[];m30=[];m31=[];m32=[];m33=[];m34=[];m35=[];m36=[];m37=[];m38=[];m39=[];m40=[];m41=[];m42=[];m43=[];m44=[];m45=[];m46=[];m47=[];m48=[];
+        dataparalel = [
+ m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33,m34,m35,m36,m37,m38,m39,m40,m41,m42,m43,m44,m45,m46,m47,m48,
+]
+// LLENAR LOS ARRAYS PARA LA GRAFICA DE COORDENADAS PARALELAS
+    for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].policias));
+    }
+    for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].arbol));
+    }
+        for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].caneca));
+    }
+        for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].estacion));
+    }
+        for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].juego));
+    }
+        for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].silla));
+    }
+        for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(Number(data[i].luz));
+    }
+        for (var i = 0; i < data.length; i++) {
+        dataparalel[i].push(nombresManzanas[i]);
+    }
+        //CREACION DE COORDENADAS PARALELAS
+
+    console.log(dataparalel);
+        //document.getElementById("graficaCoordenadasParalelas").removeChild;
+        d3.select("#graficaCoordenadasParalelas").html("");
+       pc = d3.parcoords()("#graficaCoordenadasParalelas")
+            .data(dataparalel)
+            .render()
+            .createAxes()
+
+            .brushMode("1D-axes")
+            .color("rgba(0,200,0,0.3)")
+            .alphaOnBrushed(0.6)
+            .brushedColor("#000");
+
+        d3.select('#reseteoBrushParalel').on('click', function () {
+            pc.brushReset();
+        })
+
+
         var maximoReportesporManzana = d3.max(data, function (d) {
             return Number(d.totale);
         });
@@ -292,6 +349,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
+
+
             if (data[i].policias >= 0 && data[i].policias <= maximoReportesporManzanaPolicia / 4) {
                 opacidadesPoligonosPolicia[data[i].gid] = 0.1;
             } else if (data[i].policias > maximoReportesporManzanaPolicia / 4 && data[i].policias <= (maximoReportesporManzanaPolicia / 4) * 2) {
@@ -666,25 +725,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         console.log(extent0[0] + " y " + extent0[1]);
     }
 
-      //CREACION DE COORDENADAS PARALELAS
-        var dataparalel = [
- m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33,m34,m35,m36,m37,m38,m39,m40,m41,m42,m43,m44,m45,m46,m47,m48,
-];
-
-console.log(opacidadesPoligonosPolicia);
-        var pc = d3.parcoords()("#graficaCoordenadasParalelas")
-            .data(dataparalel)
-            .render()
-            .createAxes()
-
-            .brushMode("1D-axes")
-            .color("rgba(0,200,0,0.3)")
-            .alphaOnBrushed(0.2)
-            .brushedColor("#000");
-
-        d3.select('#reseteoBrushParalel').on('click', function () {
-            pc.brushReset();
-        })
 
 
             }]);

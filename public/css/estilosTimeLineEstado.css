@@ -1,10 +1,10 @@
 #timeLineControlEstado{
-/*    text-align:center;*/
+   text-align:center;
     pading: 0 0 0;
 }
 
 #timeLineControlEstado {
-    display: block;
+    display: inline-block;
     clear: both;
     float: left;
     width: 96%;
@@ -22,7 +22,7 @@
 }
 
 #barraNavegacion{
-    width: 930px;
+    width: 100%;
     margin-bottom: 0px;
 }
 
@@ -40,14 +40,17 @@
     position: relative;
 }
 
-#papaArriba #nivelesAlertas{
-    position: absolute;
-    top: -10px;
-    right: 0px;
+#nivelesAlertas{
+
+    display:block;
+    clear:both;
+    float:right;
+    text-align: right;
     background-color: #fff;
     padding-left: 10px;
+    margin-top: 12px;
 }
-#papaArriba #nivelesAlertas img{
+#nivelesAlertas img{
     width: 200px;
 }
 
@@ -114,12 +117,18 @@
 
     left: 0px;
     width:720px;
-    height:300px;
+    height:462px;
     display:block;
     clear:both;
     float:left;
     margin-left: 0px;
 }
+
+#reseteoBrushParalel{
+    float: right;
+}
+
+
 #graficaCoordenadasParalelas .foreground path {
   fill: none;
   stroke: steelblue;
@@ -130,7 +139,7 @@
         display:block;
     clear:both;
     float:left;
-    margin-top: 20px;
+
     margin-left: 35px;
 
 }
@@ -185,7 +194,7 @@
 
 }
 
-.wrapperMapas h3{
+.wrapperMapas h3, #nivelesAlertas h3{
     display: block;
     clear: both;
     float: left;
@@ -249,7 +258,7 @@
   font: 11px sans-serif;
 }
 
-.axis path {
+#timeLineControlEstado .axis path {
   display: none;
 }
 
@@ -279,3 +288,58 @@
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
+
+
+#graficaCoordenadasParalelas svg g.axis path{
+    stroke-width:2px;
+
+}
+
+#graficaCoordenadasParalelas svg g:nth-child(1) .axis path{
+    stroke:#0070bb;
+}
+#graficaCoordenadasParalelas svg g:nth-child(1) g.brush rect.extent{
+    fill:#0070bb !important;
+}
+#graficaCoordenadasParalelas svg g:nth-child(2) .axis path{
+    stroke:#30bb51;
+}
+#graficaCoordenadasParalelas svg g:nth-child(2) g.brush rect.extent{
+    fill:#30bb51 !important;
+}
+#graficaCoordenadasParalelas svg g:nth-child(3) .axis path{
+    stroke:#bc6731;
+}
+#graficaCoordenadasParalelas svg g:nth-child(3) g.brush rect.extent{
+    fill:#bc6731 !important;
+}
+#graficaCoordenadasParalelas svg g:nth-child(4) .axis path{
+    stroke:#ffb92e;
+}
+#graficaCoordenadasParalelas svg g:nth-child(4) g.brush rect.extent{
+    fill:#ffb92e !important;
+}
+#graficaCoordenadasParalelas svg g:nth-child(5) .axis path{
+    stroke:#e31b20;
+}
+#graficaCoordenadasParalelas svg g:nth-child(5) g.brush rect.extent{
+    fill:#e31b20 !important;
+}
+#graficaCoordenadasParalelas svg g:nth-child(6) .axis path{
+    stroke:#5a31bc;
+}
+#graficaCoordenadasParalelas svg g:nth-child(6) g.brush rect.extent{
+    fill:#5a31bc !important;
+}
+#graficaCoordenadasParalelas svg g:nth-child(7) .axis path{
+    stroke:#dfdc13;
+}
+#graficaCoordenadasParalelas svg g:nth-child(7) g.brush rect.extent{
+    fill:#dfdc13 !important;
+}
+
+#graficaCoordenadasParalelas svg g:nth-child(8) g.axis g.tick text{
+    font-size: 8px;
+}
+
+

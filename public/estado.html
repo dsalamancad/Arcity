@@ -20,8 +20,9 @@
 
     <link rel="stylesheet" href="css/leaflet.label.css" />
     <!--pruebas -->
-    <link rel="stylesheet" href="css/d3.parcoords.css" />
     <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
+    <link rel="stylesheet" href="css/d3.parcoords.css" />
+
 
 
 
@@ -38,10 +39,7 @@
                     <a href="monitoreo.html">Alertas Generadas</a>
 
                 </nav>
-                <div id="nivelesAlertas">
-                    <h3>Niveles de Alerta</h3>
-                    <img src="imagenes/nivelesAlertas.png" alt="">
-                </div>
+
             </div>
         </header>
         <div id="timeLineControlEstado">
@@ -53,6 +51,7 @@
         <div id="contenedorPrincipal">
             <div id="categorias">
             </div>
+            <button id="reseteoBrushParalel">Resetear</button>
             <!--  <h3>Estado General</h3> -->
             <div id="mapaConReportesEstado">
                 <div id="ponderacion">
@@ -123,11 +122,14 @@
                         <!-- The map is going to fill this div... -->
 
                     </div>
-
+                 <div id="nivelesAlertas">
+                    <h3>Niveles de Alerta</h3>
+                    <img src="imagenes/nivelesAlertas.png" alt="">
+                </div>
                 </div>
 
                 <div id="EstadoDerecho">
-                    <button id="reseteoBrushParalel">Resetear</button>
+
                     <div id="graficaCoordenadasParalelas" class="parcoords">
 
                     </div>
