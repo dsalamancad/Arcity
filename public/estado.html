@@ -7,21 +7,20 @@
     <script src="js/libs/d3.min.js"></script>
     <script src="js/libs/d3.parcoords.js"></script>
     <script src="js/libs/leaflet.js"></script>
-    <!-- <script src="js/libs/leaflet-providers.js"></script> -->
     <script src="js/libs/leaflet.label.js"></script>
     <script src="js/libs/angular.min.js"></script>
-
-    <!-- <script src="js/libs/rzslider.min.js"></script> -->
+    <script src="js/libs/jquery-1.12.3.min.js"></script>
+    <script src="js/controllers/form.js"></script>
     <script src="js/controllers/coreEstado.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <!--estilos -->
     <link rel="stylesheet" href="css/dc.css" />
-    <link rel="stylesheet" href="css/viewer.css" />
-
+    <link rel="stylesheet" href="css/estilosHome-Generales.css" />
     <link rel="stylesheet" href="css/leaflet.label.css" />
-    <!--pruebas -->
-    <link rel="stylesheet" href="css/estilosTimeLineEstado.css" />
+    <link rel="stylesheet" href="css/estiloEstado.css" />
     <link rel="stylesheet" href="css/d3.parcoords.css" />
+    <link rel="stylesheet" href="css/estilosForm.css" rel="stylesheet">
 
 
 
@@ -122,10 +121,10 @@
                         <!-- The map is going to fill this div... -->
 
                     </div>
-                 <div id="nivelesAlertas">
-                    <h3>Niveles de Alerta</h3>
-                    <img src="imagenes/nivelesAlertas.png" alt="">
-                </div>
+                    <div id="nivelesAlertas">
+                        <h3>Niveles de Alerta</h3>
+                        <img src="imagenes/nivelesAlertas.png" alt="">
+                    </div>
                 </div>
 
                 <div id="EstadoDerecho">
@@ -173,6 +172,137 @@
 
             </div>
         </div>
+        <!-- Formulario escondido -->
+        <div id='fondoOscuro'>
+
+            <div id='divCentrado'>
+                <div id='estadoVisualizacion'>
+                    <h2>Estado de la visualización</h2>
+                    <div id='fechayManzana'>
+                        <p id='fecha'>Rango de Fecha:
+                            <br><span>Del 24/08/2015 al 30/03/2016</span></p>
+                        <p id='manzana'>Manzana Seleccionada: <span>25</span></p>
+                    </div>
+                    <div id='reportesEnlaManzana'>
+                        <p id='reportesEnZona'>Reportes en la manzana seleccionada:</p>
+                        <div><img src='imagenes/iconos/iconoPolicia.png' alt=''><span>3</span></div>
+                        <div><img src='imagenes/iconos/iconoArbol.png' alt=''><span>3</span></div>
+                        <div><img src='imagenes/iconos/iconoCaneca.png' alt=''><span>3</span></div>
+                        <div><img src='imagenes/iconos/iconoEstacion.png' alt=''><span>3</span></div>
+                        <div><img src='imagenes/iconos/iconoJuego.png' alt=''><span>3</span></div>
+                        <div><img src='imagenes/iconos/iconoSilla.png' alt=''><span>3</span></div>
+                        <div><img src='imagenes/iconos/iconoLuz.png' alt=''><span>3</span></div>
+
+                    </div>
+                    <div id='ponderacionSelecccionada'>
+                        <p>Peso ponderado seleccionado</p>
+                        <table>
+
+                            <tr>
+                                <td>Policías: </td>
+                                <td>
+                                    <span>20</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Árboles: </td>
+                                <td>
+                                    <span>0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Basuras: </td>
+                                <td>
+                                    <span>0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Acceso: </td>
+                                <td>
+                                    <span>0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Juegos: </td>
+                                <td>
+                                    <span>0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sillas: </td>
+                                <td>
+                                    <span>0</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Luz: </td>
+                                <td>
+                                    <span>20</span>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+                <div id='datosEnvio'>
+                    <h2>Creación de alerta</h2>
+                    <form action='#' id='form' method='post' name='form'>
+                        <img id='close' src='imagenes/cerrar.png' onclick='esconderFormulario()'>
+                        <div id='responsablesAEnviar'>
+
+                            <h3>A los responsables de cuales categorías quiere enviar?</h3>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='Policias' id='CategoriasAEnviar_0'> <img src='imagenes/iconos/iconoPolicia.png'>
+
+                            </div>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='arboles' id='CategoriasAEnviar_1'> <img src='imagenes/iconos/iconoArbol.png'>
+
+                            </div>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='basuras' id='CategoriasAEnviar_2'> <img src='imagenes/iconos/iconoCaneca.png'>
+
+                            </div>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='estacion' id='CategoriasAEnviar_3'> <img src='imagenes/iconos/iconoEstacion.png'>
+
+                            </div>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='juegos' id='CategoriasAEnviar_3'> <img src='imagenes/iconos/iconoJuego.png'>
+
+                            </div>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='sillas' id='CategoriasAEnviar_4'> <img src='imagenes/iconos/iconoSilla.png'>
+
+                            </div>
+                            <div>
+
+                                <input type='checkbox' name='CategoriasAEnviar' value='luz' id='CategoriasAEnviar_5'> <img src='imagenes/iconos/iconoLuz.png'>
+
+                            </div>
+                        </div>
+
+                        <div id='escrito'>
+                            <h3>Mensaje:</h3>
+                            <textarea name='mensajeAResponsables' rows='8' id='mensajeAResponsables' placeholder='Escriba su mensaje acá'></textarea>
+                        </div>
+                        <div id='usuarioyHoy'>
+                            <h3>Alerta creada por:</h3>
+                            <p id='usuario'>Usuario: <span>Daniel Salamanca</span></p>
+                            <p id='fechaHoy'>FEcha de hoy: <span>15/05/2016</span></p>
+                        </div>
+                        <a id='submit'>enviar</a>
+                    </form>
+                </div>
+            </div>
+
+        </div>
         <!--  <div id='popUpPoligono'>
             <div id='elementosUsados'>
                 <div>
@@ -191,7 +321,6 @@
 
     </div>
     <script>
-
     </script>
 
 

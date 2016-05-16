@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Popup contact form</title>
+<link href="css/estilosForm.css" rel="stylesheet">
+<script src="js/controllers/form.js"></script>
+</head>
+<!-- Body Starts Here -->
+<body >
+<div id="fondoOscuro">
+<!-- Popup Div Starts Here -->
+<div id="divCentrado">
+<!-- Contact Us Form -->
+<form action="#" id="form" method="post" name="form">
+<img id="close" src="imagenes/cerrar.png" onclick ="esconderFormulario()">
+<h2>Contact Us</h2>
+<hr>
+<input id="name" name="name" placeholder="Name" type="text">
+<input id="email" name="email" placeholder="Email" type="text">
+<textarea id="msg" name="message" placeholder="Message"></textarea>
+<a id="submit">enviar</a>
+</form>
+</div>
+<!-- Popup Div Ends Here -->
+</div>
+<!-- Display Popup Button -->
+<button id="popupFormulario" onclick="mostrarFormulario()">Crear Alerta</button>
+</body>
+<!-- Body Ends Here -->
+</html>

@@ -13,7 +13,7 @@ my_angular_app.service("coneccion", function () {
     });
 
     socket.on("manzanasFiltradas", function (params) {
-        //console.log("llamado 4");
+
         //llamar el callback que tien el guid y le paso como parametro el geojson
         callbacksMapa[params.guid](params.geojson);
         delete callbacksMapa[params.guid];
@@ -69,6 +69,7 @@ my_angular_app.service("coneccion", function () {
 
 
 my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($scope, coneccion) {
+
     //console.log($scope);
     var pintarunavez = 1;
     var socket = io();
@@ -212,6 +213,15 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         pesoGlobalJuegos = $scope.pesoJuegos;
         pesoGlobalSillas = $scope.pesoSillas;
         pesoGlobalLuz = $scope.pesoLuz;
+
+        //PARA FROMULARIO
+        alerta_policiaPonderados = pesoGlobalPolicia;
+        alerta_arbolesPonderados = pesoGlobalArboles;
+        alerta_basurasPonderados = pesoGlobalBasuras;
+        alerta_accesoPonderados = pesoGlobalAcceso;
+        alerta_juegoPonderados = pesoGlobalJuegos;
+        alerta_sillasPonderados = pesoGlobalSillas;
+        alerta_luzPonderados = pesoGlobalLuz;
     }
 
     var dibujarPuntos = function (data) {
@@ -369,7 +379,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
         //CREACION DE COORDENADAS PARALELAS
 
-        console.log(dataparalel);
+
         //document.getElementById("graficaCoordenadasParalelas").removeChild;
         d3.select("#graficaCoordenadasParalelas").html("");
         pc = d3.parcoords()("#graficaCoordenadasParalelas")
@@ -540,6 +550,19 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             var l = capaConPoligonosCargados._layers[each];
             var gid = l.feature.properties.gid;
             var opacidad = opacidadesPoligonos[gid];
+
+            l.on('click', function () {
+                console.log(this);
+                alerta_manzana = this.feature.properties.gid;
+                alerta_policiaReportados = cantidadDePolicias[gid];
+                alerta_arbolesReportados = cantidadDeArboles[gid];
+                alerta_canecaReportados = cantidadDeCanecas[gid];
+                alerta_estacionReportados = cantidadDeEstaciones[gid];
+                alerta_juegoReportados = cantidadDeJuegos[gid];
+                alerta_sillaReportados = cantidadDeSillas[gid];
+                alerta_luzReportados = cantidadDeLuces[gid];
+
+            });
             l.setStyle({
                 fillColor: "#144a78",
                 color: "#fff",
@@ -552,11 +575,12 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 "<div><img src='imagenes/iconos/iconoEstacion.png'><span>" + cantidadDeEstaciones[gid] + "</span></div>" +
                 "<div><img src='imagenes/iconos/iconoJuego.png'><span>" + cantidadDeJuegos[gid] + "</span></div>" +
                 "<div><img src='imagenes/iconos/iconoSilla.png'><span>" + cantidadDeSillas[gid] + "</span></div>" +
-                "<div><img src='imagenes/iconos/iconoLuz.png'><span>" + cantidadDeLuces[gid] + "</span></div></div></div>");
+                "<div><img src='imagenes/iconos/iconoLuz.png'><span>" + cantidadDeLuces[gid] + "</span></div></div><div class='divBotonEnviar'><a id='popupFormulario' onclick='crearFormulario()'>Crear Alerta</a></div></div>");
+
             if (pintarunavez == 1) {
-//                l.bindLabel(String(l.feature.properties.gid), {
-//                    noHide: true
-//                }).addTo(map);
+                //                l.bindLabel(String(l.feature.properties.gid), {
+                //                    noHide: true
+                //                }).addTo(map);
                 label = new L.Label()
                 label.setContent(String(l.feature.properties.gid))
                 label.setLatLng(capaConPoligonosCargados._layers[each].getBounds().getCenter())
@@ -642,6 +666,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     }
 
 
+
     //HACER LLAMADOS AL SERVIDOR (EL CALLBACK ES LA FUNCI´ON QUE LLAMA CUANDO ME DEVUELVE EL SERVIDOR)
     $scope.filtrarManzanas = function () {
         if (!d3.event.sourceEvent) return;
@@ -662,7 +687,18 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         fechaFinal = brush.extent()[1];
 
         document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
+        //para el formulario
+        alerta_diaInicial= String(brush.extent()[0].getDate());
+        alerta_mesInicial=String(brush.extent()[0].getMonth());
+        alerta_anoInicial=String(brush.extent()[0].getFullYear());
+
+
+
         document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
+        //para el formulario
+        alerta_diaFinal=String(brush.extent()[1].getDate());
+        alerta_mesFinal=String(brush.extent()[1].getMonth());
+        alerta_anoFinal=String(brush.extent()[1].getFullYear());
 
         fechaInicialGlobal = fechaInicial;
         fechaFinalGlobal = fechaFinal;
@@ -677,7 +713,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         mapaJuegos.removeLayer(capaConPoligonosCargadosJuegos);
         mapaSillas.removeLayer(capaConPoligonosCargadosSillas);
         mapaLuz.removeLayer(capaConPoligonosCargadosLuz);
-        console.log("llegue a filtrar 2");
+
         coneccion.llamarFiltroManzanas({
             callback: dibujarMapa,
         });
@@ -686,6 +722,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         });
 
     }
+
 
 
     // me llama los poligonos para dibujar
@@ -775,6 +812,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     .on("brushend", $scope.filtrarManzanas);
     document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
+
     document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
 
     var svg = d3.select("body #timeLineControlEstado").append("svg")

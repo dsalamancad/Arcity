@@ -144,10 +144,10 @@
 
 }
 #mapEstado{
-    width: 450px;
-    min-height: 450px;
-    max-height: 450px !important;
-
+    width: 448px;
+    min-height: 448px;
+    max-height: 448px !important;
+ border: solid 1px #ddd;
 
 }
 .leaflet-container{
@@ -175,6 +175,7 @@
     display:block;
     clear:none;
     float:left;
+
 
 
 }
@@ -223,7 +224,7 @@
 #popUpPoligono{
     font-size: 11px;
     overflow: hidden;
-    width: 250px;
+    width: 260px;
 }
 
 #popUpPoligono #tituloPop{
@@ -249,6 +250,30 @@
     display:block;
     clear:none;
     float:left;
+    margin: 0px 5px 5px 0px;
+}
+#popUpPoligono #elementosUsados{
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+}
+#popUpPoligono .divBotonEnviar{
+     width: 100%;
+    display:block;
+    clear:both;
+    float:left;
+
+    margin: 20px 0px 0px;
+}
+#popUpPoligono a#popupFormulario {
+
+background-color:#ff4343;
+color:#fff;
+cursor:pointer;
+     padding: 5px 5px;
+    height: 20px;
+    line-height: 20px;
 }
 
 

@@ -1,0 +1,155 @@
+#fondoOscuro {
+width:100%;
+height:100%;
+opacity:.95;
+top:0;
+left:0;
+display:none;
+position:fixed;
+background-color:#313131;
+overflow:auto;
+font-size: 12px;
+}
+#fondoOscuro img#close {
+position:absolute;
+right:-14px;
+top:-14px;
+cursor:pointer
+}
+#fondoOscuro *{
+  font-size: 12px;
+    margin: 0px;
+    padding: 0px;
+}
+#fondoOscuro h2{
+    font-size: 100%;
+    margin-bottom: 10px;
+}
+#fondoOscuro h3{
+    font-size: 80%;
+}
+#fondoOscuro div#divCentrado {
+
+    display:block;
+    clear:both;
+    float:left;
+position:absolute;
+left:50%;
+top:17%;
+margin-left:-302px;
+    background-color:#fff;
+
+}
+#estadoVisualizacion{
+    width:24%;
+    padding: 3%;
+    display:block;
+    clear:none;
+    float:left;
+    background-color: #eee;
+
+}
+#datosEnvio{
+    width:64%;
+    padding: 3%;
+    display:block;
+    clear:none;
+    float:left;
+}
+#estadoVisualizacion #reportesEnlaManzana{
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+}
+#estadoVisualizacion>div{
+    margin-bottom: 20px;
+
+}
+#estadoVisualizacion #reportesEnlaManzana div{
+    display:block;
+    clear:none;
+    float:left;
+    width: 30%;
+    margin-bottom: 7px;
+}
+#estadoVisualizacion #reportesEnlaManzana div img{
+    width: 20px;
+    display:block;
+    clear:none;
+    float:left;
+
+}
+#estadoVisualizacion #reportesEnlaManzana div span{
+    font-size: 12px;
+    display:block;
+    clear:none;
+    float:left;
+    margin-left: 3px;
+    padding-top: 3px;
+}
+
+#estadoVisualizacion p{
+ margin-bottom: 3px;
+
+}
+#estadoVisualizacion table, #estadoVisualizacion table th, #estadoVisualizacion table td{
+    font-size: 12px;
+    font-weight: 300;
+}
+#datosEnvio #responsablesAEnviar, #datosEnvio #escrito, #datosEnvio #usuarioyHoy {
+    margin-bottom: 20px;
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
+}
+#datosEnvio #responsablesAEnviar div{
+    display:block;
+    clear:none;
+    float:left;
+    margin: 5px 15px 0px 0px;
+}
+
+#datosEnvio #responsablesAEnviar div img{
+    display:block;
+    clear:none;
+    float:left;
+
+}
+#datosEnvio #responsablesAEnviar div input{
+    display:block;
+    clear:none;
+    float:right;
+    margin-left: 3px;
+    margin-top:10px;
+
+}
+
+#escrito textarea{
+    margin-top: 5px;
+    width: 100%;
+}
+#datosEnvio form {
+
+
+}
+
+
+#datosEnvio #submit {
+text-decoration:none;
+    display:block;
+    clear:both;
+    float:left;
+text-align:center;
+background-color:#044265;
+color:#fff;
+padding:5px 10px;
+cursor:pointer;
+}
+#fondoOscuro span {
+color:#0b7aff;
+font-weight:300;
+    font-size: 10pt;
+}
+
