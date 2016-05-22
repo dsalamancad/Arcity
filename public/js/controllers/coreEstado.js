@@ -231,6 +231,17 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         pesoGlobalJuegos = $scope.pesoJuegos;
         pesoGlobalSillas = $scope.pesoSillas;
         pesoGlobalLuz = $scope.pesoLuz;
+        map.removeLayer(capaConPoligonosCargados);
+        mapaPolicia.removeLayer(capaConPoligonosCargadosPolicia);
+        mapaArboles.removeLayer(capaConPoligonosCargadosArboles);
+        mapaBasuras.removeLayer(capaConPoligonosCargadosBasuras);
+        mapaAcceso.removeLayer(capaConPoligonosCargadosAcceso);
+        mapaJuegos.removeLayer(capaConPoligonosCargadosJuegos);
+        mapaSillas.removeLayer(capaConPoligonosCargadosSillas);
+        mapaLuz.removeLayer(capaConPoligonosCargadosLuz);
+        coneccion.llamarFiltroManzanas({
+        callback: dibujarMapa
+    });
 
         //PARA FROMULARIO
         alerta_policiaPonderados = pesoGlobalPolicia;
@@ -578,25 +589,31 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 var numero = this.feature.properties.gid;
                 var manzana = "m" + numero;
                 //console.log(manzana);
+                manzanaSeleccionadacl = numero;
+                $scope.cambiarSemanasSegunManzana();
                 pc.highlight([eval(manzana)]);
 
             });
-            l.on('mouseover', function () {
+            l.on('mouseover', function (e) {
+                 //this.openPopup();
                 this.setStyle({
                     fillColor: '#0f0'
                 });
 
                 var numero = this.feature.properties.gid;
                 var manzana = "m" + numero;
+
                 //console.log(manzana);
                 pc.highlight([eval(manzana)]);
+                
                 //console.log(capaConPoligonosCargadosPolicia._layers[165].feature.properties.gid);
                 capaConPoligonosCargadosPolicia._layers[165].setStyle({
                     fillColor: '#0f0'
                 });
 
             });
-            l.on('mouseout', function () {
+            l.on('mouseout', function (e) {
+                // this.closePopup();
                 this.setStyle({
 
                     fillColor: '#144a78',
@@ -709,15 +726,16 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     }
     var temporal = {};
     var dibujarSemanas = function (data) {
-        console.log(data);
+        //console.log(data);
+
         for (var i = 0; i < data.length; i++) {
-            opacidadesCuadrosPolicias[data[i].semananumero] = data[i].policias/4;
-             opacidadesCuadrosArboles[data[i].semananumero] = data[i].arbol/4;
-             opacidadesCuadrosBasuras[data[i].semananumero] = data[i].caneca/4;
-             opacidadesCuadrosAccesos[data[i].semananumero] = data[i].estacion/4;
-             opacidadesCuadrosJuegos[data[i].semananumero] = data[i].juego/4;
-             opacidadesCuadrosSillas[data[i].semananumero] = data[i].silla/4;
-             opacidadesCuadrosLuces[data[i].semananumero] = data[i].luz/4;
+            opacidadesCuadrosPolicias[data[i].semananumero] = data[i].policias / 4;
+            opacidadesCuadrosArboles[data[i].semananumero] = data[i].arbol / 4;
+            opacidadesCuadrosBasuras[data[i].semananumero] = data[i].caneca / 4;
+            opacidadesCuadrosAccesos[data[i].semananumero] = data[i].estacion / 4;
+            opacidadesCuadrosJuegos[data[i].semananumero] = data[i].juego / 4;
+            opacidadesCuadrosSillas[data[i].semananumero] = data[i].silla / 4;
+            opacidadesCuadrosLuces[data[i].semananumero] = data[i].luz / 4;
         }
         console.log(datosCuadradosArboles);
         definirOpacidad(datosCuadradosPolicias, opacidadesCuadrosPolicias, opacidadesGuardadasPolicias);
@@ -796,7 +814,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     }
 
 
-
+    var manzanaSeleccionadacl = 0;
     // me llama los poligonos para dibujar
     coneccion.llamarFiltroManzanas({
         callback: dibujarMapa
@@ -807,8 +825,36 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     });
 
     coneccion.llamarOpacidadesSemana({
-        callback: dibujarSemanas
+        callback: dibujarSemanas,
+        manzanaSeleccionada: manzanaSeleccionadacl
     });
+
+
+    $scope.cambiarSemanasSegunManzana = function () {
+        console.log(manzanaSeleccionadacl);
+        d3.selectAll("#graficasemanas svg").remove();
+        opacidadesCuadrosPolicias = {};
+        opacidadesGuardadasPolicias = [];
+        opacidadesCuadrosPolicias = {};
+        opacidadesGuardadasArboles = [];
+        opacidadesCuadrosArboles = {};
+        opacidadesGuardadasBasuras = [];
+        opacidadesCuadrosBasuras = {};
+        opacidadesGuardadasAccesos = [];
+        opacidadesCuadrosAccesos = {};
+        opacidadesGuardadasJuegos = [];
+        opacidadesCuadrosJuegos = {};
+        opacidadesGuardadasSillas = [];
+        opacidadesCuadrosSillas = {};
+        opacidadesGuardadasLuces = [];
+        opacidadesCuadrosLuces = {};
+
+        coneccion.llamarOpacidadesSemana({
+            callback: dibujarSemanas,
+            manzanaSeleccionada: manzanaSeleccionadacl
+
+        });
+    }
 
 
     //CREACION DEL MAPA DE GEOTABULA

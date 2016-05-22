@@ -74,7 +74,8 @@ function crearCuadradosSemanas(id, width, height, colorEscogido, categoria, arre
         })
         .on('mouseover', function () {
             d3.select(this)
-                .style('fill', '#0F0')
+                .style('fill', '#0F0');
+           
 
         })
         .on('mouseout', function () {
