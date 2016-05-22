@@ -589,8 +589,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 var numero = this.feature.properties.gid;
                 var manzana = "m" + numero;
                 //console.log(manzana);
-                manzanaSeleccionadacl = numero;
-                $scope.cambiarSemanasSegunManzana();
+                
                 pc.highlight([eval(manzana)]);
 
             });
@@ -605,6 +604,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
                 //console.log(manzana);
                 pc.highlight([eval(manzana)]);
+                manzanaSeleccionadacl = numero;
+                $scope.cambiarSemanasSegunManzana();
                 
                 //console.log(capaConPoligonosCargadosPolicia._layers[165].feature.properties.gid);
                 capaConPoligonosCargadosPolicia._layers[165].setStyle({
@@ -918,18 +919,18 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             top: 0,
             right: 0,
             bottom: 20,
-            left: 0
+            left: 25
         },
-        width = 930 - margin.left - margin.right,
-        height = 70 - margin.top - margin.bottom;
+        width = 565 - margin.left - margin.right,
+        height = 50 - margin.top - margin.bottom;
 
     var x = d3.time.scale()
-        .domain([new Date(2014, 12, 1), new Date(2016, 5, 1) - 1])
+        .domain([new Date(2015, 1, 1), new Date(2015, 12, 31) - 1])
         .range([0, width]);
 
     var brush = d3.svg.brush()
         .x(x)
-        .extent([new Date(2015, 1, 1), new Date(2016, 3, 1)])
+        .extent([new Date(2015, 1, 1), new Date(2015, 12, 30)])
 
 
     .on("brushend", $scope.filtrarManzanas);
