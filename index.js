@@ -71,6 +71,16 @@ io.on('connection', function (socket) {
             });
         })
     })
+    
+    socket.on("llamarOpacidadesPorSemana", function (params) {
+        // console.log("llamado 2");
+        consultarReportesPorSemanaParaOpacidad(params, function (geojson) {
+            socket.emit("opacidadesSemanalesDefinidas", {
+                guid: params.caller,
+                geojson: geojson
+            });
+        })
+    })
     socket.on("llamarReportesPorManzanas", function (params) {
         consultarReportesenManzanasEnDB(params, function (geojson) {
             socket.emit("reportesPorManzanasFiltradas", {
@@ -134,12 +144,12 @@ function consultarReportesenManzanasEnDB(params, callback) {
         });
 
 }
-function consultarReportesPorSemana(params, callback) {
+function consultarReportesPorSemanaParaOpacidad(params, callback) {
     //console.log("inicial: "+ params.diaInicial+"/"+ params.mesInicial+"/"+ params.anoInicial);
     //console.log("final: "+ params.diaFinal+"/"+ params.mesFinal+"/"+ params.anoFinal);
    // console.log(params);
     geo.query({
-            querystring: "SELECT date_trunc('week',reportes.fecha) as semana,count(*) as cantidadReportes,sum(reportes.policia) as policias,sum(reportes.caneca) as caneca,sum(reportes.silla) as silla,sum(reportes.estacion) as estacion,sum(reportes.juego) as juego,sum(reportes.arbol) as arbol,sum(reportes.luz) as luz FROM public.reportes GROUP BY semana ORDER BY semana;"
+            querystring: "SELECT manzanasbarriolasnieves.gid as gid,EXTRACT(WEEK FROM reportes.fecha) as semananumero,EXTRACT(YEAR FROM reportes.fecha) as anio,date_trunc('week',reportes.fecha) as semana,count(reportes.geom) AS totale,sum(reportes.policia) as policias,sum(reportes.caneca) as caneca,sum(reportes.silla) as silla,sum(reportes.estacion) as estacion,sum(reportes.juego) as juego,sum(reportes.arbol) as arbol,sum(reportes.luz) as luz FROM public.manzanasbarriolasnieves LEFT JOIN public.reportes ON st_contains(manzanasbarriolasnieves.geom,reportes.geom) WHERE manzanasbarriolasnieves.gid=10 GROUP BY semana,manzanasbarriolasnieves.gid,semananumero,anio ORDER BY semana,manzanasbarriolasnieves.gid"
 
 
         },

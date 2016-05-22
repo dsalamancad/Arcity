@@ -1,4 +1,5 @@
 var my_angular_app = angular.module('my_angular_app', []);
+var my_angular_app = angular.module('my_angular_app', []);
 
 my_angular_app.service("coneccion", function () {
     //este servicio lo uso para comunicarme con el servidor. Aca va todos los sockets.
@@ -20,6 +21,12 @@ my_angular_app.service("coneccion", function () {
     });
 
     socket.on("reportesPorManzanasFiltradas", function (params) {
+        //console.log(params);
+        //llamar el callback que tien el guid y le paso como parametro el geojson
+        callbacksMapa[params.guid](params.geojson);
+        delete callbacksMapa[params.guid];
+    });
+    socket.on("opacidadesSemanalesDefinidas", function (params) {
         //console.log(params);
         //llamar el callback que tien el guid y le paso como parametro el geojson
         callbacksMapa[params.guid](params.geojson);
@@ -53,6 +60,8 @@ my_angular_app.service("coneccion", function () {
         socket.emit("llamarManzanas", params);
     }
 
+
+
     var llamarFiltroReportesPorManzanas = function (params) {
         //console.log(params);
         var guid = genGuid();
@@ -60,10 +69,20 @@ my_angular_app.service("coneccion", function () {
         params["caller"] = guid;
         socket.emit("llamarReportesPorManzanas", params);
     }
+
+    var llamarOpacidadesSemana = function (params) {
+        //console.log("llamado 1");
+        var guid = genGuid();
+        callbacksMapa[guid] = params.callback;
+        params["caller"] = guid;
+        socket.emit("llamarOpacidadesPorSemana", params);
+    }
+
     return {
         llamarFiltroporHora: llamarFiltroporHora,
         llamarFiltroManzanas: llamarFiltroManzanas,
         llamarFiltroReportesPorManzanas: llamarFiltroReportesPorManzanas,
+        llamarOpacidadesSemana: llamarOpacidadesSemana,
     };
 })
 
@@ -102,13 +121,12 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         "weight": 1,
         "opacity": 1
     };
-
+    //ESTILOS POR DEFECTO DE LOS POLIGONOS
     var geojsonMarkerOptionsPolicia = {
         "color": "#0070bb",
         "weight": 0.5,
         "opacity": 1
     };
-
     var geojsonMarkerOptionsArboles = {
         "color": "#30bb51",
         "weight": 0.5,
@@ -222,6 +240,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         alerta_juegoPonderados = pesoGlobalJuegos;
         alerta_sillasPonderados = pesoGlobalSillas;
         alerta_luzPonderados = pesoGlobalLuz;
+        definirTransparencia(data);
     }
 
     var dibujarPuntos = function (data) {
@@ -374,9 +393,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         for (var i = 0; i < data.length; i++) {
             dataparalel[i].push(Number(data[i].luz));
         }
-        for (var i = 0; i < data.length; i++) {
-            dataparalel[i].push(nombresManzanas[i]);
-        }
+        //        for (var i = 0; i < data.length; i++) {
+        //            dataparalel[i].push(nombresManzanas[i]);
+        //        }
         //CREACION DE COORDENADAS PARALELAS
 
 
@@ -386,9 +405,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .data(dataparalel)
             .render()
             .createAxes()
-
-        .brushMode("1D-axes")
-            .color("rgba(0,200,0,0.3)")
+            .brushMode("1D-axes")
+            .color("rgba(0,200,0,0.5)")
             .alphaOnBrushed(0.6)
             .brushedColor("#000");
 
@@ -398,6 +416,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
 
         var maximoReportesporManzana = d3.max(data, function (d) {
+            // console.log(d.totale);
             return Number(d.totale);
         });
         var maximoReportesporManzanaPolicia = d3.max(data, function (d) {
@@ -434,6 +453,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             reportesporManzanaPonderados.push(valorTotalPonderado);
         }
         maximoReportesporManzanaPonderados = d3.max(reportesporManzanaPonderados);
+
+
         for (var i = 0; i < data.length; i++) {
             if (reportesporManzanaPonderados[i] >= 0 && reportesporManzanaPonderados[i] <= maximoReportesporManzanaPonderados / 4) {
                 opacidadesPoligonos[data[i].gid] = 0.1;
@@ -454,8 +475,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         }
 
         for (var i = 0; i < data.length; i++) {
-
-
             if (data[i].policias >= 0 && data[i].policias <= maximoReportesporManzanaPolicia / 4) {
                 opacidadesPoligonosPolicia[data[i].gid] = 0.1;
             } else if (data[i].policias > maximoReportesporManzanaPolicia / 4 && data[i].policias <= (maximoReportesporManzanaPolicia / 4) * 2) {
@@ -478,7 +497,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 opacidadesPoligonosArboles[data[i].gid] = 1;
             }
         }
-
         for (var i = 0; i < data.length; i++) {
             if (data[i].caneca >= 0 && data[i].caneca <= maximoReportesporManzanaBasuras / 4) {
                 opacidadesPoligonosBasuras[data[i].gid] = 0.1;
@@ -490,7 +508,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 opacidadesPoligonosBasuras[data[i].gid] = 1;
             }
         }
-
         for (var i = 0; i < data.length; i++) {
             if (data[i].estacion >= 0 && data[i].estacion <= maximoReportesporManzanaAcceso / 4) {
                 opacidadesPoligonosAcceso[data[i].gid] = 0.1;
@@ -502,7 +519,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 opacidadesPoligonosAcceso[data[i].gid] = 1;
             }
         }
-
         for (var i = 0; i < data.length; i++) {
             if (data[i].juego >= 0 && data[i].juego <= maximoReportesporManzanaJuegos / 4) {
                 opacidadesPoligonosJuegos[data[i].gid] = 0.1;
@@ -514,7 +530,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 opacidadesPoligonosJuegos[data[i].gid] = 1;
             }
         }
-
         for (var i = 0; i < data.length; i++) {
             if (data[i].silla >= 0 && data[i].silla <= maximoReportesporManzanaSillas / 4) {
                 opacidadesPoligonosSillas[data[i].gid] = 0.1;
@@ -526,7 +541,6 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 opacidadesPoligonosSillas[data[i].gid] = 1;
             }
         }
-
         for (var i = 0; i < data.length; i++) {
             if (data[i].luz >= 0 && data[i].luz <= maximoReportesporManzanaLuz / 4) {
                 opacidadesPoligonosLuz[data[i].gid] = 0.1;
@@ -552,7 +566,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             var opacidad = opacidadesPoligonos[gid];
 
             l.on('click', function () {
-                console.log(this);
+                //console.log(this);
                 alerta_manzana = this.feature.properties.gid;
                 alerta_policiaReportados = cantidadDePolicias[gid];
                 alerta_arbolesReportados = cantidadDeArboles[gid];
@@ -561,6 +575,35 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 alerta_juegoReportados = cantidadDeJuegos[gid];
                 alerta_sillaReportados = cantidadDeSillas[gid];
                 alerta_luzReportados = cantidadDeLuces[gid];
+                var numero = this.feature.properties.gid;
+                var manzana = "m" + numero;
+                //console.log(manzana);
+                pc.highlight([eval(manzana)]);
+
+            });
+            l.on('mouseover', function () {
+                this.setStyle({
+                    fillColor: '#0f0'
+                });
+
+                var numero = this.feature.properties.gid;
+                var manzana = "m" + numero;
+                //console.log(manzana);
+                pc.highlight([eval(manzana)]);
+                //console.log(capaConPoligonosCargadosPolicia._layers[165].feature.properties.gid);
+                capaConPoligonosCargadosPolicia._layers[165].setStyle({
+                    fillColor: '#0f0'
+                });
+
+            });
+            l.on('mouseout', function () {
+                this.setStyle({
+
+                    fillColor: '#144a78',
+
+                });
+                pc.unhighlight([eval(manzana)]);
+
 
             });
             l.setStyle({
@@ -664,6 +707,35 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
 
     }
+    var temporal = {};
+    var dibujarSemanas = function (data) {
+        console.log(data);
+        for (var i = 0; i < data.length; i++) {
+            opacidadesCuadrosPolicias[data[i].semananumero] = data[i].policias/4;
+             opacidadesCuadrosArboles[data[i].semananumero] = data[i].arbol/4;
+             opacidadesCuadrosBasuras[data[i].semananumero] = data[i].caneca/4;
+             opacidadesCuadrosAccesos[data[i].semananumero] = data[i].estacion/4;
+             opacidadesCuadrosJuegos[data[i].semananumero] = data[i].juego/4;
+             opacidadesCuadrosSillas[data[i].semananumero] = data[i].silla/4;
+             opacidadesCuadrosLuces[data[i].semananumero] = data[i].luz/4;
+        }
+        console.log(datosCuadradosArboles);
+        definirOpacidad(datosCuadradosPolicias, opacidadesCuadrosPolicias, opacidadesGuardadasPolicias);
+        definirOpacidad(datosCuadradosArboles, opacidadesCuadrosArboles, opacidadesGuardadasArboles);
+        definirOpacidad(datosCuadradosBasuras, opacidadesCuadrosBasuras, opacidadesGuardadasBasuras);
+        definirOpacidad(datosCuadradosAccesos, opacidadesCuadrosAccesos, opacidadesGuardadasAccesos);
+        definirOpacidad(datosCuadradosJuegos, opacidadesCuadrosJuegos, opacidadesGuardadasJuegos);
+        definirOpacidad(datosCuadradosSillas, opacidadesCuadrosSillas, opacidadesGuardadasSillas);
+        definirOpacidad(datosCuadradosLuces, opacidadesCuadrosLuces, opacidadesGuardadasLuces);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, '0070bb', 'policias', datosCuadradosPolicias);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, '30bb51', 'arboles', datosCuadradosArboles);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, 'bc6731', 'basuras', datosCuadradosBasuras);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, 'ffb92e', 'accesos', datosCuadradosAccesos);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, 'e31b20', 'juegos', datosCuadradosJuegos);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, '5a31bc', 'sillas', datosCuadradosSillas);
+        crearCuadradosSemanas('#graficasemanas', 540, 20, 'dfdc13', 'luces', datosCuadradosLuces);
+
+    }
 
 
 
@@ -688,17 +760,17 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
         document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
         //para el formulario
-        alerta_diaInicial= String(brush.extent()[0].getDate());
-        alerta_mesInicial=String(brush.extent()[0].getMonth());
-        alerta_anoInicial=String(brush.extent()[0].getFullYear());
+        alerta_diaInicial = String(brush.extent()[0].getDate());
+        alerta_mesInicial = String(brush.extent()[0].getMonth());
+        alerta_anoInicial = String(brush.extent()[0].getFullYear());
 
 
 
         document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
         //para el formulario
-        alerta_diaFinal=String(brush.extent()[1].getDate());
-        alerta_mesFinal=String(brush.extent()[1].getMonth());
-        alerta_anoFinal=String(brush.extent()[1].getFullYear());
+        alerta_diaFinal = String(brush.extent()[1].getDate());
+        alerta_mesFinal = String(brush.extent()[1].getMonth());
+        alerta_anoFinal = String(brush.extent()[1].getFullYear());
 
         fechaInicialGlobal = fechaInicial;
         fechaFinalGlobal = fechaFinal;
@@ -732,6 +804,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     coneccion.llamarFiltroporHora({
         callback: dibujarPuntos
+    });
+
+    coneccion.llamarOpacidadesSemana({
+        callback: dibujarSemanas
     });
 
 

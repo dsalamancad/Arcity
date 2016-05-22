@@ -5,23 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/leaflet.css" />
     <script src="js/libs/d3.min.js"></script>
-    <script src="js/libs/crossfilter.min.js"></script>
-    <script src="js/libs/dc.min.js"></script>
+    <script src="js/libs/d3.parcoords.js"></script>
     <script src="js/libs/leaflet.js"></script>
-    <!-- <script src="js/libs/leaflet-providers.js"></script> -->
     <script src="js/libs/leaflet.label.js"></script>
     <script src="js/libs/angular.min.js"></script>
-
-    <!-- <script src="js/libs/rzslider.min.js"></script> -->
+    <script src="js/libs/jquery-1.12.3.min.js"></script>
+    <script src="js/controllers/form.js"></script>
     <script src="js/controllers/coreEstado.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <!--estilos -->
     <link rel="stylesheet" href="css/dc.css" />
-    <link rel="stylesheet" href="css/viewer.css" />
-    <link rel="stylesheet" href="css/rzslider.min.css" />
+    <link rel="stylesheet" href="css/estilosHome-Generales.css" />
     <link rel="stylesheet" href="css/leaflet.label.css" />
-    <!--pruebas -->
-    <link rel="stylesheet" href="css/estilosLineaTiempo.css" />
+    <link rel="stylesheet" href="css/estiloEstado.css" />
+    <link rel="stylesheet" href="css/d3.parcoords.css" />
+    <link rel="stylesheet" href="css/estilosForm.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/estilosMonitoreo.css" rel="stylesheet">
+
 
 
 
@@ -31,16 +32,220 @@
     <div ng-controller="home_controller">
         <header>
             <h1>Calidad del Espacio público</h1>
-             <nav id="barraNavegacion">
-                <a href="index.html" >Explorar</a>
-                <a href="estado.html">Sistema de Alertas</a>
-                <a href="monitoreo.html" id="actual">Monitoreo</a>
+            <div id="papaArriba">
+                <nav id="barraNavegacion">
+                    <a href="index.html">Estado General de la zona</a>
+                    <a href="estado.html" >Estado de las manzanas</a>
+                    <a href="monitoreo.html" id="actual">Alertas Generadas</a>
 
-            </nav>
+                </nav>
+
+            </div>
         </header>
 
         <div id="contenedorPrincipal">
-          <img src="imagenes/muestraMonitoreo.png">
+         <table >
+  <tbody>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Fecha de creación</th>
+      <th scope="col">Creada por:</th>
+      <th scope="col">Mensaje</th>
+      <th scope="col">Enviada a:</th>
+      <th scope="col">Respuestas</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Cambiar estado</th>
+      <th scope="col">Ver</th>
+    </tr>
+    <tr class="alerta">
+      <td>01</td>
+      <td>16/05/2016</td>
+      <td>Daniel Salamanca</td>
+      <td>La comunidad está proponiendo muchas canecas y luces en la manzana 22. Por favor hacer inspección</td>
+      <td><img src='imagenes/iconos/iconoCaneca.png'>
+      </td>
+      
+      <td>Pendiente</td>
+      <td><p>Abierto</p>
+      </td>
+      <td>
+        <select name="select" id="select">
+          <option value="no cambia">Cambiar estado..</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+      </select>
+      <input type="submit" value="OK">
+      </td>
+      <td><a href="estado.html" target="_blank">Ver estado</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src='imagenes/iconos/iconoLuz.png'>
+      </td>
+      
+      <td>Se revisaron las luces en el sector. En efecto había luminarias fundidas. Fue necesario reponerlas.</td>
+      <td>
+      </td>
+      <td>
+        
+      </td>
+      <td></td>
+    </tr>
+    <tr class="alerta">
+      <td>01</td>
+      <td>16/05/2016</td>
+      <td>Daniel Salamanca</td>
+      <td>La comunidad está proponiendo muchas canecas y luces en la manzana 22. Por favor hacer inspección</td>
+      <td><img src='imagenes/iconos/iconoCaneca.png'>
+      </td>
+      
+      <td>Pendiente</td>
+      <td><p>Abierto</p>
+      </td>
+      <td>
+        <select name="select" id="select">
+          <option value="no cambia">Cambiar estado..</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+      </select>
+      <input type="submit" value="OK">
+      </td>
+      <td><a href="estado.html" target="_blank">Ver estado</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src='imagenes/iconos/iconoLuz.png'>
+      </td>
+      
+      <td>Se revisaron las luces en el sector. En efecto había luminarias fundidas. Fue necesario reponerlas.</td>
+      <td>
+      </td>
+      <td>
+        
+      </td>
+      <td></td>
+    </tr>
+    <tr class="alerta">
+      <td>01</td>
+      <td>16/05/2016</td>
+      <td>Daniel Salamanca</td>
+      <td>La comunidad está proponiendo muchas canecas y luces en la manzana 22. Por favor hacer inspección</td>
+      <td><img src='imagenes/iconos/iconoCaneca.png'>
+      </td>
+      
+      <td>Pendiente</td>
+      <td><p>Abierto</p>
+      </td>
+      <td>
+        <select name="select" id="select">
+          <option value="no cambia">Cambiar estado..</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+      </select>
+      <input type="submit" value="OK">
+      </td>
+      <td><a href="estado.html" target="_blank">Ver estado</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src='imagenes/iconos/iconoLuz.png'>
+      </td>
+      
+      <td>Se revisaron las luces en el sector. En efecto había luminarias fundidas. Fue necesario reponerlas.</td>
+      <td>
+      </td>
+      <td>
+        
+      </td>
+      <td></td>
+    </tr>
+    <tr class="alerta">
+      <td>01</td>
+      <td>16/05/2016</td>
+      <td>Daniel Salamanca</td>
+      <td>La comunidad está proponiendo muchas canecas y luces en la manzana 22. Por favor hacer inspección</td>
+      <td><img src='imagenes/iconos/iconoCaneca.png'>
+      </td>
+      
+      <td>Pendiente</td>
+      <td><p>Abierto</p>
+      </td>
+      <td>
+        <select name="select" id="select">
+          <option value="no cambia">Cambiar estado..</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+      </select>
+      <input type="submit" value="OK">
+      </td>
+      <td><a href="estado.html" target="_blank">Ver estado</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src='imagenes/iconos/iconoLuz.png'>
+      </td>
+      
+      <td>Se revisaron las luces en el sector. En efecto había luminarias fundidas. Fue necesario reponerlas.</td>
+      <td>
+      </td>
+      <td>
+        
+      </td>
+      <td></td>
+    </tr>
+    <tr class="alerta">
+      <td>01</td>
+      <td>16/05/2016</td>
+      <td>Daniel Salamanca</td>
+      <td>La comunidad está proponiendo muchas canecas y luces en la manzana 22. Por favor hacer inspección</td>
+      <td><img src='imagenes/iconos/iconoCaneca.png'>
+      </td>
+      
+      <td>Pendiente</td>
+      <td><p>Abierto</p>
+      </td>
+      <td>
+        <select name="select" id="select">
+          <option value="no cambia">Cambiar estado..</option>
+          <option value="abierto">Abierto</option>
+          <option value="cerrado">Cerrado</option>
+      </select>
+      <input type="submit" value="OK">
+      </td>
+      <td><a href="estado.html" target="_blank">Ver estado</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><img src='imagenes/iconos/iconoLuz.png'>
+      </td>
+      
+      <td>Se revisaron las luces en el sector. En efecto había luminarias fundidas. Fue necesario reponerlas.</td>
+      <td>
+      </td>
+      <td>
+        
+      </td>
+      <td></td>
+    </tr>
+   
+  </tbody>
+</table>
+         
            <!--  <div id="categorias">
                 <h3>Intervenciones creadas</h3></div>
             <div id="mapaConReportes">
@@ -61,66 +266,7 @@
 
             </div>
         </div>
-      <!--   <div id="contenedorTiempo">
-            <div id="graficaAnual" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>Intervenciones anuales</h3>
-                    <small><a id="resetearAno" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
 
-            </div>
-            <div id="graficaMensual" class="dc-chart">
-                <div id="tituloGraficas">
-                    <div id="tituloGraficas">
-                        <h3>Intervenciones mensuales</h3>
-                        <small><a id="resetearMes" href="#" class="botonReseteo">Resetear</a></small>
-                    </div>
-                </div>
-            </div>
-
-            <div id="usuariosPorReporte" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>votos por intervención</h3>
-                    <small><a id="resetearVotos" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
-
-            </div>
-            <div id="reportesRespondidos" class="dc-chart">
-                <div id="tituloGraficas">
-                    <h3>Intervenciones atendidas</h3>
-                    <small><a id="resetearRespondidos" href="#" class="botonReseteo">Resetear</a></small>
-                </div>
-            </div>
-        </div> -->
-        <!-- <div id='popUpMarker'>
-            <div id='fecha'><span>fecha: </span> d.properties.fecha_fecha</div>
-            <div id='votos'><span>Votos: </span> d.propoerties.seguidores</div>
-            <div id='elementosUsados'>
-                <div>
-                    <span>Elementos Usados:</span>
-                </div>
-                <div><span>Policias: </span>1</div>
-                <div><span>Canecas: </span>2</div>
-                <div><span>Asientos: </span>0</div>
-                <div><span>Paraderos: </span>1</div>
-                <div><span>Juegos: </span>3</div>
-                <div><span>Árboles: </span>2</div>
-                <div><span>Luces: </span>0</div>
-
-            </div>
-        </div> -->
-        <!-- <div id="contenedorlineaDeTiempoVieja">
-             reportes entre:
-        <input type="text" ng-model="horaInicialFiltro" size="2" placeholder="0"> y
-        <input type="text" ng-model="horaFinalFiltro" size="2" placeholder="24">
-        <button type="button" ng_click="filtrarManzanas()">filtrar</button>
-        <h4>texto <span class="number">{{ horaInicialFiltro }}</span></h4>
-        </div> -->
-
-        <!--   <div id="capad3Hora"></div> -->
-        <!--  <div id="timeSlider"></div> -->
-        <!--pruebas -->
-        <!-- <script src="js/controllers/lineaTiempo.js"></script> -->
 
 </body>
 

@@ -108,7 +108,7 @@ margin-left:-302px;
     display:block;
     clear:none;
     float:left;
-    margin: 5px 15px 0px 0px;
+    margin: 5px 10px 0px 0px;
 }
 
 #datosEnvio #responsablesAEnviar div img{
@@ -121,7 +121,7 @@ margin-left:-302px;
     display:block;
     clear:none;
     float:right;
-    margin-left: 3px;
+    margin-left: 0px;
     margin-top:10px;
 
 }

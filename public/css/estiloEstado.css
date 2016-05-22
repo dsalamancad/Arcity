@@ -116,8 +116,9 @@
 #graficaCoordenadasParalelas{
 
     left: 0px;
-    width:720px;
-    height:462px;
+    width:630px;
+/*    height:462px;*/
+    height:230px;
     display:block;
     clear:both;
     float:left;
@@ -132,6 +133,27 @@
 #graficaCoordenadasParalelas .foreground path {
   fill: none;
   stroke: steelblue;
+}
+
+#graficasemanas{
+    margin-left: 30px;
+    width:560px;
+    display:block;
+    clear:both;
+    float:left;
+    height: 230px;
+   
+  
+}
+#graficasemanas svg{
+    width: 560px;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    width:100%;
+    display:block;
+    clear:both;
+    float:left;
 }
 
 #mapasCadauno{
