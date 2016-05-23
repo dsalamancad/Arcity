@@ -24,3 +24,4 @@ document.getElementById('fondoOscuro').style.display = "block";
 function esconderFormulario(){
 document.getElementById('fondoOscuro').style.display = "none";
 }
+

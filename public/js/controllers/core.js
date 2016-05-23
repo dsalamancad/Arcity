@@ -280,7 +280,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         ]);
 
         graficaLineaDeTiempo
-            .width(1060).height(80)
+            .width(1060).height(60)
             .dimension(dimensionFecha)
             .group(todospolicias)
             .renderVerticalGridLines(true)
@@ -377,7 +377,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 right: 20,
                 bottom: 20,
                 left: 40
-            }).ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+            }).ordinalColors(['#888', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
         graficaSeguidores.xAxis().tickValues([" ", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, " "]);
 
         graficaRespondido
@@ -386,7 +386,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             .dimension(dimensionRespondido)
             .group(conteoPorRespondido)
             .innerRadius(20)
-            .ordinalColors(['#3182bd', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
+            .ordinalColors(['#888', '#cc4878', '#4c001c', '#ccbe48', '#4c4400', '#00bf75', '#01663f', '#cc4602', '#592d16', '#000be6', '#000566', '#c951e6']);
 
         dataCount
             .dimension(ndx)
@@ -438,10 +438,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
                     var loc = d.geometry;
 //                    var radio = d.properties.seguidores;
-                    var radio = 3;
+                    var radio = 4;
                     //var name = d.brewery.brewery_name;
                     var marker = L.circleMarker([loc.coordinates[1], loc.coordinates[0]], {
-                        fillColor: "#2354ae",
+                        fillColor: "#666",
                         color: "#fff",
                         weight: 0.5,
                         opacity: 1,
@@ -449,7 +449,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                         radius: radio,
 
                     });
-                    marker.bindPopup("<div id='popUpMarker'><img style='width:150px' src='imagenes/capturasReportes/" + d.properties.id + ".jpg' > <div id='fecha'><span>fecha: </span>"  +d.properties.fecha_dia+ "/" +d.properties.fecha_mes+ "/"+ d.properties.fecha_ano + "</div><div id='votos'><span>Likes: </span>" + d.properties.seguidores + "</div><div id='elementosUsados'> <div id='tituloelementosusados'> <span>Elementos Usados:</span> </div><div><img src='imagenes/iconos/iconoPolicia.png'><span class='valorenpopup'>" + d.properties.policia + "</span></div><div><img src='imagenes/iconos/iconoCaneca.png'><span class='valorenpopup'>" + d.properties.caneca + "</span></div><div><img src='imagenes/iconos/iconoSilla.png'><span class='valorenpopup'>" + d.properties.silla + "</span></div><div><img src='imagenes/iconos/iconoEstacion.png'><span class='valorenpopup'>" + d.properties.estacion + "</span></div><div><img src='imagenes/iconos/iconoJuego.png'><span class='valorenpopup'>" + d.properties.juego + "</span></div><div><img src='imagenes/iconos/iconoArbol.png'><span class='valorenpopup'>" + d.properties.arbol + "</span></div><div><img src='imagenes/iconos/iconoLuz.png'><span class='valorenpopup'>" + d.properties.luz + "</div></div></div>");
+                    marker.bindPopup("<div id='popUpMarker'><img style='width:150px' src='imagenes/capturasReportes/" + d.properties.id + ".jpg' > <div id='fecha'><span>fecha: </span>"  +d.properties.fecha_dia+ "/" +d.properties.fecha_mes+ "/"+ d.properties.fecha_ano + "</div><div id='votos'><span>Likes: </span>" + d.properties.seguidores + "</div><div id='votos'><span>ID: </span>" + d.properties.id + "</div><div id='elementosUsados'> <div id='tituloelementosusados'> <span>Elementos Usados:</span> </div><div><img src='imagenes/iconos/iconoPolicia.png'><span class='valorenpopup'>" + d.properties.policia + "</span></div><div><img src='imagenes/iconos/iconoCaneca.png'><span class='valorenpopup'>" + d.properties.caneca + "</span></div><div><img src='imagenes/iconos/iconoSilla.png'><span class='valorenpopup'>" + d.properties.silla + "</span></div><div><img src='imagenes/iconos/iconoEstacion.png'><span class='valorenpopup'>" + d.properties.estacion + "</span></div><div><img src='imagenes/iconos/iconoJuego.png'><span class='valorenpopup'>" + d.properties.juego + "</span></div><div><img src='imagenes/iconos/iconoArbol.png'><span class='valorenpopup'>" + d.properties.arbol + "</span></div><div><img src='imagenes/iconos/iconoLuz.png'><span class='valorenpopup'>" + d.properties.luz + "</div></div></div>");
                     marcadoresIntervenciones.addLayer(marker);
 
 

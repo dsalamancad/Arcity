@@ -97,6 +97,37 @@ function crearCuadradosSemanas(id, width, height, colorEscogido, categoria, arre
 
 
 
+    d3.select(".policias10").style("stroke", '#000').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            console.log("hola en 10");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("hola" + "<br/>" + "tu")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    d3.select(".policias0").style("stroke", '#000').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            console.log("hola en 9");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("hola" + "<br/>" + "tu")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
 
 }
 
@@ -129,6 +160,7 @@ function crearCuadrados(gridWidth) {
     }
     xpos = startX;
     ypos += stepY;
+    
     //definiropacidad();
     return data;
 }
@@ -148,5 +180,6 @@ function definirOpacidad(objetosConDatos, objetoQuellegaConValores, opacidadesGu
         opacidadesGuardas.push(opacidadAsignada);
         l.opacidad = opacidadesGuardas[each];
     }
+
 
 }

@@ -92,7 +92,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     //console.log($scope);
     var pintarunavez = 1;
     var socket = io();
-    var capaConPuntosCargados;
+    //var capaConPuntosCargados;
     var capaConPoligonosCargados, capaConPoligonosCargadosPolicia, capaConPoligonosCargadosArboles, capaConPoligonosCargadosBasuras, capaConPoligonosCargadosAcceso, capaConPoligonosCargadosJuegos, capaConPoligonosCargadosSillas, capaConPoligonosCargadosLuz;
     var capaConPoligonosMulticoloresCargados;
     var guardaPoligonos = [];
@@ -224,7 +224,10 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     var pc;
 
     $scope.cambiarPesos = function () {
-        pesoGlobalPolicia = $scope.pesoPolicia;
+        if (document.getElementById('pesoPolicia').value == "" || document.getElementById('pesoArboles').value == "" || document.getElementById('pesoBasuras').value == "" || document.getElementById('pesoAcceso').value == "" || document.getElementById('pesoJuegos').value == "" || document.getElementById('pesoSillas').value == "" || document.getElementById('pesoLuz').value == ""  ) {
+alert("Debe definir el peso de todas las categorías para poder recalcular");
+} else {
+pesoGlobalPolicia = $scope.pesoPolicia;
         pesoGlobalArboles = $scope.pesoArboles;
         pesoGlobalBasuras = $scope.pesoBasuras;
         pesoGlobalAcceso = $scope.pesoAcceso;
@@ -240,8 +243,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         mapaSillas.removeLayer(capaConPoligonosCargadosSillas);
         mapaLuz.removeLayer(capaConPoligonosCargadosLuz);
         coneccion.llamarFiltroManzanas({
-        callback: dibujarMapa
-    });
+            callback: dibujarMapa
+        });
 
         //PARA FROMULARIO
         alerta_policiaPonderados = pesoGlobalPolicia;
@@ -252,6 +255,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         alerta_sillasPonderados = pesoGlobalSillas;
         alerta_luzPonderados = pesoGlobalLuz;
         definirTransparencia(data);
+}
+        
+        
     }
 
     var dibujarPuntos = function (data) {
@@ -271,7 +277,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 return L.circleMarker(latlng, geojsonMarkerOptions);
             },
             onEachFeature: function (feature, layer) {
-                layer.bindPopup(feature.properties.descripcio);
+                layer.bindPopup("<div id='popUpMarker'><img style='width:150px' src='imagenes/capturasReportes/" + feature.properties.id + ".jpg' > <div id='votos'><span>Likes: </span>" + feature.properties.seguidores + "</div><div id='votos'><span>ID: </span>" + feature.properties.id + "</div><div id='elementosUsados'> <div id='tituloelementosusados'> <span>Elementos Usados:</span> </div><div><img src='imagenes/iconos/iconoPolicia.png'><span class='valorenpopup'>" + feature.properties.policia + "</span></div><div><img src='imagenes/iconos/iconoCaneca.png'><span class='valorenpopup'>" + feature.properties.caneca + "</span></div><div><img src='imagenes/iconos/iconoSilla.png'><span class='valorenpopup'>" + feature.properties.silla + "</span></div><div><img src='imagenes/iconos/iconoEstacion.png'><span class='valorenpopup'>" + feature.properties.estacion + "</span></div><div><img src='imagenes/iconos/iconoJuego.png'><span class='valorenpopup'>" + feature.properties.juego + "</span></div><div><img src='imagenes/iconos/iconoArbol.png'><span class='valorenpopup'>" + feature.properties.arbol + "</span></div><div><img src='imagenes/iconos/iconoLuz.png'><span class='valorenpopup'>" + feature.properties.luz + "</div></div></div>");
             }
         });
         capaConPuntosCargados.addTo(map);
@@ -316,6 +322,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         });
         capaConPoligonosCargados.addTo(map);
         capaConPoligonosCargadosPolicia.addTo(mapaPolicia);
+        //capaConPoligonosCargadosPolicia.addTo(map);
         capaConPoligonosCargadosArboles.addTo(mapaArboles);
         capaConPoligonosCargadosBasuras.addTo(mapaBasuras);
         capaConPoligonosCargadosAcceso.addTo(mapaAcceso);
@@ -568,7 +575,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         aplicarEstilo();
 
     }
-
+    var prenderSeleccionadoAnterior = 0;
     //función para crear estilo de cada poligono
     var aplicarEstilo = function () {
         for (each in capaConPoligonosCargados._layers) {
@@ -577,6 +584,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
             var opacidad = opacidadesPoligonos[gid];
 
             l.on('click', function () {
+               
                 //console.log(this);
                 alerta_manzana = this.feature.properties.gid;
                 alerta_policiaReportados = cantidadDePolicias[gid];
@@ -589,12 +597,37 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 var numero = this.feature.properties.gid;
                 var manzana = "m" + numero;
                 //console.log(manzana);
-                
                 pc.highlight([eval(manzana)]);
+                
+                manzanaSeleccionadacl = numero;
+                $scope.cambiarSemanasSegunManzana();
+                //                var anterior;
+                //                if (prenderSeleccionadoAnterior == 0) {
+                //                    this.setStyle({
+                //                        fillColor: '#0f0'
+                //                    });
+                //                    anterior = this;
+                //                    console.log(anterior);
+                //                } else {
+                //                    anterior.setStyle({
+                //                        fillColor: '#ff0'
+                //                    });
+                //                    this.setStyle({
+                //                        fillColor: '#0f0'
+                //                    });
+                //                    anterior = this._layers;
+                //                }
+                //
+                //                prenderSeleccionadoAnterior = 1;
+
+
+
+
+
 
             });
             l.on('mouseover', function (e) {
-                 //this.openPopup();
+                //this.openPopup();
                 this.setStyle({
                     fillColor: '#0f0'
                 });
@@ -603,14 +636,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 var manzana = "m" + numero;
 
                 //console.log(manzana);
-                pc.highlight([eval(manzana)]);
-                manzanaSeleccionadacl = numero;
-                $scope.cambiarSemanasSegunManzana();
+                //pc.highlight([eval(manzana)]);
                 
-                //console.log(capaConPoligonosCargadosPolicia._layers[165].feature.properties.gid);
-                capaConPoligonosCargadosPolicia._layers[165].setStyle({
-                    fillColor: '#0f0'
-                });
 
             });
             l.on('mouseout', function (e) {
@@ -620,7 +647,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                     fillColor: '#144a78',
 
                 });
-                pc.unhighlight([eval(manzana)]);
+                //pc.unhighlight([eval(manzana)]);
 
 
             });
@@ -629,7 +656,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
                 color: "#fff",
                 fillOpacity: opacidad
             });
-            l.bindPopup("<div id='popUpPoligono'><div id='elementosUsados'><div id='tituloPop'><span>Reportes:</span></div>" +
+            l.bindPopup("<div id='popUpPoligono'><div id='elementosUsados'><!--<div id='tituloPop'><span>Reportes:</span></div>-->" +
                 "<div><img src='imagenes/iconos/iconoPolicia.png'><span>" + cantidadDePolicias[gid] + "</span></div>" +
                 "<div><img src='imagenes/iconos/iconoArbol.png'><span>" + cantidadDeArboles[gid] + "</span></div>" +
                 "<div><img src='imagenes/iconos/iconoCaneca.png'><span>" + cantidadDeCanecas[gid] + "</span></div>" +
@@ -777,18 +804,18 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         fechaInicial = brush.extent()[0];
         fechaFinal = brush.extent()[1];
 
-        document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
+        document.getElementById("desde").innerHTML = String((brush.extent()[0].getDate()) + 1) + " / " + String((brush.extent()[0].getMonth()) + 1) + " / " + String(brush.extent()[0].getFullYear());
         //para el formulario
         alerta_diaInicial = String(brush.extent()[0].getDate());
-        alerta_mesInicial = String(brush.extent()[0].getMonth());
+        alerta_mesInicial = String((brush.extent()[0].getMonth()) + 1);
         alerta_anoInicial = String(brush.extent()[0].getFullYear());
 
 
 
-        document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
+        document.getElementById("hasta").innerHTML = String((brush.extent()[1].getDate()) + 1) + " / " + String((brush.extent()[1].getMonth()) + 1) + " / " + String(brush.extent()[1].getFullYear());
         //para el formulario
         alerta_diaFinal = String(brush.extent()[1].getDate());
-        alerta_mesFinal = String(brush.extent()[1].getMonth());
+        alerta_mesFinal = String((brush.extent()[1].getMonth()) + 1);
         alerta_anoFinal = String(brush.extent()[1].getFullYear());
 
         fechaInicialGlobal = fechaInicial;
@@ -808,9 +835,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         coneccion.llamarFiltroManzanas({
             callback: dibujarMapa,
         });
-        coneccion.llamarFiltroporHora({
-            callback: dibujarPuntos,
-        });
+                coneccion.llamarFiltroporHora({
+                    callback: dibujarPuntos,
+                });
 
     }
 
@@ -821,9 +848,9 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         callback: dibujarMapa
     });
 
-    coneccion.llamarFiltroporHora({
-        callback: dibujarPuntos
-    });
+        coneccion.llamarFiltroporHora({
+            callback: dibujarPuntos
+        });
 
     coneccion.llamarOpacidadesSemana({
         callback: dibujarSemanas,
@@ -925,18 +952,18 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         height = 50 - margin.top - margin.bottom;
 
     var x = d3.time.scale()
-        .domain([new Date(2015, 1, 1), new Date(2015, 12, 31) - 1])
+        .domain([new Date(2014, 11, 21), new Date(2015, 11, 23)])
         .range([0, width]);
 
     var brush = d3.svg.brush()
         .x(x)
-        .extent([new Date(2015, 1, 1), new Date(2015, 12, 30)])
+        .extent([new Date(2014, 11, 22), new Date(2015, 11, 22)])
 
 
     .on("brushend", $scope.filtrarManzanas);
-    document.getElementById("desde").innerHTML = String(brush.extent()[0].getDate()) + " / " + String(brush.extent()[0].getMonth()) + " / " + String(brush.extent()[0].getFullYear());
+    document.getElementById("desde").innerHTML = String((brush.extent()[0].getDate()) + 1) + " / " + String((brush.extent()[0].getMonth()) + 1) + " / " + String(brush.extent()[0].getFullYear());
 
-    document.getElementById("hasta").innerHTML = String(brush.extent()[1].getDate()) + " / " + String(brush.extent()[1].getMonth()) + " / " + String(brush.extent()[1].getFullYear());
+    document.getElementById("hasta").innerHTML = String((brush.extent()[1].getDate()) + 1) + " / " + String((brush.extent()[1].getMonth()) + 1) + " / " + String(brush.extent()[1].getFullYear());
 
     var svg = d3.select("body #timeLineControlEstado").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -948,6 +975,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         .attr("class", "grid-background")
         .attr("width", width)
         .attr("height", height);
+    
 
     svg.append("g")
         .attr("class", "x grid")
@@ -969,7 +997,7 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         .call(d3.svg.axis()
             .scale(x)
             .orient("bottom")
-            .ticks(d3.time.months)
+            .ticks(d3.time.months, 2)
             .tickPadding(0))
         .selectAll("text")
         .attr("x", 6)
@@ -979,6 +1007,16 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
         .attr("class", "brush")
         .call(brush)
         .call(brush.event);
+    
+        var arc = d3.svg.arc()
+    .outerRadius(height / 4)
+    .startAngle(0)
+    .endAngle(function(d, i) { return i ? -Math.PI : Math.PI; });
+
+gBrush.selectAll(".resize").append("path")
+    .attr("transform", "translate(0," +  height / 2 + ")")
+    .attr("d", arc);
+    
 
     gBrush.selectAll("rect")
         .attr("height", height);
