@@ -114,8 +114,8 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
     var cantidadDeArboles = {};
     var cantidadDeLuces = {};
     //variables iniciales para llamar a los filtros
-    var fechaInicialGlobal = new Date(2015, 0, 1);
-    var fechaFinalGlobal = new Date(2016, 10, 1);
+    var fechaInicialGlobal = new Date(2014, 11, 22);
+    var fechaFinalGlobal = new Date(2015, 11, 22);
     var geojsonMarkerOptions = {
         "color": "#fff",
         "weight": 1,
@@ -269,7 +269,7 @@ pesoGlobalPolicia = $scope.pesoPolicia;
                     stroke: false,
                     color: "#fff",
                     fillColor: "#0a2438",
-                    radius: 2,
+                    radius: 4,
                     fillOpacity: 0.5,
                 };
             },
@@ -841,8 +841,8 @@ pesoGlobalPolicia = $scope.pesoPolicia;
 
     }
 
-
-    var manzanaSeleccionadacl = 0;
+    //ACA CAMBIO LA MANZANA POR DEFECTO
+    var manzanaSeleccionadacl = 23;
     // me llama los poligonos para dibujar
     coneccion.llamarFiltroManzanas({
         callback: dibujarMapa

@@ -42,8 +42,11 @@ my_angular_app.service("coneccion", function () {
 my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($scope, coneccion) {
     //console.log($scope);
     var socket = io();
+    var fechaInicialGlobalPuntos = new Date(2015, 0, 1);
+    var fechaFinalGlobalPuntos = new Date(2016, 1, 1);
 
     var capaConPuntosCargados;
+    //new Date(2014, 11, 22), new Date(2015, 11, 22)
 
     var dibujarMapa = function (data) {
         // console.log(data);
@@ -493,20 +496,22 @@ my_angular_app.controller("home_controller", ["$scope", "coneccion", function ($
 
     }
 
-    $scope.filtrarPorValor = function () {
-        d3.selectAll("#capad3Hora svg").remove();
-        map.removeLayer(capaConPuntosCargados);
-        coneccion.llamarFiltroporHora({
-            callback: dibujarMapa,
-            horaInicial: $scope.horaInicialFiltro,
-            horaFinal: $scope.horaFinalFiltro
-        });
-    }
+//    $scope.filtrarPorValor = function () {
+//        d3.selectAll("#capad3Hora svg").remove();
+//        map.removeLayer(capaConPuntosCargados);
+//        coneccion.llamarFiltroporHora({
+//            callback: dibujarMapa,
+//            horaInicial: $scope.horaInicialFiltro,
+//            horaFinal: $scope.horaFinalFiltro
+//        });
+//    }
+    
 
     coneccion.llamarFiltroporHora({
         callback: dibujarMapa,
-        horaInicial: 0,
-        horaFinal: 24
+        fechaInicial: fechaInicialGlobalPuntos,
+        fechaFinal: fechaFinalGlobalPuntos
+         
     });
 
     // ------------------------------------------------------

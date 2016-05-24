@@ -97,13 +97,12 @@ function crearCuadradosSemanas(id, width, height, colorEscogido, categoria, arre
 
 
 
-    d3.select(".policias10").style("stroke", '#000').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
-            //d3.select(".policias0").attr("transform", "translate(0,2)");
-            console.log("hola en 10");
+    d3.select(".policias23").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html("hola" + "<br/>" + "tu")
+            div.html("La policia Nacional destinó personal fijo durante el día y la noche con el fin de cuidar a la ciudadanía y la maquinaria de la obra")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -112,13 +111,12 @@ function crearCuadradosSemanas(id, width, height, colorEscogido, categoria, arre
                 .duration(500)
                 .style("opacity", 0);
         });
-    d3.select(".policias0").style("stroke", '#000').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+    d3.select(".accesos2").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
             //d3.select(".policias0").attr("transform", "translate(0,2)");
-            console.log("hola en 9");
             div.transition()
                 .duration(200)
                 .style("opacity", .9);
-            div.html("hola" + "<br/>" + "tu")
+            div.html("Inicio de obras por parte del IDU para la intervención de andenes, mejora de superficies y vías de acceso")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -127,6 +125,113 @@ function crearCuadradosSemanas(id, width, height, colorEscogido, categoria, arre
                 .duration(500)
                 .style("opacity", 0);
         });
+    
+     d3.select(".accesos27").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Entrega de la obra a la comunidad")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    d3.select(".luces6").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Inicio de intervención por parte de la EEB. Se cambiarán postes, cables aéreos y tipo de bombillo")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+      d3.select(".luces20").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Entrega de obra a la comunidad")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    d3.select(".basuras35").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Se finaliza instalación de canecas alrededor de toda la zona")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    d3.select(".juegos39").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Instalación de juegos para niños y máquinas para hacer ejercicio por parte del IDRD")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    d3.select(".sillas39").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Instalación de mobiliario urbano por parte del IDRD")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    d3.select(".arboles43").style("stroke", '#444').attr("height", "15").attr("y", "3").attr("width", "9").on("mouseover", function () {
+            //d3.select(".policias0").attr("transform", "translate(0,2)");
+            div.transition()
+                .duration(200)
+                .style("opacity", .9);
+            div.html("Siembra de árboles nativos por parte de la Secretaría del Medio Ambiente")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+    
+    
 
 
 }
